@@ -13,6 +13,10 @@ web/
 ├── index.html              # 项目入口（重定向到登录页）
 ├── package.json            # 项目配置
 ├── README.md               # 项目文档
+├── docs/                   # 文档目录
+│   ├── DEV_STANDARDS.md    # 开发规范
+│   ├── CSS_JS_SPEC.md      # 文件内容规范
+│   └── GIT_GUIDE.md        # Git 命令大全
 │
 └── src/
     ├── assets/             # 静态资源
