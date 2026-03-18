@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>企业管理系统</title>
+    <link rel="stylesheet" href="src/assets/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- 登录界面 -->
+        <div id="login-page" class="page active">
+            <div class="login-container">
+                <h2>企业管理系统登录</h2>
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="username">用户名</label>
+                        <input type="text" id="username" name="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">密码</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    <button type="submit" class="btn">登录</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- 主界面 -->
+        <div id="main-page" class="page">
+            <!-- 顶部导航栏 -->
+            <header class="header">
+                <h1>企业管理系统</h1>
+                <div class="user-info">
+                    <span>欢迎，管理员</span>
+                    <button id="logout-btn" class="btn">退出</button>
+                </div>
+            </header>
+
+            <!-- 侧边导航菜单 -->
+            <nav class="sidebar">
+                <ul>
+                    <li><a href="#production" class="nav-link" data-target="production">生产管理</a></li>
+                    <li><a href="#sales" class="nav-link" data-target="sales">销售管理</a></li>
+                    <li><a href="#equipment" class="nav-link" data-target="equipment">设备管理</a></li>
+                    <li><a href="#purchase" class="nav-link" data-target="purchase">采购管理</a></li>
+                    <li><a href="#warehouse" class="nav-link" data-target="warehouse">仓储管理</a></li>
+                    <li><a href="#employee" class="nav-link" data-target="employee">员工管理</a></li>
+                </ul>
+            </nav>
+
+            <!-- 主内容区域 -->
+            <main class="content">
+                <!-- 生产管理子系统 -->
+                <div id="production" class="subsystem">
+                    <h2>生产管理子系统</h2>
+                    <div class="subsystem-content">
+                        <!-- 生产计划管理 -->
+                        <div class="module">
+                            <h3>生产计划管理</h3>
+                            <p>生产计划管理模块内容</p>
+                        </div>
+                        <!-- 生产任务排产 -->
+                        <div class="module">
+                            <h3>生产任务排产</h3>
+                            <p>生产任务排产模块内容</p>
+                        </div>
+                        <!-- 物料需求计划 -->
+                        <div class="module">
+                            <h3>物料需求计划</h3>
+                            <p>物料需求计划模块内容</p>
+                        </div>
+                        <!-- 库存管理 -->
+                        <div class="module">
+                            <h3>库存管理</h3>
+                            <p>库存管理模块内容</p>
+                        </div>
+                        <!-- 生产订单管理 -->
+                        <div class="module">
+                            <h3>生产订单管理</h3>
+                            <p>生产订单管理模块内容</p>
+                        </div>
+                        <!-- 质量管理 -->
+                        <div class="module">
+                            <h3>质量管理</h3>
+                            <p>质量管理模块内容</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 销售管理子系统 -->
+                <div id="sales" class="subsystem">
+                    <h2>销售管理子系统</h2>
+                    <div class="subsystem-content">
+                        <!-- 客户信息管理 -->
+                        <div class="module">
+                            <h3>客户信息管理</h3>
+                            <p>客户信息管理模块内容</p>
+                        </div>
+                        <!-- 销售数据报表 -->
+                        <div class="module">
+                            <h3>销售数据报表</h3>
+                            <p>销售数据报表模块内容</p>
+                        </div>
+                        <!-- 销售订单管理 -->
+                        <div class="module">
+                            <h3>销售订单管理</h3>
+                            <p>销售订单管理模块内容</p>
+                        </div>
+                        <!-- 产品定价和促销管理 -->
+                        <div class="module">
+                            <h3>产品定价和促销管理</h3>
+                            <p>产品定价和促销管理模块内容</p>
+                        </div>
+                        <!-- 销售团队管理 -->
+                        <div class="module">
+                            <h3>销售团队管理</h3>
+                            <p>销售团队管理模块内容</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 设备管理子系统 -->
+                <div id="equipment" class="subsystem">
+                    <h2>设备管理子系统</h2>
+                    <div class="subsystem-content">
+                        <!-- 设备状态监控 -->
+                        <div class="module">
+                            <h3>设备状态监控</h3>
+                            <p>设备状态监控模块内容</p>
+                        </div>
+                        <!-- 设备维护计划管理 -->
+                        <div class="module">
+                            <h3>设备维护计划管理</h3>
+                            <p>设备维护计划管理模块内容</p>
+                        </div>
+                        <!-- 设备故障记录和分析 -->
+                        <div class="module">
+                            <h3>设备故障记录和分析</h3>
+                            <p>设备故障记录和分析模块内容</p>
+                        </div>
+                        <!-- 设备信息管理 -->
+                        <div class="module">
+                            <h3>设备信息管理</h3>
+                            <p>设备信息管理模块内容</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 采购管理子系统 -->
+                <div id="purchase" class="subsystem">
+                    <h2>采购管理子系统</h2>
+                    <div class="subsystem-content">
+                        <!-- 供应商信息管理 -->
+                        <div class="module">
+                            <h3>供应商信息管理</h3>
+                            <p>供应商信息管理模块内容</p>
+                        </div>
+                        <!-- 采购流程管理 -->
+                        <div class="module">
+                            <h3>采购流程管理</h3>
+                            <p>采购流程管理模块内容</p>
+                        </div>
+                        <!-- 采购订单跟踪 -->
+                        <div class="module">
+                            <h3>采购订单跟踪</h3>
+                            <p>采购订单跟踪模块内容</p>
+                        </div>
+                        <!-- 采购数据分析 -->
+                        <div class="module">
+                            <h3>采购数据分析</h3>
+                            <p>采购数据分析模块内容</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 仓储管理子系统 -->
+                <div id="warehouse" class="subsystem">
+                    <h2>仓储管理子系统</h2>
+                    <div class="subsystem-content">
+                        <!-- 仓储基本操作 -->
+                        <div class="module">
+                            <h3>仓储基本操作</h3>
+                            <p>仓储基本操作模块内容</p>
+                        </div>
+                        <!-- 仓库布局和货位管理 -->
+                        <div class="module">
+                            <h3>仓库布局和货位管理</h3>
+                            <p>仓库布局和货位管理模块内容</p>
+                        </div>
+                        <!-- 库存预警和盘点 -->
+                        <div class="module">
+                            <h3>库存预警和盘点</h3>
+                            <p>库存预警和盘点模块内容</p>
+                        </div>
+                        <!-- 运输计划和跟踪 -->
+                        <div class="module">
+                            <h3>运输计划和跟踪</h3>
+                            <p>运输计划和跟踪模块内容</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 员工管理子系统 -->
+                <div id="employee" class="subsystem">
+                    <h2>员工管理子系统</h2>
+                    <div class="subsystem-content">
+                        <!-- 员工信息管理 -->
+                        <div class="module">
+                            <h3>员工信息管理</h3>
+                            <p>员工信息管理模块内容</p>
+                        </div>
+                        <!-- 招聘和培训管理 -->
+                        <div class="module">
+                            <h3>招聘和培训管理</h3>
+                            <p>招聘和培训管理模块内容</p>
+                        </div>
+                        <!-- 考勤和薪资管理 -->
+                        <div class="module">
+                            <h3>考勤和薪资管理</h3>
+                            <p>考勤和薪资管理模块内容</p>
+                        </div>
+                        <!-- 员工绩效评估 -->
+                        <div class="module">
+                            <h3>员工绩效评估</h3>
+                            <p>员工绩效评估模块内容</p>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="src/assets/js/main.js"></script>
+</body>
+</html>

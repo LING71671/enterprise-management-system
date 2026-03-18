@@ -1,0 +1,21 @@
+{
+  "name": "enterprise-management-system",
+  "version": "1.0.0",
+  "description": "企业管理系统前端原型",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx http-server -p 8080",
+    "dev": "npx http-server -p 8080 -o"
+  },
+  "keywords": [
+    "enterprise",
+    "management",
+    "system",
+    "frontend"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}
