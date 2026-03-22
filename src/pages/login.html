@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>登录 - 小麦科技企业管理平台</title>
+  <link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body>
+  <div class="login-page">
+    <div class="login-side">
+      <div class="login-side-content fade-in">
+        <img src="../assets/images/logo.png" alt="小麦科技" style="height:80px; margin-bottom:24px;">
+        <h1>小麦科技企业管理平台</h1>
+        <p>连接数据，创造价值，让管理触手可及。</p>
+      </div>
+    </div>
+    <div class="login-form-container">
+      <div class="login-box fade-in">
+        <div class="login-title">欢迎登录</div>
+        <form id="login-form">
+          <div class="form-group">
+            <label class="form-label required" for="username">用户名</label>
+            <input class="form-control" type="text" id="username" name="username" placeholder="请输入用户名">
+            <div class="form-error" id="username-error"></div>
+          </div>
+          <div class="form-group">
+            <label class="form-label required" for="password">密码</label>
+            <input class="form-control" type="password" id="password" name="password" placeholder="请输入密码">
+            <div class="form-error" id="password-error"></div>
+          </div>
+          <div class="form-error" id="login-error"></div>
+          <button type="submit" class="btn btn-primary">登录系统</button>
+        </form>
+        <div class="login-footer">
+          还没有账号？<a href="register.html">立即注册</a><br><br>
+          <span style="opacity:0.6; font-size:12px;">默认体验账号 admin / 123456</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../assets/js/utils/storage.js"></script>
+  <script src="../assets/js/utils/validate.js"></script>
+  <script src="../assets/js/modules/auth.js"></script>
+  <script>
+    'use strict';
+    // 已登录则直接跳转
+    if (auth.isLoggedIn()) {
+      window.location.href = 'dashboard.html';
+    }
+
+    document.getElementById('login-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value;
+
+      document.getElementById('username-error').textContent = '';
+      document.getElementById('password-error').textContent = '';
+      document.getElementById('login-error').textContent = '';
+
+      if (!username) {
+        document.getElementById('username-error').textContent = '请输入用户名';
+        return;
+      }
+      if (!password) {
+        document.getElementById('password-error').textContent = '请输入密码';
+        return;
+      }
+
+      if (auth.login(username, password)) {
+        window.location.href = 'dashboard.html';
+      } else {
+        document.getElementById('login-error').textContent = '用户名或密码错误';
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>员工信息 - 小麦科技企业管理平台</title>
+  <link rel="stylesheet" href="../../assets/css/main.css">
+</head>
+<body>
+  <div id="header-placeholder"></div>
+  <div class="layout">
+    <div id="sidebar-placeholder"></div>
+    <main class="main-content">
+      <div class="page-header">
+        <div>
+          <div class="page-title">员工信息</div>
+          <div class="page-subtitle">员工档案管理</div>
+        </div>
+        <button class="btn btn-primary" id="add-btn">+ 新增员工</button>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">员工档案</div>
+          <div class="toolbar-right">
+            <div class="search-box">
+              <span class="search-icon">🔍</span>
+              <input type="text" id="search-input" placeholder="搜索姓名/工号">
+            </div>
+          </div>
+        </div>
+        <div class="table-wrapper">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>工号</th><th>姓名</th><th>性别</th><th>部门</th>
+                <th>职位</th><th>手机</th><th>入职日期</th><th>薪资</th><th>状态</th><th>操作</th>
+              </tr>
+            </thead>
+            <tbody id="info-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- 新增/编辑弹窗 -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title" id="modal-title">新增员工</div>
+        <div class="modal-close" id="modal-close">✕</div>
+      </div>
+      <div class="modal-body">
+        <form id="emp-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label required">姓名</label>
+              <input class="form-control" id="f-name" placeholder="请输入姓名">
+            </div>
+            <div class="form-group">
+              <label class="form-label required">性别</label>
+              <select class="form-control" id="f-gender">
+                <option value="男">男</option>
+                <option value="女">女</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label required">部门</label>
+              <input class="form-control" id="f-dept" placeholder="请输入部门">
+            </div>
+            <div class="form-group">
+              <label class="form-label required">职位</label>
+              <input class="form-control" id="f-position" placeholder="请输入职位">
+            </div>
+            <div class="form-group">
+              <label class="form-label">手机</label>
+              <input class="form-control" id="f-phone" placeholder="请输入手机号">
+            </div>
+            <div class="form-group">
+              <label class="form-label">邮箱</label>
+              <input class="form-control" id="f-email" placeholder="请输入邮箱">
+            </div>
+            <div class="form-group">
+              <label class="form-label">入职日期</label>
+              <input class="form-control" type="date" id="f-entryDate">
+            </div>
+            <div class="form-group">
+              <label class="form-label">薪资</label>
+              <input class="form-control" type="number" id="f-salary" placeholder="请输入薪资">
+            </div>
+          </div>
+          <div class="form-error" id="form-error"></div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" id="modal-cancel">取消</button>
+        <button class="btn btn-primary" id="modal-save">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../assets/js/utils/dom.js"></script>
+  <script src="../../assets/js/utils/storage.js"></script>
+  <script src="../../assets/js/utils/format.js"></script>
+  <script src="../../assets/js/modules/auth.js"></script>
+  <script src="../../assets/js/modules/navigation.js"></script>
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../data/employee.js"></script>
+  <script>
+    'use strict';
+    fetch('../../components/header.html').then(r => r.text()).then(html => {
+      document.getElementById('header-placeholder').innerHTML = html;
+      appNav.init();
+    });
+    fetch('../../components/sidebar.html').then(r => r.text()).then(html => {
+      document.getElementById('sidebar-placeholder').innerHTML = html;
+    });
+
+    // 使用本地副本支持增删改
+    let employees = [...employeeData.employees];
+    let editId = null;
+
+    const statusMap = { '在职': 'badge-success', '试用期': 'badge-warning', '离职': 'badge-danger' };
+
+    function renderTable(list) {
+      document.getElementById('info-tbody').innerHTML = list.map(e => `
+        <tr>
+          <td>${e.id}</td>
+          <td><strong>${e.name}</strong></td>
+          <td>${e.gender}</td>
+          <td>${e.dept}</td>
+          <td>${e.position}</td>
+          <td>${e.phone}</td>
+          <td>${e.entryDate}</td>
+          <td>${formatMoney(e.salary)}</td>
+          <td><span class="badge ${statusMap[e.status] || 'badge-default'}">${e.status}</span></td>
+          <td>
+            <div class="table-actions">
+              <button class="btn btn-outline btn-sm" onclick="openEdit('${e.id}')">编辑</button>
+              <button class="btn btn-danger btn-sm" onclick="deleteEmp('${e.id}')">删除</button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function openModal(title) {
+      document.getElementById('modal-title').textContent = title;
+      document.getElementById('form-error').textContent = '';
+      addClass(document.getElementById('modal-overlay'), 'active');
+    }
+
+    function closeModal() {
+      removeClass(document.getElementById('modal-overlay'), 'active');
+      editId = null;
+    }
+
+    function openAdd() {
+      editId = null;
+      ['name','gender','dept','position','phone','email','entryDate','salary'].forEach(f => {
+        const el = document.getElementById('f-' + f);
+        if (el) el.value = f === 'gender' ? '男' : '';
+      });
+      openModal('新增员工');
+    }
+
+    function openEdit(id) {
+      const e = employees.find(emp => emp.id === id);
+      if (!e) return;
+      editId = id;
+      document.getElementById('f-name').value = e.name;
+      document.getElementById('f-gender').value = e.gender;
+      document.getElementById('f-dept').value = e.dept;
+      document.getElementById('f-position').value = e.position;
+      document.getElementById('f-phone').value = e.phone;
+      document.getElementById('f-email').value = e.email;
+      document.getElementById('f-entryDate').value = e.entryDate;
+      document.getElementById('f-salary').value = e.salary;
+      openModal('编辑员工');
+    }
+
+    function deleteEmp(id) {
+      if (!confirm('确认删除该员工？')) return;
+      employees = employees.filter(e => e.id !== id);
+      renderTable(employees);
+    }
+
+    document.getElementById('add-btn').onclick = openAdd;
+    document.getElementById('modal-close').onclick = closeModal;
+    document.getElementById('modal-cancel').onclick = closeModal;
+    document.getElementById('modal-overlay').onclick = e => { if (e.target === e.currentTarget) closeModal(); };
+
+    document.getElementById('modal-save').onclick = function () {
+      const name = document.getElementById('f-name').value.trim();
+      if (!name) {
+        document.getElementById('form-error').textContent = '姓名为必填项';
+        return;
+      }
+      if (editId) {
+        const emp = employees.find(e => e.id === editId);
+        emp.name = name;
+        emp.gender = document.getElementById('f-gender').value;
+        emp.dept = document.getElementById('f-dept').value.trim();
+        emp.position = document.getElementById('f-position').value.trim();
+        emp.phone = document.getElementById('f-phone').value.trim();
+        emp.email = document.getElementById('f-email').value.trim();
+        emp.entryDate = document.getElementById('f-entryDate').value;
+        emp.salary = Number(document.getElementById('f-salary').value) || 0;
+      } else {
+        const newId = 'E' + String(employees.length + 1).padStart(3, '0');
+        employees.push({
+          id: newId,
+          name,
+          gender: document.getElementById('f-gender').value,
+          dept: document.getElementById('f-dept').value.trim(),
+          position: document.getElementById('f-position').value.trim(),
+          phone: document.getElementById('f-phone').value.trim(),
+          email: document.getElementById('f-email').value.trim(),
+          entryDate: document.getElementById('f-entryDate').value,
+          salary: Number(document.getElementById('f-salary').value) || 0,
+          status: '试用期'
+        });
+      }
+      closeModal();
+      renderTable(employees);
+    };
+
+    document.getElementById('search-input').addEventListener('input', function () {
+      const kw = this.value.trim().toLowerCase();
+      renderTable(employees.filter(e => !kw || e.name.includes(kw) || e.id.toLowerCase().includes(kw)));
+    });
+
+    renderTable(employees);
+  </script>
+</body>
+</html>

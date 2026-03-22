@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>考勤薪资 - 小麦科技企业管理平台</title>
+  <link rel="stylesheet" href="../../assets/css/main.css">
+</head>
+<body>
+  <div id="header-placeholder"></div>
+  <div class="layout">
+    <div id="sidebar-placeholder"></div>
+    <main class="main-content">
+      <div class="page-header">
+        <div>
+          <div class="page-title">考勤薪资</div>
+          <div class="page-subtitle">2026年03月 考勤记录</div>
+        </div>
+      </div>
+
+      <div class="stats-grid" id="stats-grid"></div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">考勤明细</div>
+        </div>
+        <div class="table-wrapper">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>工号</th>
+                <th>姓名</th>
+                <th>应出勤</th>
+                <th>实际出勤</th>
+                <th>迟到次数</th>
+                <th>请假天数</th>
+                <th>加班时长</th>
+                <th>出勤率</th>
+              </tr>
+            </thead>
+            <tbody id="attendance-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="../../assets/js/utils/dom.js"></script>
+  <script src="../../assets/js/utils/storage.js"></script>
+  <script src="../../assets/js/utils/format.js"></script>
+  <script src="../../assets/js/modules/auth.js"></script>
+  <script src="../../assets/js/modules/navigation.js"></script>
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../data/employee.js"></script>
+  <script>
+    'use strict';
+    fetch('../../components/header.html').then(r => r.text()).then(html => {
+      document.getElementById('header-placeholder').innerHTML = html;
+      appNav.init();
+    });
+    fetch('../../components/sidebar.html').then(r => r.text()).then(html => {
+      document.getElementById('sidebar-placeholder').innerHTML = html;
+    });
+
+    const list = employeeData.attendance;
+
+    // 统计
+    const totalWork = list.reduce((s, a) => s + a.actualDays, 0);
+    const totalOvertime = list.reduce((s, a) => s + a.overtimeHours, 0);
+    const totalLate = list.reduce((s, a) => s + a.lateTimes, 0);
+    document.getElementById('stats-grid').innerHTML = `
+      <div class="stat-card"><div class="stat-icon">👥</div><div class="stat-info"><div class="stat-value">${list.length}</div><div class="stat-label">统计人数</div></div></div>
+      <div class="stat-card"><div class="stat-icon">📅</div><div class="stat-info"><div class="stat-value">${totalWork}</div><div class="stat-label">总出勤天数</div></div></div>
+      <div class="stat-card"><div class="stat-icon">⏰</div><div class="stat-info"><div class="stat-value">${totalOvertime}h</div><div class="stat-label">总加班时长</div></div></div>
+      <div class="stat-card"><div class="stat-icon">⚠️</div><div class="stat-info"><div class="stat-value">${totalLate}</div><div class="stat-label">迟到次数</div></div></div>
+    `;
+
+    document.getElementById('attendance-tbody').innerHTML = list.map(a => {
+      const rate = ((a.actualDays / a.workDays) * 100).toFixed(1);
+      const rateClass = rate >= 95 ? 'badge-success' : rate >= 85 ? 'badge-warning' : 'badge-danger';
+      return `
+        <tr>
+          <td>${a.empId}</td>
+          <td><strong>${a.empName}</strong></td>
+          <td>${a.workDays} 天</td>
+          <td>${a.actualDays} 天</td>
+          <td>${a.lateTimes > 0 ? `<span class="badge badge-warning">${a.lateTimes} 次</span>` : '—'}</td>
+          <td>${a.leaveDays > 0 ? a.leaveDays + ' 天' : '—'}</td>
+          <td>${a.overtimeHours} h</td>
+          <td><span class="badge ${rateClass}">${rate}%</span></td>
+        </tr>
+      `;
+    }).join('');
+  </script>
+</body>
+</html>

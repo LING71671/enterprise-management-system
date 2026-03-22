@@ -1,0 +1,60 @@
+:root {
+  /* 主题色 - 小麦橙色系 */
+  --color-primary: #FF6B00;
+  --color-primary-light: #FF8C33;
+  --color-primary-dark: #CC5500;
+  --color-primary-bg: #FFF3E8;
+
+  --color-success: #52c41a;
+  --color-warning: #faad14;
+  --color-danger: #f5222d;
+  --color-info: #1890ff;
+
+  /* 文字颜色 */
+  --color-text-primary: #1a1a1a;
+  --color-text-secondary: #666;
+  --color-text-disabled: #bbb;
+  --color-text-inverse: #fff;
+
+  /* 背景色 */
+  --color-bg: #f5f7f9;
+  --color-bg-white: #ffffff;
+  --color-bg-sidebar: #1f2233;
+  --color-bg-sidebar-hover: #2a2d42;
+  --color-bg-header: #ffffff;
+  --color-bg-dark: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+
+  /* 边框 */
+  --border-color: #ebeef5;
+  --border-radius-sm: 6px;
+  --border-radius: 12px;
+  --border-radius-lg: 16px;
+
+  /* 间距 */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+
+  /* 字体 */
+  --font-size-xs: 12px;
+  --font-size-sm: 13px;
+  --font-size-base: 14px;
+  --font-size-md: 15px;
+  --font-size-lg: 16px;
+  --font-size-xl: 20px;
+  --font-size-xxl: 24px;
+
+  /* 阴影 - 更加平滑柔软的高级感阴影 */
+  --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.03);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.08);
+
+  /* 布局 */
+  --sidebar-width: 220px;
+  --header-height: 60px;
+
+  /* 过渡 */
+  --transition: all 0.2s ease;
+}

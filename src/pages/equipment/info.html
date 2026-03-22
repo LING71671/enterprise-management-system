@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>设备信息 - 小麦科技企业管理平台</title>
+  <link rel="stylesheet" href="../../assets/css/main.css">
+</head>
+<body>
+  <div id="header-placeholder"></div>
+  <div class="layout">
+    <div id="sidebar-placeholder"></div>
+    <main class="main-content">
+      <div class="page-header">
+        <div>
+          <div class="page-title">设备信息</div>
+          <div class="page-subtitle">设备档案管理</div>
+        </div>
+        <button class="btn btn-primary" id="add-btn">+ 新增设备</button>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">设备档案</div>
+          <div class="toolbar-right">
+            <div class="search-box">
+              <span class="search-icon">🔍</span>
+              <input type="text" id="search-input" placeholder="搜索设备名称/型号">
+            </div>
+          </div>
+        </div>
+        <div class="table-wrapper">
+          <table class="table">
+            <thead>
+              <tr><th>设备编号</th><th>设备名称</th><th>型号</th><th>位置</th><th>购入日期</th><th>上次维护</th><th>下次维护</th><th>状态</th><th>操作</th></tr>
+            </thead>
+            <tbody id="info-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- 详情弹窗 -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title" id="modal-title">设备详情</div>
+        <div class="modal-close" id="modal-close">✕</div>
+      </div>
+      <div class="modal-body" id="modal-body"></div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" id="modal-cancel">关闭</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../assets/js/utils/dom.js"></script>
+  <script src="../../assets/js/utils/storage.js"></script>
+  <script src="../../assets/js/utils/format.js"></script>
+  <script src="../../assets/js/modules/auth.js"></script>
+  <script src="../../assets/js/modules/navigation.js"></script>
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../data/equipment.js"></script>
+  <script>
+    'use strict';
+    fetch('../../components/header.html').then(r => r.text()).then(html => {
+      document.getElementById('header-placeholder').innerHTML = html;
+      appNav.init();
+    });
+    fetch('../../components/sidebar.html').then(r => r.text()).then(html => {
+      document.getElementById('sidebar-placeholder').innerHTML = html;
+    });
+
+    let list = [...equipmentData.equipment];
+    const statusMap = { '运行中': 'badge-success', '维修中': 'badge-warning', '停机': 'badge-danger' };
+
+    function renderTable(data) {
+      document.getElementById('info-tbody').innerHTML = data.map(e => `
+        <tr>
+          <td>${e.id}</td>
+          <td><strong>${e.name}</strong></td>
+          <td>${e.model}</td>
+          <td>${e.location}</td>
+          <td>${e.purchaseDate}</td>
+          <td>${e.lastMaintain}</td>
+          <td>${e.nextMaintain}</td>
+          <td><span class="badge ${statusMap[e.status] || 'badge-default'}">${e.status}</span></td>
+          <td>
+            <div class="table-actions">
+              <button class="btn btn-outline btn-sm" onclick="showDetail('${e.id}')">详情</button>
+              <button class="btn btn-danger btn-sm" onclick="deleteItem('${e.id}')">删除</button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function showDetail(id) {
+      const e = list.find(eq => eq.id === id);
+      if (!e) return;
+      document.getElementById('modal-title').textContent = e.name + ' 设备档案';
+      document.getElementById('modal-body').innerHTML = `
+        <div class="form-row">
+          <div class="form-group"><div class="form-label">设备编号</div><div>${e.id}</div></div>
+          <div class="form-group"><div class="form-label">设备名称</div><div>${e.name}</div></div>
+          <div class="form-group"><div class="form-label">型号</div><div>${e.model}</div></div>
+          <div class="form-group"><div class="form-label">位置</div><div>${e.location}</div></div>
+          <div class="form-group"><div class="form-label">购入日期</div><div>${e.purchaseDate}</div></div>
+          <div class="form-group"><div class="form-label">上次维护</div><div>${e.lastMaintain}</div></div>
+          <div class="form-group"><div class="form-label">下次维护</div><div>${e.nextMaintain}</div></div>
+          <div class="form-group"><div class="form-label">状态</div><div><span class="badge ${statusMap[e.status] || 'badge-default'}">${e.status}</span></div></div>
+        </div>
+      `;
+      addClass(document.getElementById('modal-overlay'), 'active');
+    }
+
+    function closeModal() {
+      removeClass(document.getElementById('modal-overlay'), 'active');
+    }
+
+    function deleteItem(id) {
+      if (!confirm('确认删除该设备？')) return;
+      list = list.filter(e => e.id !== id);
+      renderTable(list);
+    }
+
+    document.getElementById('modal-close').onclick = closeModal;
+    document.getElementById('modal-cancel').onclick = closeModal;
+    document.getElementById('modal-overlay').onclick = e => { if (e.target === e.currentTarget) closeModal(); };
+
+    document.getElementById('search-input').addEventListener('input', function () {
+      const kw = this.value.trim().toLowerCase();
+      renderTable(list.filter(e => !kw || e.name.includes(kw) || e.model.toLowerCase().includes(kw)));
+    });
+
+    document.getElementById('add-btn').onclick = () => alert('新增设备功能待实现');
+    renderTable(list);
+  </script>
+</body>
+</html>

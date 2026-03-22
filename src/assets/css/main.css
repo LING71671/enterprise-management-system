@@ -1,0 +1,82 @@
+/* 1. 基础样式 */
+@import './base/reset.css';
+@import './base/variables.css';
+@import './base/typography.css';
+
+/* 2. 组件样式 */
+@import './components/header.css';
+@import './components/sidebar.css';
+@import './components/button.css';
+@import './components/form.css';
+@import './components/table.css';
+@import './components/card.css';
+@import './components/modal.css';
+
+/* 3. 页面样式 */
+@import './pages/login.css';
+@import './pages/production.css';
+@import './pages/sales.css';
+@import './pages/equipment.css';
+@import './pages/purchase.css';
+@import './pages/warehouse.css';
+@import './pages/employee.css';
+@import './pages/landing.css';
+
+/* 4. 共享动画 */
+@keyframes componentFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* =====================
+   自定义鼠标跟随动画 (Antigravity 风格)
+   ===================== */
+.custom-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--color-primary);
+  border-radius: 50%;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  z-index: 99999;
+  transition: width 0.3s cubic-bezier(0.25, 1, 0.5, 1), 
+              height 0.3s cubic-bezier(0.25, 1, 0.5, 1), 
+              background-color 0.3s cubic-bezier(0.25, 1, 0.5, 1),
+              opacity 0.3s;
+  mix-blend-mode: difference;
+}
+
+.custom-cursor.hover {
+  width: 48px;
+  height: 48px;
+  background-color: var(--color-primary);
+  opacity: 0.5;
+  border-color: transparent;
+}
+
+/* 小白点中心 */
+.custom-cursor::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 4px;
+  height: 4px;
+  background-color: var(--color-primary);
+  border-radius: 50%;
+  transition: opacity 0.2s;
+}
+
+.custom-cursor.hover::after {
+  opacity: 0;
+}
+
+@media (max-width: 768px) {
+  .custom-cursor {
+    display: none; /* 移动端隐藏自定义鼠标 */
+  }
+}

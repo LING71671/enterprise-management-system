@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>库存预警 - 小麦科技企业管理平台</title>
+  <link rel="stylesheet" href="../../assets/css/main.css">
+</head>
+<body>
+  <div id="header-placeholder"></div>
+  <div class="layout">
+    <div id="sidebar-placeholder"></div>
+    <main class="main-content">
+      <div class="page-header">
+        <div>
+          <div class="page-title">库存预警</div>
+          <div class="page-subtitle">库存不足预警提醒</div>
+        </div>
+      </div>
+
+      <div class="stats-grid" id="stats-grid"></div>
+
+      <!-- 预警列表 -->
+      <div class="card">
+        <div class="card-header"><div class="card-title">⚠️ 库存不足预警</div></div>
+        <div class="table-wrapper">
+          <table class="table">
+            <thead>
+              <tr><th>编号</th><th>物品名称</th><th>分类</th><th>规格</th><th>当前库存</th><th>最低库存</th><th>缺口量</th><th>紧急程度</th></tr>
+            </thead>
+            <tbody id="warning-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 库存充足列表 -->
+      <div class="card" style="margin-top:var(--spacing-lg)">
+        <div class="card-header"><div class="card-title">✅ 库存正常</div></div>
+        <div class="table-wrapper">
+          <table class="table">
+            <thead>
+              <tr><th>编号</th><th>物品名称</th><th>分类</th><th>当前库存</th><th>最低库存</th><th>库存率</th></tr>
+            </thead>
+            <tbody id="normal-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="../../assets/js/utils/dom.js"></script>
+  <script src="../../assets/js/utils/storage.js"></script>
+  <script src="../../assets/js/utils/format.js"></script>
+  <script src="../../assets/js/modules/auth.js"></script>
+  <script src="../../assets/js/modules/navigation.js"></script>
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../data/warehouse.js"></script>
+  <script>
+    'use strict';
+    fetch('../../components/header.html').then(r => r.text()).then(html => {
+      document.getElementById('header-placeholder').innerHTML = html;
+      appNav.init();
+    });
+    fetch('../../components/sidebar.html').then(r => r.text()).then(html => {
+      document.getElementById('sidebar-placeholder').innerHTML = html;
+    });
+
+    const inventory = warehouseData.inventory;
+    const lowItems = inventory.filter(i => i.stock < i.minStock);
+    const normalItems = inventory.filter(i => i.stock >= i.minStock);
+
+    document.getElementById('stats-grid').innerHTML = `
+      <div class="stat-card"><div class="stat-icon">📦</div><div class="stat-info"><div class="stat-value">${inventory.length}</div><div class="stat-label">库存品类</div></div></div>
+      <div class="stat-card"><div class="stat-icon">⚠️</div><div class="stat-info"><div class="stat-value" style="color:var(--color-danger)">${lowItems.length}</div><div class="stat-label">预警品类</div></div></div>
+      <div class="stat-card"><div class="stat-icon">✅</div><div class="stat-info"><div class="stat-value">${normalItems.length}</div><div class="stat-label">库存正常</div></div></div>
+    `;
+
+    // 预警列表
+    document.getElementById('warning-tbody').innerHTML = lowItems.length === 0
+      ? '<tr><td colspan="8" style="text-align:center;color:var(--color-text-secondary);padding:var(--spacing-xl)">🎉 暂无库存预警</td></tr>'
+      : lowItems.map(i => {
+        const gap = i.minStock - i.stock;
+        const ratio = i.stock / i.minStock;
+        const urgency = ratio < 0.5 ? '紧急' : '一般';
+        const urgencyClass = ratio < 0.5 ? 'badge-danger' : 'badge-warning';
+        return `
+          <tr>
+            <td>${i.id}</td>
+            <td><strong>${i.name}</strong></td>
+            <td>${i.category}</td>
+            <td>${i.spec}</td>
+            <td><span style="color:var(--color-danger);font-weight:600">${i.stock} ${i.unit}</span></td>
+            <td>${i.minStock} ${i.unit}</td>
+            <td><span style="color:var(--color-danger);font-weight:600">${gap} ${i.unit}</span></td>
+            <td><span class="badge ${urgencyClass}">${urgency}</span></td>
+          </tr>
+        `;
+      }).join('');
+
+    // 正常列表
+    document.getElementById('normal-tbody').innerHTML = normalItems.map(i => {
+      const ratio = ((i.stock / i.minStock) * 100).toFixed(0);
+      return `
+        <tr>
+          <td>${i.id}</td>
+          <td><strong>${i.name}</strong></td>
+          <td>${i.category}</td>
+          <td>${i.stock} ${i.unit}</td>
+          <td>${i.minStock} ${i.unit}</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:8px">
+              <div style="flex:1;height:8px;background:var(--color-bg);border-radius:4px;overflow:hidden">
+                <div style="width:${Math.min(ratio, 100)}%;height:100%;background:var(--color-success);border-radius:4px"></div>
+              </div>
+              <span style="font-size:var(--font-size-sm);color:var(--color-text-secondary);width:40px">${ratio}%</span>
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  </script>
+</body>
+</html>

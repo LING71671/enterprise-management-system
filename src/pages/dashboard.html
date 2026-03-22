@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>仪表盘 - 小麦科技企业管理平台</title>
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <style>
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: var(--spacing-md);
+      margin-top: var(--spacing-lg);
+    }
+    .module-card {
+      background: var(--color-bg-white);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-sm);
+      padding: var(--spacing-lg);
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-md);
+      text-decoration: none;
+      transition: var(--transition);
+      border-left: 4px solid var(--color-primary);
+    }
+    .module-card:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+    }
+    .module-card .icon {
+      font-size: 36px;
+      width: 56px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--color-primary-bg);
+      border-radius: var(--border-radius);
+    }
+    .module-card .info .name {
+      font-size: var(--font-size-lg);
+      font-weight: 600;
+      color: var(--color-text-primary);
+    }
+    .module-card .info .desc {
+      font-size: var(--font-size-sm);
+      color: var(--color-text-secondary);
+      margin-top: 4px;
+    }
+    .welcome-bar {
+      background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+      border-radius: var(--border-radius);
+      padding: var(--spacing-lg) var(--spacing-xl);
+      color: #fff;
+      margin-bottom: var(--spacing-lg);
+    }
+    .welcome-bar h2 { color: #fff; font-size: var(--font-size-xl); }
+    .welcome-bar p  { color: rgba(255,255,255,0.8); margin: 4px 0 0; }
+  </style>
+</head>
+<body>
+  <div id="header-placeholder"></div>
+
+  <div class="layout">
+    <div id="sidebar-placeholder"></div>
+
+    <main class="main-content">
+      <div class="welcome-bar">
+        <h2>欢迎回来，<span id="welcome-name">管理员</span> 👋</h2>
+        <p id="welcome-time"></p>
+      </div>
+
+      <div class="page-header">
+        <div>
+          <div class="page-title">系统概览</div>
+          <div class="page-subtitle">快速进入各业务子系统</div>
+        </div>
+      </div>
+
+      <div class="dashboard-grid">
+        <a href="production/index.html" class="module-card">
+          <div class="icon">🏭</div>
+          <div class="info">
+            <div class="name">生产管理</div>
+            <div class="desc">生产计划 · 任务排产 · 质量管理</div>
+          </div>
+        </a>
+        <a href="sales/index.html" class="module-card">
+          <div class="icon">📈</div>
+          <div class="info">
+            <div class="name">销售管理</div>
+            <div class="desc">客户信息 · 销售订单 · 数据报表</div>
+          </div>
+        </a>
+        <a href="equipment/index.html" class="module-card">
+          <div class="icon">⚙️</div>
+          <div class="info">
+            <div class="name">设备管理</div>
+            <div class="desc">状态监控 · 维护计划 · 故障记录</div>
+          </div>
+        </a>
+        <a href="purchase/index.html" class="module-card">
+          <div class="icon">🛒</div>
+          <div class="info">
+            <div class="name">采购管理</div>
+            <div class="desc">供应商 · 采购流程 · 订单跟踪</div>
+          </div>
+        </a>
+        <a href="warehouse/index.html" class="module-card">
+          <div class="icon">🏬</div>
+          <div class="info">
+            <div class="name">仓储管理</div>
+            <div class="desc">出入库 · 货位管理 · 库存预警</div>
+          </div>
+        </a>
+        <a href="employee/index.html" class="module-card">
+          <div class="icon">👥</div>
+          <div class="info">
+            <div class="name">员工管理</div>
+            <div class="desc">员工信息 · 考勤薪资 · 绩效评估</div>
+          </div>
+        </a>
+      </div>
+    </main>
+  </div>
+
+  <script src="../assets/js/utils/dom.js"></script>
+  <script src="../assets/js/utils/storage.js"></script>
+  <script src="../assets/js/utils/format.js"></script>
+  <script src="../assets/js/modules/auth.js"></script>
+  <script src="../assets/js/modules/navigation.js"></script>
+  <script src="../assets/js/main.js"></script>
+  <script>
+    'use strict';
+    // 加载公共组件（带错误处理）
+    fetch('../components/header.html')
+      .then(r => { if (!r.ok) throw new Error('Header loading failed'); return r.text(); })
+      .then(html => {
+        document.getElementById('header-placeholder').innerHTML = html;
+        appNav.init();
+      })
+      .catch(err => {
+        document.getElementById('header-placeholder').innerHTML = '<div style="padding:16px;color:red;">头部加载失败</div>';
+        console.error(err);
+      });
+    fetch('../components/sidebar.html')
+      .then(r => { if (!r.ok) throw new Error('Sidebar loading failed'); return r.text(); })
+      .then(html => {
+        document.getElementById('sidebar-placeholder').innerHTML = html;
+      })
+      .catch(err => {
+        document.getElementById('sidebar-placeholder').innerHTML = '<div style="padding:16px;color:red;">侧边栏加载失败</div>';
+        console.error(err);
+      });
+
+    // 欢迎语
+    const user = auth.getUser();
+    if (user) document.getElementById('welcome-name').textContent = user.username;
+    document.getElementById('welcome-time').textContent = formatDate(new Date(), 'YYYY年MM月DD日 HH:mm') + ' · 今天也是充满活力的一天';
+  </script>
+</body>
+</html>

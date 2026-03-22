@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>销售管理 - 小麦科技企业管理平台</title>
+  <link rel="stylesheet" href="../../assets/css/main.css">
+</head>
+<body>
+  <div id="header-placeholder"></div>
+  <div class="layout">
+    <div id="sidebar-placeholder"></div>
+    <main class="main-content">
+      <div class="page-header">
+        <div>
+          <div class="page-title">销售管理</div>
+          <div class="page-subtitle">销售全流程管理</div>
+        </div>
+      </div>
+
+      <div class="stats-grid" id="stats-grid"></div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:var(--spacing-md);margin-top:var(--spacing-lg)">
+        <a href="customer.html" class="stat-card" style="text-decoration:none">
+          <div class="stat-icon">🤝</div>
+          <div class="stat-info"><div class="stat-value" style="font-size:var(--font-size-lg)">客户信息</div><div class="stat-label">客户档案与管理</div></div>
+        </a>
+        <a href="order.html" class="stat-card" style="text-decoration:none">
+          <div class="stat-icon">📋</div>
+          <div class="stat-info"><div class="stat-value" style="font-size:var(--font-size-lg)">销售订单</div><div class="stat-label">订单跟踪与管理</div></div>
+        </a>
+        <a href="report.html" class="stat-card" style="text-decoration:none">
+          <div class="stat-icon">📈</div>
+          <div class="stat-info"><div class="stat-value" style="font-size:var(--font-size-lg)">销售报表</div><div class="stat-label">销售数据分析</div></div>
+        </a>
+        <a href="pricing.html" class="stat-card" style="text-decoration:none">
+          <div class="stat-icon">💰</div>
+          <div class="stat-info"><div class="stat-value" style="font-size:var(--font-size-lg)">定价促销</div><div class="stat-label">产品定价管理</div></div>
+        </a>
+        <a href="team.html" class="stat-card" style="text-decoration:none">
+          <div class="stat-icon">👥</div>
+          <div class="stat-info"><div class="stat-value" style="font-size:var(--font-size-lg)">销售团队</div><div class="stat-label">团队业绩管理</div></div>
+        </a>
+      </div>
+
+      <!-- 近期订单 -->
+      <div class="card" style="margin-top:var(--spacing-lg)">
+        <div class="card-header">
+          <div class="card-title">近期订单</div>
+          <a href="order.html" class="btn btn-ghost btn-sm">查看全部</a>
+        </div>
+        <div class="table-wrapper">
+          <table class="table">
+            <thead>
+              <tr><th>订单号</th><th>客户</th><th>产品</th><th>金额</th><th>状态</th></tr>
+            </thead>
+            <tbody id="order-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="../../assets/js/utils/dom.js"></script>
+  <script src="../../assets/js/utils/storage.js"></script>
+  <script src="../../assets/js/utils/format.js"></script>
+  <script src="../../assets/js/modules/auth.js"></script>
+  <script src="../../assets/js/modules/navigation.js"></script>
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../data/sales.js"></script>
+  <script>
+    'use strict';
+    fetch('../../components/header.html').then(r => r.text()).then(html => {
+      document.getElementById('header-placeholder').innerHTML = html;
+      appNav.init();
+    });
+    fetch('../../components/sidebar.html').then(r => r.text()).then(html => {
+      document.getElementById('sidebar-placeholder').innerHTML = html;
+    });
+
+    const { customers, orders, report } = salesData;
+    const totalRevenue = orders.reduce((s, o) => s + o.amount, 0);
+    const done = orders.filter(o => o.status === '已完成').length;
+    const vip = customers.filter(c => c.level === 'VIP').length;
+
+    document.getElementById('stats-grid').innerHTML = `
+      <div class="stat-card"><div class="stat-icon">💰</div><div class="stat-info"><div class="stat-value">${formatMoney(totalRevenue)}</div><div class="stat-label">本月销售额</div></div></div>
+      <div class="stat-card"><div class="stat-icon">📋</div><div class="stat-info"><div class="stat-value">${orders.length}</div><div class="stat-label">订单总数</div></div></div>
+      <div class="stat-card"><div class="stat-icon">✅</div><div class="stat-info"><div class="stat-value">${done}</div><div class="stat-label">已完成订单</div></div></div>
+      <div class="stat-card"><div class="stat-icon">⭐</div><div class="stat-info"><div class="stat-value">${vip}</div><div class="stat-label">VIP客户</div></div></div>
+    `;
+
+    const statusMap = { '已完成': 'badge-success', '配送中': 'badge-info', '待发货': 'badge-warning', '待审核': 'badge-default' };
+    document.getElementById('order-tbody').innerHTML = orders.slice(0, 5).map(o => `
+      <tr>
+        <td>${o.id}</td>
+        <td>${o.customerName}</td>
+        <td>${o.product}</td>
+        <td><strong>${formatMoney(o.amount)}</strong></td>
+        <td><span class="badge ${statusMap[o.status] || 'badge-default'}">${o.status}</span></td>
+      </tr>
+    `).join('');
+  </script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-sm);
+  background: var(--color-bg-white);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-base);
+}
+
+.table thead {
+  background: var(--color-bg);
+}
+
+.table th {
+  padding: 12px var(--spacing-md);
+  text-align: left;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  border-bottom: 1px solid var(--border-color);
+  white-space: nowrap;
+}
+
+.table td {
+  padding: 12px var(--spacing-md);
+  color: var(--color-text-primary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.table tbody tr:hover {
+  background: var(--color-primary-bg);
+}
+
+.table-actions {
+  display: flex;
+  gap: var(--spacing-xs);
+}
+
+/* 状态标签 */
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: var(--font-size-xs);
+  font-weight: 500;
+}
+
+.badge-success { background: #f6ffed; color: var(--color-success); }
+.badge-warning { background: #fffbe6; color: var(--color-warning); }
+.badge-danger  { background: #fff1f0; color: var(--color-danger); }
+.badge-info    { background: #e6f7ff; color: var(--color-info); }
+.badge-default { background: var(--color-bg); color: var(--color-text-secondary); }

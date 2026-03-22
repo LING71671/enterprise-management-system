@@ -1,0 +1,697 @@
+/**
+* Landing Page Styles
+* 落地页基础样式框架
+*
+* @description 定义落地页通用布局、section基础样式及动画
+*/
+
+/* =====================
+   页面容器
+   ===================== */
+.landing-page {
+  min-height: 100vh;
+  color: var(--color-text-primary);
+  background: var(--color-bg);
+}
+
+/* =====================
+   通用容器
+   ===================== */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-md);
+}
+
+@media (min-width: 768px) {
+  .container {
+    padding: 0 var(--spacing-xl);
+  }
+}
+
+/* =====================
+   通用Section样式
+   ===================== */
+.landing-section {
+  padding: var(--spacing-xl) 0;
+}
+
+@media (min-width: 768px) {
+  .landing-section {
+    padding: 80px 0;
+  }
+}
+
+/* Section标题 */
+.section-title {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  text-align: center;
+  margin-bottom: var(--spacing-md);
+}
+
+@media (min-width: 768px) {
+  .section-title {
+    font-size: var(--font-size-xxl);
+    margin-bottom: var(--spacing-lg);
+  }
+}
+
+/* Section副标题 */
+.section-subtitle {
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto var(--spacing-xl);
+  line-height: 1.6;
+}
+
+@media (min-width: 768px) {
+  .section-subtitle {
+    font-size: var(--font-size-lg);
+  }
+}
+
+/* =====================
+   导航栏
+   ===================== */
+#navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--header-height);
+  background: var(--color-bg-header);
+  box-shadow: var(--shadow-sm);
+  z-index: 1000;
+}
+
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 60px;
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-primary);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.navbar-brand img {
+  height: 32px;
+}
+
+.navbar-nav {
+  display: flex;
+  gap: 24px;
+}
+
+.navbar-nav a {
+  color: inherit;
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.navbar-nav a:hover {
+  color: var(--color-primary);
+}
+
+.navbar-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+/* 导航栏按钮统一样式 */
+.navbar-actions .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 24px;
+  font-size: var(--font-size-base);
+  font-weight: 500;
+  text-decoration: none;
+  border-radius: var(--border-radius);
+  transition: var(--transition);
+  cursor: pointer;
+  min-width: 80px;
+  height: 40px;
+  box-sizing: border-box;
+}
+
+.navbar-actions .btn-primary {
+  background: var(--color-primary);
+  color: var(--color-text-inverse);
+  border: 1px solid var(--color-primary);
+}
+
+.navbar-actions .btn-primary:hover {
+  background: var(--color-primary-dark);
+  border-color: var(--color-primary-dark);
+}
+
+.navbar-actions .btn-outline {
+  background: transparent;
+  color: var(--color-text-primary);
+  border: 1px solid var(--border-color);
+}
+
+.navbar-actions .btn-outline:hover {
+  background: var(--color-primary-bg);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.navbar-scrolled {
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.9);
+}
+
+/* =====================
+   按钮样式
+   ===================== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  font-size: var(--font-size-base);
+  font-weight: 500;
+  text-decoration: none;
+  border-radius: var(--border-radius);
+  transition: var(--transition);
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: var(--color-primary);
+  color: var(--color-text-inverse);
+  border: 1px solid var(--color-primary);
+}
+
+.btn-primary:hover {
+  background: var(--color-primary-dark);
+  border-color: var(--color-primary-dark);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--color-text-inverse);
+  border: 1px solid var(--color-text-inverse);
+}
+
+.btn-outline:hover {
+  background: var(--color-text-inverse);
+  color: var(--color-text-primary);
+}
+
+.btn-lg {
+  padding: 12px 32px;
+  font-size: var(--font-size-lg);
+}
+
+/* =====================
+   Hero区域
+   ===================== */
+#hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg-dark, linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%));
+  padding-top: var(--header-height);
+}
+
+.hero-container {
+  text-align: center;
+  padding: 120px 0;
+}
+
+.hero-title {
+  font-size: 48px;
+  color: var(--color-text-inverse);
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.hero-subtitle {
+  font-size: 20px;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 40px;
+}
+
+.hero-actions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+/* =====================
+   业务区块
+   ===================== */
+#about,
+#technology,
+#products,
+#partners {
+  background: var(--color-bg-white);
+}
+
+/* =====================
+   统计卡片
+   ===================== */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+@media (max-width: 768px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.stat-card {
+  background: var(--color-bg-white);
+  border-radius: var(--border-radius);
+  padding: 32px;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+}
+
+.stat-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-4px);
+}
+
+.stat-number {
+  font-size: 36px;
+  color: var(--color-primary);
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.stat-label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+/* =====================
+   技术卡片
+   ===================== */
+.tech-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+@media (max-width: 768px) {
+  .tech-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.tech-card {
+  background: var(--color-bg-white);
+  border-radius: var(--border-radius);
+  padding: 32px;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+}
+
+.tech-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-4px);
+}
+
+.tech-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.tech-card h3 {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: 8px;
+}
+
+.tech-card p {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+
+/* =====================
+   产品服务卡片
+   ===================== */
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+@media (max-width: 768px) {
+  .products-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.product-card {
+  background: var(--color-bg-white);
+  border-radius: var(--border-radius);
+  padding: 32px;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+}
+
+.product-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-4px);
+}
+
+.product-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.product-card h3 {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: 8px;
+}
+
+.product-card p {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+
+/* =====================
+   合作伙伴
+   ===================== */
+.partners-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 32px;
+  align-items: center;
+  justify-items: center;
+}
+
+.partner-logo {
+  padding: 16px;
+  opacity: 0.6;
+  transition: 0.3s;
+}
+
+.partner-logo:hover {
+  opacity: 1;
+}
+
+.partner-logo img {
+  width: 80px !important;
+  height: 80px !important;
+  object-fit: contain;
+  transition: transform 0.3s, opacity 0.3s;
+}
+
+.partner-logo:hover img {
+  transform: scale(1.1);
+}
+
+/* =====================
+   CTA区域
+   ===================== */
+#cta {
+  background: var(--color-primary);
+  padding: 80px 0;
+  text-align: center;
+}
+
+.cta-title {
+  font-size: 32px;
+  color: var(--color-text-inverse);
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.cta-subtitle {
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 32px;
+}
+
+.btn-white {
+  background: var(--color-text-inverse);
+  color: var(--color-primary);
+  border: 1px solid var(--color-text-inverse);
+}
+
+.btn-white:hover {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: rgba(255, 255, 255, 0.9);
+}
+
+/* =====================
+   页脚
+   ===================== */
+#footer {
+  background: var(--color-bg-sidebar);
+  color: var(--color-text-inverse);
+  padding: var(--spacing-xl) 0;
+}
+
+.footer-content {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 40px;
+  padding: 40px 0;
+}
+
+@media (max-width: 768px) {
+  .footer-content {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding: 24px 0;
+  }
+}
+
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.footer-logo {
+  width: auto;
+  height: 32px;
+  object-fit: contain;
+}
+
+.footer-brand p {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: var(--font-size-sm);
+}
+
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  justify-content: center;
+}
+
+.footer-links a {
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.footer-links a:hover {
+  color: var(--color-text-inverse);
+}
+
+.footer-copyright {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 20px;
+  text-align: center;
+  opacity: 0.7;
+  font-size: var(--font-size-sm);
+}
+
+/* =====================
+   动画关键帧
+   ===================== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =====================
+   动画辅助类
+   ===================== */
+.fade-in {
+  animation: fadeIn 0.6s ease forwards;
+}
+
+.slide-up {
+  animation: slideUp 0.6s ease forwards;
+}
+
+/* =====================
+   响应式适配
+   ===================== */
+@media (max-width: 1024px) {
+  .stats-grid,
+  .tech-grid,
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .footer-content {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar-nav {
+    display: none;
+  }
+  
+  .stats-grid,
+  .tech-grid,
+  .products-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .hero-title {
+    font-size: 32px;
+  }
+  
+  .hero-subtitle {
+    font-size: 16px;
+  }
+  
+  .cta-title {
+    font-size: 24px;
+  }
+  
+  .partners-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+.partner-logo img {
+  width: 60px !important;
+  height: 60px !important;
+}
+}
+
+/* =====================
+   创始人板块及占位符
+   ===================== */
+.image-placeholder {
+  background: rgba(0, 0, 0, 0.03);
+  border: 2px dashed rgba(255, 107, 0, 0.2);
+  border-radius: var(--border-radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  text-align: center;
+  padding: 16px;
+  width: 100%;
+}
+
+.tech-placeholder { height: 120px; margin-bottom: 24px; }
+.product-placeholder { height: 180px; margin-bottom: 24px; }
+
+.founders-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 32px;
+}
+
+@media (max-width: 768px) {
+  .founders-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.founder-card {
+  background: var(--color-bg-white);
+  border-radius: var(--border-radius-lg);
+  padding: 32px;
+  box-shadow: var(--shadow-md);
+  text-align: center;
+  transition: var(--transition);
+}
+
+.founder-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.founder-photo {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  border-radius: var(--border-radius);
+  margin-bottom: 24px;
+  display: none;
+}
+
+.founder-photo[src]:not([src=""]) {
+  display: block;
+}
+.founder-card .image-placeholder {
+  display: flex;
+}
+.founder-photo[src]:not([src=""]) + .image-placeholder {
+  display: none;
+}
+
+.founder-card h3 {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--color-text-primary);
+}
+
+.founder-title {
+  color: var(--color-primary);
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.founder-bio {
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}

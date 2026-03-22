@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>物料需求 - 小麦科技企业管理平台</title>
+  <link rel="stylesheet" href="../../assets/css/main.css">
+</head>
+<body>
+  <div id="header-placeholder"></div>
+  <div class="layout">
+    <div id="sidebar-placeholder"></div>
+    <main class="main-content">
+      <div class="page-header">
+        <div>
+          <div class="page-title">物料需求计划</div>
+          <div class="page-subtitle">物料库存与短缺分析</div>
+        </div>
+      </div>
+
+      <div class="stats-grid" id="stats-grid"></div>
+
+      <div class="card">
+        <div class="card-header"><div class="card-title">物料清单</div></div>
+        <div class="table-wrapper">
+          <table class="table">
+            <thead>
+              <tr><th>编号</th><th>物料名称</th><th>规格</th><th>单位</th><th>需求量</th><th>库存量</th><th>短缺量</th><th>状态</th></tr>
+            </thead>
+            <tbody id="material-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="../../assets/js/utils/dom.js"></script>
+  <script src="../../assets/js/utils/storage.js"></script>
+  <script src="../../assets/js/utils/format.js"></script>
+  <script src="../../assets/js/modules/auth.js"></script>
+  <script src="../../assets/js/modules/navigation.js"></script>
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../data/production.js"></script>
+  <script>
+    'use strict';
+    fetch('../../components/header.html').then(r => r.text()).then(html => {
+      document.getElementById('header-placeholder').innerHTML = html;
+      appNav.init();
+    });
+    fetch('../../components/sidebar.html').then(r => r.text()).then(html => {
+      document.getElementById('sidebar-placeholder').innerHTML = html;
+    });
+
+    const materials = productionData.materials;
+    const shortage = materials.filter(m => m.shortage > 0).length;
+    const sufficient = materials.filter(m => m.shortage === 0).length;
+
+    document.getElementById('stats-grid').innerHTML = `
+      <div class="stat-card"><div class="stat-icon">📦</div><div class="stat-info"><div class="stat-value">${materials.length}</div><div class="stat-label">物料种类</div></div></div>
+      <div class="stat-card"><div class="stat-icon">✅</div><div class="stat-info"><div class="stat-value">${sufficient}</div><div class="stat-label">库存充足</div></div></div>
+      <div class="stat-card"><div class="stat-icon">⚠️</div><div class="stat-info"><div class="stat-value">${shortage}</div><div class="stat-label">库存短缺</div></div></div>
+    `;
+
+    document.getElementById('material-tbody').innerHTML = materials.map(m => `
+      <tr>
+        <td>${m.id}</td>
+        <td><strong>${m.name}</strong></td>
+        <td>${m.spec}</td>
+        <td>${m.unit}</td>
+        <td>${m.required}</td>
+        <td>${m.stock}</td>
+        <td>${m.shortage > 0 ? `<span style="color:var(--color-danger);font-weight:600">${m.shortage}</span>` : '—'}</td>
+        <td><span class="badge ${m.shortage > 0 ? 'badge-danger' : 'badge-success'}">${m.shortage > 0 ? '短缺' : '充足'}</span></td>
+      </tr>
+    `).join('');
+  </script>
+</body>
+</html>

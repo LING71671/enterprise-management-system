@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>员工管理 - 小麦科技企业管理平台</title>
+  <link rel="stylesheet" href="../../assets/css/main.css">
+</head>
+<body>
+  <div id="header-placeholder"></div>
+  <div class="layout">
+    <div id="sidebar-placeholder"></div>
+    <main class="main-content">
+      <div class="page-header">
+        <div>
+          <div class="page-title">员工管理</div>
+          <div class="page-subtitle">管理公司全体员工信息</div>
+        </div>
+        <div>
+          <a href="info.html" class="btn btn-primary">+ 新增员工</a>
+        </div>
+      </div>
+
+      <!-- 统计卡片 -->
+      <div class="stats-grid" id="stats-grid"></div>
+
+      <!-- 快捷入口 -->
+      <div class="stats-grid" style="margin-bottom: var(--spacing-lg);">
+        <a href="info.html" class="stat-card" style="text-decoration:none">
+          <div class="stat-icon">👤</div>
+          <div class="stat-info">
+            <div class="stat-value" style="font-size:var(--font-size-lg)">员工信息</div>
+            <div class="stat-label">查看与管理员工档案</div>
+          </div>
+        </a>
+        <a href="attendance.html" class="stat-card" style="text-decoration:none">
+          <div class="stat-icon">📅</div>
+          <div class="stat-info">
+            <div class="stat-value" style="font-size:var(--font-size-lg)">考勤薪资</div>
+            <div class="stat-label">考勤记录与薪资核算</div>
+          </div>
+        </a>
+        <a href="recruitment.html" class="stat-card" style="text-decoration:none">
+          <div class="stat-icon">📋</div>
+          <div class="stat-info">
+            <div class="stat-value" style="font-size:var(--font-size-lg)">招聘培训</div>
+            <div class="stat-label">招聘计划与培训管理</div>
+          </div>
+        </a>
+        <a href="performance.html" class="stat-card" style="text-decoration:none">
+          <div class="stat-icon">🏆</div>
+          <div class="stat-info">
+            <div class="stat-value" style="font-size:var(--font-size-lg)">绩效评估</div>
+            <div class="stat-label">季度绩效考核结果</div>
+          </div>
+        </a>
+      </div>
+
+      <!-- 员工列表 -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">员工列表</div>
+          <div class="toolbar-right">
+            <div class="search-box">
+              <span class="search-icon">🔍</span>
+              <input type="text" id="search-input" placeholder="搜索姓名/部门/职位">
+            </div>
+            <select class="form-control" id="dept-filter" style="width:120px">
+              <option value="">全部部门</option>
+            </select>
+          </div>
+        </div>
+        <div class="table-wrapper">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>工号</th>
+                <th>姓名</th>
+                <th>性别</th>
+                <th>部门</th>
+                <th>职位</th>
+                <th>入职日期</th>
+                <th>状态</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody id="employee-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- 模态框 -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title" id="modal-title">员工详情</div>
+        <div class="modal-close" id="modal-close">✕</div>
+      </div>
+      <div class="modal-body" id="modal-body"></div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" id="modal-cancel">关闭</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../assets/js/utils/dom.js"></script>
+  <script src="../../assets/js/utils/storage.js"></script>
+  <script src="../../assets/js/utils/format.js"></script>
+  <script src="../../assets/js/modules/auth.js"></script>
+  <script src="../../assets/js/modules/navigation.js"></script>
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../data/employee.js"></script>
+  <script>
+    'use strict';
+
+    // 加载公共组件
+    fetch('../../components/header.html').then(r => r.text()).then(html => {
+      document.getElementById('header-placeholder').innerHTML = html;
+      appNav.init();
+    });
+    fetch('../../components/sidebar.html').then(r => r.text()).then(html => {
+      document.getElementById('sidebar-placeholder').innerHTML = html;
+    });
+
+    const employees = employeeData.employees;
+
+    // 统计卡片
+    function renderStats() {
+      const total = employees.length;
+      const active = employees.filter(e => e.status === '在职').length;
+      const trial = employees.filter(e => e.status === '试用期').length;
+      const depts = new Set(employees.map(e => e.dept)).size;
+      const grid = document.getElementById('stats-grid');
+      grid.innerHTML = `
+        <div class="stat-card"><div class="stat-icon">👥</div><div class="stat-info"><div class="stat-value">${total}</div><div class="stat-label">员工总数</div></div></div>
+        <div class="stat-card"><div class="stat-icon">✅</div><div class="stat-info"><div class="stat-value">${active}</div><div class="stat-label">在职员工</div></div></div>
+        <div class="stat-card"><div class="stat-icon">🕐</div><div class="stat-info"><div class="stat-value">${trial}</div><div class="stat-label">试用期员工</div></div></div>
+        <div class="stat-card"><div class="stat-icon">🏢</div><div class="stat-info"><div class="stat-value">${depts}</div><div class="stat-label">部门数量</div></div></div>
+      `;
+    }
+
+    // 部门筛选
+    function renderDeptFilter() {
+      const depts = [...new Set(employees.map(e => e.dept))];
+      const sel = document.getElementById('dept-filter');
+      depts.forEach(d => {
+        const opt = document.createElement('option');
+        opt.value = d;
+        opt.textContent = d;
+        sel.appendChild(opt);
+      });
+    }
+
+    // 渲染表格
+    function renderTable(list) {
+      const statusMap = { '在职': 'badge-success', '试用期': 'badge-warning', '离职': 'badge-danger' };
+      document.getElementById('employee-tbody').innerHTML = list.map(e => `
+        <tr>
+          <td>${e.id}</td>
+          <td><strong>${e.name}</strong></td>
+          <td>${e.gender}</td>
+          <td>${e.dept}</td>
+          <td>${e.position}</td>
+          <td>${e.entryDate}</td>
+          <td><span class="badge ${statusMap[e.status] || 'badge-default'}">${e.status}</span></td>
+          <td>
+            <div class="table-actions">
+              <button class="btn btn-outline btn-sm" onclick="showDetail('${e.id}')">详情</button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    // 详情弹窗
+    function showDetail(id) {
+      const e = employees.find(emp => emp.id === id);
+      if (!e) return;
+      document.getElementById('modal-title').textContent = e.name + ' 的员工档案';
+      document.getElementById('modal-body').innerHTML = `
+        <div class="form-row">
+          <div class="form-group"><div class="form-label">工号</div><div>${e.id}</div></div>
+          <div class="form-group"><div class="form-label">姓名</div><div>${e.name}</div></div>
+          <div class="form-group"><div class="form-label">性别</div><div>${e.gender}</div></div>
+          <div class="form-group"><div class="form-label">部门</div><div>${e.dept}</div></div>
+          <div class="form-group"><div class="form-label">职位</div><div>${e.position}</div></div>
+          <div class="form-group"><div class="form-label">手机</div><div>${e.phone}</div></div>
+          <div class="form-group"><div class="form-label">邮箱</div><div>${e.email}</div></div>
+          <div class="form-group"><div class="form-label">入职日期</div><div>${e.entryDate}</div></div>
+          <div class="form-group"><div class="form-label">薪资</div><div>${formatMoney(e.salary)}</div></div>
+          <div class="form-group"><div class="form-label">状态</div><div>${e.status}</div></div>
+        </div>
+      `;
+      addClass(document.getElementById('modal-overlay'), 'active');
+    }
+
+    // 关闭弹窗
+    document.getElementById('modal-close').onclick = closeModal;
+    document.getElementById('modal-cancel').onclick = closeModal;
+    document.getElementById('modal-overlay').onclick = function(e) {
+      if (e.target === this) closeModal();
+    };
+    function closeModal() {
+      removeClass(document.getElementById('modal-overlay'), 'active');
+    }
+
+    // 搜索 + 筛选
+    function filterAndRender() {
+      const keyword = document.getElementById('search-input').value.trim().toLowerCase();
+      const dept = document.getElementById('dept-filter').value;
+      const list = employees.filter(e => {
+        const matchKeyword = !keyword || e.name.includes(keyword) || e.dept.includes(keyword) || e.position.includes(keyword);
+        const matchDept = !dept || e.dept === dept;
+        return matchKeyword && matchDept;
+      });
+      renderTable(list);
+    }
+
+    document.getElementById('search-input').addEventListener('input', filterAndRender);
+    document.getElementById('dept-filter').addEventListener('change', filterAndRender);
+
+    renderStats();
+    renderDeptFilter();
+    renderTable(employees);
+  </script>
+</body>
+</html>

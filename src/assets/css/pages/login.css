@@ -1,0 +1,124 @@
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  background: var(--color-bg);
+  position: relative;
+  overflow: hidden;
+  flex-direction: row;
+}
+
+@media (max-width: 768px) {
+  .login-page {
+    flex-direction: column;
+  }
+}
+
+.login-side {
+  flex: 1;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  padding: 40px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: inset -10px 0 20px rgba(0,0,0,0.2);
+}
+
+.login-side::before {
+  content: '';
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,107,0,0.15) 0%, transparent 70%);
+  top: -200px;
+  right: -100px;
+}
+
+.login-side::after {
+  content: '';
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,107,0,0.10) 0%, transparent 70%);
+  bottom: -100px;
+  left: -100px;
+}
+
+.login-side-content {
+  z-index: 1;
+  text-align: center;
+}
+
+.login-side-content img {
+  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
+}
+
+.login-side-content h1 {
+  font-size: 32px;
+  margin-bottom: 16px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.login-side-content p {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.6;
+}
+
+.login-form-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  background: var(--color-bg-white);
+}
+
+.login-box {
+  width: 100%;
+  max-width: 380px;
+}
+
+.login-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+.login-box .btn-primary {
+  width: 100%;
+  padding: 12px;
+  font-size: var(--font-size-lg);
+  margin-top: var(--spacing-md);
+  box-shadow: 0 4px 12px rgba(255,107,0,0.3);
+}
+
+.login-box .btn-primary:active {
+  transform: translateY(2px);
+}
+
+.login-footer {
+  text-align: center;
+  margin-top: var(--spacing-xl);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.login-footer a {
+  color: var(--color-primary);
+  font-weight: 600;
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.login-footer a:hover {
+  text-decoration: underline;
+}

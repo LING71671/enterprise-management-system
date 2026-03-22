@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>故障记录 - 小麦科技企业管理平台</title>
+  <link rel="stylesheet" href="../../assets/css/main.css">
+</head>
+<body>
+  <div id="header-placeholder"></div>
+  <div class="layout">
+    <div id="sidebar-placeholder"></div>
+    <main class="main-content">
+      <div class="page-header">
+        <div>
+          <div class="page-title">故障记录</div>
+          <div class="page-subtitle">设备故障记录与分析</div>
+        </div>
+        <button class="btn btn-primary" id="add-btn">+ 报告故障</button>
+      </div>
+
+      <div class="stats-grid" id="stats-grid"></div>
+
+      <div class="card">
+        <div class="card-header"><div class="card-title">故障列表</div></div>
+        <div class="table-wrapper">
+          <table class="table">
+            <thead>
+              <tr><th>编号</th><th>设备名称</th><th>故障日期</th><th>故障描述</th><th>严重程度</th><th>处理人</th><th>状态</th><th>操作</th></tr>
+            </thead>
+            <tbody id="fault-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="../../assets/js/utils/dom.js"></script>
+  <script src="../../assets/js/utils/storage.js"></script>
+  <script src="../../assets/js/utils/format.js"></script>
+  <script src="../../assets/js/modules/auth.js"></script>
+  <script src="../../assets/js/modules/navigation.js"></script>
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../data/equipment.js"></script>
+  <script>
+    'use strict';
+    fetch('../../components/header.html').then(r => r.text()).then(html => {
+      document.getElementById('header-placeholder').innerHTML = html;
+      appNav.init();
+    });
+    fetch('../../components/sidebar.html').then(r => r.text()).then(html => {
+      document.getElementById('sidebar-placeholder').innerHTML = html;
+    });
+
+    let list = [...equipmentData.faults];
+    const severityMap = { '严重': 'badge-danger', '一般': 'badge-warning', '轻微': 'badge-info' };
+    const statusMap = { '维修中': 'badge-warning', '待处理': 'badge-danger', '已解决': 'badge-success' };
+
+    function renderStats() {
+      const unresolved = list.filter(f => f.status !== '已解决').length;
+      const severe = list.filter(f => f.severity === '严重').length;
+      document.getElementById('stats-grid').innerHTML = `
+        <div class="stat-card"><div class="stat-icon">⚠️</div><div class="stat-info"><div class="stat-value">${list.length}</div><div class="stat-label">故障总数</div></div></div>
+        <div class="stat-card"><div class="stat-icon">🔴</div><div class="stat-info"><div class="stat-value">${unresolved}</div><div class="stat-label">未解决</div></div></div>
+        <div class="stat-card"><div class="stat-icon">🚨</div><div class="stat-info"><div class="stat-value">${severe}</div><div class="stat-label">严重故障</div></div></div>
+      `;
+    }
+
+    function renderTable() {
+      document.getElementById('fault-tbody').innerHTML = list.map(f => `
+        <tr>
+          <td>${f.id}</td>
+          <td><strong>${f.equipName}</strong></td>
+          <td>${f.faultDate}</td>
+          <td style="max-width:260px;color:var(--color-text-secondary)">${f.description}</td>
+          <td><span class="badge ${severityMap[f.severity] || 'badge-default'}">${f.severity}</span></td>
+          <td>${f.handler}</td>
+          <td><span class="badge ${statusMap[f.status] || 'badge-default'}">${f.status}</span></td>
+          <td>
+            <div class="table-actions">
+              <button class="btn btn-danger btn-sm" onclick="deleteItem('${f.id}')">删除</button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function deleteItem(id) {
+      if (!confirm('确认删除该故障记录？')) return;
+      list = list.filter(f => f.id !== id);
+      renderStats();
+      renderTable();
+    }
+
+    document.getElementById('add-btn').onclick = () => alert('报告故障功能待实现');
+    renderStats();
+    renderTable();
+  </script>
+</body>
+</html>
