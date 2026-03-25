@@ -33,9 +33,12 @@ function initPathObserver() {
     // 修复 Header Logo 路径
     const logoImg = document.getElementById('header-logo-img');
     if (logoImg && !logoImg.dataset.fixed) {
-      logoImg.src = rootPath + 'assets/images/logo.png';
-      logoImg.dataset.fixed = '1';
-      logoImg.style.display = '';
+      logoImg.style.display = '';  // Reset display FIRST
+      logoImg.dataset.fixed = '1';  // Mark as fixed
+      // Delay src change to allow onerror handler to work
+      setTimeout(() => {
+        logoImg.src = rootPath + 'assets/images/logo.png';
+      }, 0);
     }
 
     // 修复侧边栏导航路径并绑定点击事件

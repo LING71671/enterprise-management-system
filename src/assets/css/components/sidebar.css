@@ -6,7 +6,7 @@
   width: var(--sidebar-width);
   height: calc(100vh - var(--header-height));
   background: var(--color-bg-sidebar);
-  z-index: 99;
+  z-index: 101;
 }
 
 .sidebar {
@@ -17,7 +17,7 @@
   height: calc(100vh - var(--header-height));
   background: var(--color-bg-sidebar);
   overflow-y: auto;
-  z-index: 99;
+  z-index: 101;
   padding: var(--spacing-md) 0;
 }
 
