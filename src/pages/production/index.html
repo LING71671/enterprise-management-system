@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>生产管理 - 小麦科技企业管理平台</title>
+  <link rel="stylesheet" href="../../assets/css/main.css">
+</head>
+<body>
+  <div id="header-placeholder"></div>
+  <div class="layout">
+    <div id="sidebar-placeholder"></div>
+    <main class="main-content">
+      <div class="page-header">
+        <div>
+          <div class="page-title">生产管理</div>
+          <div class="page-subtitle">生产全流程管理</div>
+        </div>
+      </div>
+
+      <div class="stats-grid" id="stats-grid"></div>
+
+      <div class="dashboard-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:var(--spacing-md);margin-top:var(--spacing-lg)">
+        <a href="plan.html" class="stat-card" style="text-decoration:none">
+          <div class="stat-icon">📅</div>
+          <div class="stat-info"><div class="stat-value" style="font-size:var(--font-size-lg)">生产计划</div><div class="stat-label">制定与管理生产计划</div></div>
+        </a>
+        <a href="scheduling.html" class="stat-card" style="text-decoration:none">
+          <div class="stat-icon">🗓️</div>
+          <div class="stat-info"><div class="stat-value" style="font-size:var(--font-size-lg)">任务排产</div><div class="stat-label">生产任务分配与进度</div></div>
+        </a>
+        <a href="material.html" class="stat-card" style="text-decoration:none">
+          <div class="stat-icon">📦</div>
+          <div class="stat-info"><div class="stat-value" style="font-size:var(--font-size-lg)">物料需求</div><div class="stat-label">物料需求计划管理</div></div>
+        </a>
+        <a href="order.html" class="stat-card" style="text-decoration:none">
+          <div class="stat-icon">📋</div>
+          <div class="stat-info"><div class="stat-value" style="font-size:var(--font-size-lg)">生产订单</div><div class="stat-label">生产订单跟踪管理</div></div>
+        </a>
+        <a href="quality.html" class="stat-card" style="text-decoration:none">
+          <div class="stat-icon">✅</div>
+          <div class="stat-info"><div class="stat-value" style="font-size:var(--font-size-lg)">质量管理</div><div class="stat-label">质检记录与分析</div></div>
+        </a>
+        <a href="inventory.html" class="stat-card" style="text-decoration:none">
+          <div class="stat-icon">🏭</div>
+          <div class="stat-info"><div class="stat-value" style="font-size:var(--font-size-lg)">库存管理</div><div class="stat-label">生产库存查看</div></div>
+        </a>
+      </div>
+
+      <!-- 任务进度概览 -->
+      <div class="card" style="margin-top:var(--spacing-lg)">
+        <div class="card-header">
+          <div class="card-title">当前任务进度</div>
+        </div>
+        <div class="table-wrapper">
+          <table class="table">
+            <thead>
+              <tr><th>任务编号</th><th>产品</th><th>数量</th><th>负责人</th><th>截止日期</th><th>进度</th></tr>
+            </thead>
+            <tbody id="task-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+<script src="../../assets/js/utils/dom.js"></script>
+<script src="../../assets/js/utils/storage.js"></script>
+<script src="../../assets/js/utils/format.js"></script>
+<script src="../../assets/js/modules/auth.js"></script>
+<script src="../../assets/js/modules/navigation.js"></script>
+<script src="../../assets/js/modules/mobile-nav.js"></script>
+<script src="../../assets/js/main.js"></script>
+  <script src="../../data/production.js"></script>
+<script>
+'use strict';
+let headerLoaded = false;
+let sidebarLoaded = false;
+
+function tryInitMobileNav() {
+  if (headerLoaded && sidebarLoaded) {
+    if (typeof MobileNav !== 'undefined') MobileNav.init();
+  }
+}
+
+fetch('../../components/header.html').then(r => r.text()).then(html => {
+  document.getElementById('header-placeholder').innerHTML = html;
+  appNav.init();
+  headerLoaded = true;
+  tryInitMobileNav();
+});
+fetch('../../components/sidebar.html').then(r => r.text()).then(html => {
+  document.getElementById('sidebar-placeholder').innerHTML = html;
+  sidebarLoaded = true;
+  tryInitMobileNav();
+});
+
+    const { plans, tasks, orders, materials } = productionData;
+    const activePlans = plans.filter(p => p.status === '进行中').length;
+    const shortage = materials.filter(m => m.shortage > 0).length;
+    const pendingOrders = orders.filter(o => o.status !== '已完成').length;
+
+    document.getElementById('stats-grid').innerHTML = `
+      <div class="stat-card"><div class="stat-icon">📅</div><div class="stat-info"><div class="stat-value">${plans.length}</div><div class="stat-label">生产计划</div></div></div>
+      <div class="stat-card"><div class="stat-icon">⚡</div><div class="stat-info"><div class="stat-value">${activePlans}</div><div class="stat-label">进行中计划</div></div></div>
+      <div class="stat-card"><div class="stat-icon">📋</div><div class="stat-info"><div class="stat-value">${pendingOrders}</div><div class="stat-label">待完成订单</div></div></div>
+      <div class="stat-card"><div class="stat-icon">⚠️</div><div class="stat-info"><div class="stat-value">${shortage}</div><div class="stat-label">物料短缺项</div></div></div>
+    `;
+
+    document.getElementById('task-tbody').innerHTML = tasks.map(t => {
+      const color = t.progress === 100 ? 'var(--color-success)' : t.progress >= 60 ? 'var(--color-primary)' : 'var(--color-warning)';
+      return `
+        <tr>
+          <td>${t.id}</td>
+          <td><strong>${t.productName}</strong></td>
+          <td>${t.quantity}</td>
+          <td>${t.assignee}</td>
+          <td>${t.deadline}</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:8px">
+              <div style="flex:1;height:8px;background:var(--color-bg);border-radius:4px;overflow:hidden">
+                <div style="width:${t.progress}%;height:100%;background:${color};border-radius:4px"></div>
+              </div>
+              <span style="font-size:var(--font-size-sm);color:var(--color-text-secondary);width:36px">${t.progress}%</span>
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  </script>
+</body>
+</html>

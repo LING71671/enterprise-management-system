@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>绩效评估 - 小麦科技企业管理平台</title>
+  <link rel="stylesheet" href="../../assets/css/main.css">
+</head>
+<body>
+  <div id="header-placeholder"></div>
+  <div class="layout">
+    <div id="sidebar-placeholder"></div>
+    <main class="main-content">
+      <div class="page-header">
+        <div>
+          <div class="page-title">绩效评估</div>
+          <div class="page-subtitle">2026年 Q1 绩效考核结果</div>
+        </div>
+      </div>
+
+      <div class="stats-grid" id="stats-grid"></div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">绩效列表</div>
+        </div>
+        <div class="table-wrapper">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>工号</th><th>姓名</th><th>部门</th><th>考核周期</th>
+                <th>得分</th><th>等级</th><th>评语</th>
+              </tr>
+            </thead>
+            <tbody id="perf-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="../../assets/js/utils/dom.js"></script>
+  <script src="../../assets/js/utils/storage.js"></script>
+  <script src="../../assets/js/utils/format.js"></script>
+  <script src="../../assets/js/modules/auth.js"></script>
+  <script src="../../assets/js/modules/navigation.js"></script>
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../data/employee.js"></script>
+  <script>
+    'use strict';
+    fetch('../../components/header.html').then(r => r.text()).then(html => {
+      document.getElementById('header-placeholder').innerHTML = html;
+      appNav.init();
+    });
+    fetch('../../components/sidebar.html').then(r => r.text()).then(html => {
+      document.getElementById('sidebar-placeholder').innerHTML = html;
+    });
+
+    const list = employeeData.performance;
+    const avg = (list.reduce((s, p) => s + p.score, 0) / list.length).toFixed(1);
+    const aCount = list.filter(p => p.grade.startsWith('A')).length;
+
+    document.getElementById('stats-grid').innerHTML = `
+      <div class="stat-card"><div class="stat-icon">📊</div><div class="stat-info"><div class="stat-value">${list.length}</div><div class="stat-label">参评人数</div></div></div>
+      <div class="stat-card"><div class="stat-icon">⭐</div><div class="stat-info"><div class="stat-value">${avg}</div><div class="stat-label">平均分</div></div></div>
+      <div class="stat-card"><div class="stat-icon">🏆</div><div class="stat-info"><div class="stat-value">${aCount}</div><div class="stat-label">A级人数</div></div></div>
+    `;
+
+    const gradeMap = { 'A+': 'badge-success', 'A': 'badge-success', 'B+': 'badge-info', 'B': 'badge-info', 'C': 'badge-warning' };
+    document.getElementById('perf-tbody').innerHTML = list.map(p => `
+      <tr>
+        <td>${p.empId}</td>
+        <td><strong>${p.empName}</strong></td>
+        <td>${p.dept}</td>
+        <td>${p.period}</td>
+        <td><strong>${p.score}</strong></td>
+        <td><span class="badge ${gradeMap[p.grade] || 'badge-default'}">${p.grade}</span></td>
+        <td style="color:var(--color-text-secondary)">${p.comment}</td>
+      </tr>
+    `).join('');
+  </script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>库存管理 - 小麦科技企业管理平台</title>
+  <link rel="stylesheet" href="../../assets/css/main.css">
+</head>
+<body>
+  <div id="header-placeholder"></div>
+  <div class="layout">
+    <div id="sidebar-placeholder"></div>
+    <main class="main-content">
+      <div class="page-header">
+        <div>
+          <div class="page-title">库存管理</div>
+          <div class="page-subtitle">生产物料库存查看</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><div class="card-title">库存列表</div></div>
+        <div class="table-wrapper">
+          <table class="table">
+            <thead>
+              <tr><th>编号</th><th>物料名称</th><th>规格</th><th>单位</th><th>当前库存</th><th>需求量</th><th>库存状态</th></tr>
+            </thead>
+            <tbody id="inventory-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="../../assets/js/utils/dom.js"></script>
+  <script src="../../assets/js/utils/storage.js"></script>
+  <script src="../../assets/js/utils/format.js"></script>
+  <script src="../../assets/js/modules/auth.js"></script>
+  <script src="../../assets/js/modules/navigation.js"></script>
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../data/production.js"></script>
+  <script>
+    'use strict';
+    fetch('../../components/header.html').then(r => r.text()).then(html => {
+      document.getElementById('header-placeholder').innerHTML = html;
+      appNav.init();
+    });
+    fetch('../../components/sidebar.html').then(r => r.text()).then(html => {
+      document.getElementById('sidebar-placeholder').innerHTML = html;
+    });
+
+    document.getElementById('inventory-tbody').innerHTML = productionData.materials.map(m => {
+      const ratio = m.stock / m.required;
+      const statusClass = ratio >= 1 ? 'badge-success' : ratio >= 0.5 ? 'badge-warning' : 'badge-danger';
+      const statusText = ratio >= 1 ? '充足' : ratio >= 0.5 ? '偏低' : '严重不足';
+      return `
+        <tr>
+          <td>${m.id}</td>
+          <td><strong>${m.name}</strong></td>
+          <td>${m.spec}</td>
+          <td>${m.unit}</td>
+          <td>${m.stock}</td>
+          <td>${m.required}</td>
+          <td><span class="badge ${statusClass}">${statusText}</span></td>
+        </tr>
+      `;
+    }).join('');
+  </script>
+</body>
+</html>

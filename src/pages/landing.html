@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>小麦科技 - 北京有小米，南京有小麦</title>
+  <link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body>
+  <!-- 导航栏区域 -->
+  <header id="navbar">
+    <div class="navbar-container container">
+      <a href="#" class="navbar-brand">
+        <img src="../assets/images/logo.png" alt="小麦科技">
+        <span>小麦科技</span>
+      </a>
+      <nav class="navbar-nav">
+        <a href="#">首页</a>
+        <a href="#products">产品</a>
+        <a href="#technology">技术</a>
+        <a href="#about">关于</a>
+      </nav>
+      <div class="navbar-actions">
+        <a href="login.html" class="btn btn-outline">登录</a>
+        <a href="register.html" class="btn btn-primary">注册</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero首屏区域 -->
+  <section id="hero">
+    <div class="hero-container container">
+      <h1 class="hero-title">北京有小米，南京有小麦</h1>
+      <p class="hero-subtitle">年轻人的智能科技平台</p>
+      <div class="hero-actions">
+        <a href="login.html" class="btn btn-primary btn-lg">立即体验</a>
+        <a href="#about" class="btn btn-outline btn-lg">了解更多</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 公司介绍区域 -->
+  <section id="about" class="landing-section">
+    <div class="container">
+      <h2 class="section-title">关于小麦</h2>
+      <p class="section-subtitle">致力于用科技改变生活，让智能触手可及。</p>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-number">500+</div>
+          <div class="stat-label">服务企业</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">100万+</div>
+          <div class="stat-label">用户规模</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">50+</div>
+          <div class="stat-label">创新专利</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 技术展示区域 -->
+  <section id="technology" class="landing-section">
+    <div class="container">
+      <h2 class="section-title">核心技术</h2>
+      <p class="section-subtitle">持续投入研发，打造领先的技术能力。</p>
+      <div class="tech-grid">
+        <div class="tech-card">
+          <div class="image-placeholder tech-placeholder">预留图片位置：AI智能引擎(建议比例 1:1, 透明背景png)</div>
+          <h3>AI智能引擎</h3>
+          <p>机器学习与自然语言处理</p>
+        </div>
+        <div class="tech-card">
+          <div class="image-placeholder tech-placeholder">预留图片位置：云计算平台(建议比例 1:1, 透明背景png)</div>
+          <h3>云计算平台</h3>
+          <p>分布式架构，弹性扩展</p>
+        </div>
+        <div class="tech-card">
+          <div class="image-placeholder tech-placeholder">预留图片位置：大数据分析(建议比例 1:1, 透明背景png)</div>
+          <h3>大数据分析</h3>
+          <p>实时计算与智能决策</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 产品服务区域 -->
+  <section id="products" class="landing-section">
+    <div class="container">
+      <h2 class="section-title">产品服务</h2>
+      <p class="section-subtitle">为企业和开发者提供一站式智能化解决方案。</p>
+      <div class="products-grid">
+        <div class="product-card">
+          <div class="image-placeholder product-placeholder">预留图片位置：智能办公场景插画(建议比例 16:9)</div>
+          <h3>智能办公</h3>
+          <p>提升企业运营效率</p>
+        </div>
+        <div class="product-card">
+          <div class="image-placeholder product-placeholder">预留图片位置：开发者平台控制台截图(建议比例 16:9)</div>
+          <h3>开发者平台</h3>
+          <p>开放API，快速集成</p>
+        </div>
+        <div class="product-card">
+          <div class="image-placeholder product-placeholder">预留图片位置：数据分析看板截图(建议比例 16:9)</div>
+          <h3>数据分析</h3>
+          <p>智能报表，决策支持</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<!-- 合作伙伴区域 -->
+  <section id="partners" class="landing-section">
+    <style>
+      .partners-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 32px;
+        align-items: center;
+        justify-items: center;
+        padding: 20px 0;
+      }
+      .partner-logo {
+        padding: 16px;
+        opacity: 0.6;
+        transition: 0.3s;
+      }
+      .partner-logo:hover {
+        opacity: 1;
+      }
+      .partner-logo img {
+        width: 80px;
+        height: 80px;
+        object-fit: contain;
+        transition: transform 0.3s;
+      }
+      .partner-logo:hover img {
+        transform: scale(1.1);
+      }
+      @media (max-width: 768px) {
+        .partners-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+        .partner-logo img {
+          width: 60px;
+          height: 60px;
+        }
+      }
+    </style>
+    <div class="container">
+      <h2 class="section-title">合作伙伴</h2>
+      <p class="section-subtitle">与全球领先企业携手，共建智能生态。</p>
+      <div class="partners-grid">
+        <div class="partner-logo">
+          <img src="../assets/images/alibabacloud-color.svg" alt="阿里云">
+        </div>
+        <div class="partner-logo">
+          <img src="../assets/images/alibabadotcom-color.svg" alt="阿里巴巴">
+        </div>
+        <div class="partner-logo">
+          <img src="../assets/images/alipay-color.svg" alt="支付宝">
+        </div>
+        <div class="partner-logo">
+          <img src="../assets/images/xiaomi-color.svg" alt="小米">
+        </div>
+        <div class="partner-logo">
+          <img src="../assets/images/tiktok-color.svg" alt="字节跳动">
+        </div>
+        <div class="partner-logo">
+          <img src="../assets/images/nvidia-color.svg" alt="英伟达">
+        </div>
+        <div class="partner-logo">
+          <img src="../assets/images/tesla-color.svg" alt="特斯拉">
+        </div>
+        <div class="partner-logo">
+          <img src="../assets/images/facebook-color.svg" alt="Meta">
+        </div>
+        <div class="partner-logo">
+          <img src="../assets/images/huggingface-color.svg" alt="Hugging Face">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 创始人团队区域 -->
+  <section id="founders" class="landing-section" style="background: var(--color-bg);">
+    <div class="container">
+      <h2 class="section-title">认识小麦的掌舵人</h2>
+      <p class="section-subtitle">由业界顶尖技术领袖和商业精英联手打造的未来科技。</p>
+      <div class="founders-grid">
+        <div class="founder-card">
+          <img src="" onerror="this.src='../assets/images/founders/founder-1.jpg'" alt="创始人 1" class="founder-photo">
+          <div class="image-placeholder text-sm" style="height:250px;width:100%;margin-bottom:16px;">预留照片位置：创始人A(建议 500x500+)</div>
+          <h3>张小麦</h3>
+          <p class="founder-title">创始人兼首席执行官 (CEO)</p>
+          <p class="founder-bio">曾任顶级科技公司首席架构师，深造于前沿人工语言实验室，致力于打造真正触手可及的企业级智慧系统。</p>
+        </div>
+        <div class="founder-card">
+          <img src="" onerror="this.src='../assets/images/founders/founder-2.jpg'" alt="创始人 2" class="founder-photo">
+          <div class="image-placeholder text-sm" style="height:250px;width:100%;margin-bottom:16px;">预留照片位置：创始人B(建议 500x500+)</div>
+          <h3>李智能</h3>
+          <p class="founder-title">联合创始人兼首席技术官 (CTO)</p>
+          <p class="founder-bio">全球开源社区核心贡献者，主导过多项千万级并发架构设计。对云计算和边缘计算有极深的造诣。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 行动号召区域 -->
+  <section id="cta">
+    <div class="container">
+      <h2 class="cta-title">加入小麦，共创未来</h2>
+      <p class="cta-subtitle">立即注册，开启您的智能之旅</p>
+      <div style="display: flex; gap: 16px; justify-content: center; align-items: center;">
+        <a href="register.html" class="btn btn-white btn-lg" style="color: var(--color-primary);">免费注册</a>
+        <a href="login.html" class="btn btn-outline btn-lg" style="color: white; border-color: white;">立即登录</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 页脚区域 -->
+  <footer id="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <div style="display: flex; align-items: center; justify-content: center; gap: 16px; margin-bottom: 24px;">
+            <img src="../assets/images/logo.png" alt="小麦科技" style="width: auto; height: 64px; object-fit: contain;">
+            <span style="font-size: 32px; font-weight: bold; color: var(--color-primary);">小麦企业系统</span>
+          </div>
+          <p style="font-size: 16px;">小麦科技，让科技触手可及。</p>
+        </div>
+        <div class="footer-links">
+          <a href="#">关于我们</a>
+          <a href="#products">产品服务</a>
+          <a href="#">支持与联系</a>
+        </div>
+      </div>
+      <div class="footer-copyright">© 2026 小麦科技 All Rights Reserved.</div>
+    </div>
+  </footer>
+
+  <script src="../assets/js/modules/landing.js"></script>
+</body>
+</html>

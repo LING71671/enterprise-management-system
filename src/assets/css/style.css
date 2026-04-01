@@ -1,0 +1,239 @@
+/**
+ * ============================================================================
+ * 文件说明：style.css
+ * 文件路径：web/src/assets/css/style.css
+ * ============================================================================
+ *
+ * 【文件用途】
+ * ----------------------------------------------------------------------------
+ * 本文件是项目样式目录中的独立样式文件，目前处于未使用状态。
+ *
+ * 可能的用途包括：
+ * 1. 遗留文件：早期项目开发时的全局样式入口，现已被 main.css 取代
+ * 2. 备用文件：用于存放临时、实验性或第三方样式覆盖
+ * 3. 特定场景：用于特定页面或功能的独立样式（如打印样式、深色模式等）
+ * 4. 扩展文件：用于存放项目后期新增的全局工具类或辅助样式
+ *
+ * 【当前状态】
+ * ----------------------------------------------------------------------------
+ * - 状态：空文件（0 行代码）
+ * - 引用情况：未被 main.css 导入，未被任何页面直接引用
+ * - 最后修改：待确定
+ *
+ * 【建议用法】
+ * ----------------------------------------------------------------------------
+ * 方案 A：作为工具类样式文件（推荐）
+ *   - 用途：存放通用的工具类（utility classes），如间距、文字对齐、显示控制等
+ *   - 操作：在 main.css 末尾添加 @import './style.css';
+ *   - 优势：与组件样式分离，便于快速复用
+ *
+ * 方案 B：作为主题扩展文件
+ *   - 用途：存放深色模式、高对比度等主题变体样式
+ *   - 操作：通过 JavaScript 动态切换 body 类名时加载
+ *   - 优势：支持多主题，不污染主样式
+ *
+ * 方案 C：作为打印样式文件
+ *   - 用途：专门处理打印页面的样式优化
+ *   - 操作：在需要打印的页面单独引入
+ *   - 优势：打印样式与屏幕样式分离
+ *
+ * 方案 D：删除该文件
+ *   - 如果确认不再需要，可直接删除以保持目录整洁
+ *   - 删除前请确认：
+ *     1. 没有页面直接引用此文件
+ *     2. 没有构建工具或脚本依赖此文件
+ *     3. 团队其他成员知晓此变更
+ *
+ * 【开发规范】
+ * ----------------------------------------------------------------------------
+ * 1. CSS 变量：必须使用 variables.css 中定义的变量，禁止硬编码颜色值
+ *    正确：color: var(--color-primary);
+ *    错误：color: #FF6B00;
+ *
+ * 2. 选择器规范：
+ *    - 优先使用类选择器，避免标签选择器和 ID 选择器
+ *    - 嵌套层级不超过 3 层
+ *    - 工具类使用单一职责原则
+ *
+ * 3. 命名规范：
+ *    - 工具类前缀：u-（如 u-mb-16 表示 margin-bottom: 16px）
+ *    - 状态类前缀：is-（如 is-active, is-hidden）
+ *    - 工具类使用 kebab-case
+ *
+ * 4. 代码组织：
+ *    - 按功能分组，每组之间空一行
+ *    - 添加注释说明每组用途
+ *    - 属性按字母顺序排列（可选）
+ *
+ * 【示例内容】
+ * ----------------------------------------------------------------------------
+ * 以下示例展示了作为工具类样式文件的内容结构：
+ */
+
+/* ==========================================================================
+   工具类样式（Utility Classes）
+   用途：快速调整元素样式，无需编写自定义 CSS
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   间距工具类（Margin & Padding）
+   命名规则：u-{属性}{方向}-{大小}
+   属性：m = margin, p = padding
+   方向：t = top, r = right, b = bottom, l = left, x = left+right, y = top+bottom
+   -------------------------------------------------------------------------- */
+
+/* Margin */
+.u-m-0 { margin: 0; }
+.u-mt-4 { margin-top: var(--spacing-xs); }
+.u-mt-8 { margin-top: var(--spacing-sm); }
+.u-mt-16 { margin-top: var(--spacing-md); }
+.u-mt-24 { margin-top: var(--spacing-lg); }
+.u-mt-32 { margin-top: var(--spacing-xl); }
+
+.u-mb-4 { margin-bottom: var(--spacing-xs); }
+.u-mb-8 { margin-bottom: var(--spacing-sm); }
+.u-mb-16 { margin-bottom: var(--spacing-md); }
+.u-mb-24 { margin-bottom: var(--spacing-lg); }
+.u-mb-32 { margin-bottom: var(--spacing-xl); }
+
+.u-ml-8 { margin-left: var(--spacing-sm); }
+.u-ml-16 { margin-left: var(--spacing-md); }
+.u-mr-8 { margin-right: var(--spacing-sm); }
+.u-mr-16 { margin-right: var(--spacing-md); }
+
+/* Padding */
+.u-p-0 { padding: 0; }
+.u-p-8 { padding: var(--spacing-sm); }
+.u-p-16 { padding: var(--spacing-md); }
+.u-p-24 { padding: var(--spacing-lg); }
+
+.u-px-16 {
+  padding-left: var(--spacing-md);
+  padding-right: var(--spacing-md);
+}
+
+.u-py-24 {
+  padding-top: var(--spacing-lg);
+  padding-bottom: var(--spacing-lg);
+}
+
+/* --------------------------------------------------------------------------
+   文字工具类（Typography）
+   -------------------------------------------------------------------------- */
+
+.u-text-left { text-align: left; }
+.u-text-center { text-align: center; }
+.u-text-right { text-align: right; }
+
+.u-text-xs { font-size: var(--font-size-xs); }
+.u-text-sm { font-size: var(--font-size-sm); }
+.u-text-base { font-size: var(--font-size-base); }
+.u-text-lg { font-size: var(--font-size-lg); }
+.u-text-xl { font-size: var(--font-size-xl); }
+
+.u-text-primary { color: var(--color-text-primary); }
+.u-text-secondary { color: var(--color-text-secondary); }
+.u-text-muted { color: var(--color-text-disabled); }
+
+.u-font-bold { font-weight: 600; }
+.u-font-normal { font-weight: 400; }
+
+/* --------------------------------------------------------------------------
+   显示工具类（Display & Visibility）
+   -------------------------------------------------------------------------- */
+
+.u-hidden { display: none !important; }
+.u-visible { visibility: visible; }
+.u-invisible { visibility: hidden; }
+
+.u-block { display: block; }
+.u-inline { display: inline; }
+.u-inline-block { display: inline-block; }
+.u-flex { display: flex; }
+.u-grid { display: grid; }
+
+/* --------------------------------------------------------------------------
+   Flexbox 工具类
+   -------------------------------------------------------------------------- */
+
+.u-flex-row { flex-direction: row; }
+.u-flex-column { flex-direction: column; }
+.u-flex-wrap { flex-wrap: wrap; }
+.u-flex-nowrap { flex-wrap: nowrap; }
+
+.u-justify-start { justify-content: flex-start; }
+.u-justify-center { justify-content: center; }
+.u-justify-end { justify-content: flex-end; }
+.u-justify-between { justify-content: space-between; }
+.u-justify-around { justify-content: space-around; }
+
+.u-items-start { align-items: flex-start; }
+.u-items-center { align-items: center; }
+.u-items-end { align-items: flex-end; }
+
+.u-flex-1 { flex: 1; }
+.u-flex-auto { flex: auto; }
+.u-flex-none { flex: none; }
+
+/* --------------------------------------------------------------------------
+   状态工具类（States）
+   -------------------------------------------------------------------------- */
+
+.is-hidden { display: none !important; }
+.is-visible { display: block !important; }
+.is-invisible { visibility: hidden; }
+
+.is-disabled {
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+/* --------------------------------------------------------------------------
+   响应式工具类（Responsive）
+   在移动端隐藏/显示元素
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 768px) {
+  .u-hide-mobile { display: none !important; }
+}
+
+@media (min-width: 769px) {
+  .u-hide-desktop { display: none !important; }
+}
+
+/* --------------------------------------------------------------------------
+   其他工具类
+   -------------------------------------------------------------------------- */
+
+.u-full-width { width: 100%; }
+.u-full-height { height: 100%; }
+
+.u-rounded { border-radius: var(--border-radius); }
+.u-rounded-sm { border-radius: var(--border-radius-sm); }
+.u-rounded-lg { border-radius: var(--border-radius-lg); }
+
+.u-shadow-sm { box-shadow: var(--shadow-sm); }
+.u-shadow-md { box-shadow: var(--shadow-md); }
+.u-shadow-lg { box-shadow: var(--shadow-lg); }
+
+/* ==========================================================================
+   使用示例
+   ==========================================================================
+
+   HTML 中使用示例：
+   
+   <div class="u-flex u-justify-between u-items-center u-mb-16">
+     <h2 class="u-text-lg u-font-bold">标题</h2>
+     <button class="u-ml-16">按钮</button>
+   </div>
+
+   <p class="u-text-secondary u-text-sm u-mb-8">
+     这是一段次要文字
+   </p>
+
+   <div class="u-hide-mobile">
+     这段内容在移动端隐藏
+   </div>
+
+   ========================================================================== */

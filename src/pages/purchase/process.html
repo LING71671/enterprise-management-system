@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>采购流程 - 小麦科技企业管理平台</title>
+  <link rel="stylesheet" href="../../assets/css/main.css">
+</head>
+<body>
+  <div id="header-placeholder"></div>
+  <div class="layout">
+    <div id="sidebar-placeholder"></div>
+    <main class="main-content">
+      <div class="page-header">
+        <div>
+          <div class="page-title">采购流程</div>
+          <div class="page-subtitle">采购订单管理</div>
+        </div>
+        <button class="btn btn-primary" id="add-btn">+ 新建采购单</button>
+      </div>
+
+      <div class="stats-grid" id="stats-grid"></div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">采购订单</div>
+          <div class="toolbar-right">
+            <div class="search-box">
+              <span class="search-icon">🔍</span>
+              <input type="text" id="search-input" placeholder="搜索供应商/项目">
+            </div>
+            <select class="form-control" id="status-filter" style="width:120px">
+              <option value="">全部状态</option>
+              <option>已到货</option>
+              <option>运输中</option>
+              <option>待发货</option>
+              <option>待审核</option>
+            </select>
+          </div>
+        </div>
+        <div class="table-wrapper">
+          <table class="table">
+            <thead>
+              <tr><th>订单号</th><th>供应商</th><th>采购项目</th><th>数量</th><th>单价</th><th>金额</th><th>创建日期</th><th>交货日期</th><th>状态</th></tr>
+            </thead>
+            <tbody id="order-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="../../assets/js/utils/dom.js"></script>
+  <script src="../../assets/js/utils/storage.js"></script>
+  <script src="../../assets/js/utils/format.js"></script>
+  <script src="../../assets/js/modules/auth.js"></script>
+  <script src="../../assets/js/modules/navigation.js"></script>
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../data/purchase.js"></script>
+  <script>
+    'use strict';
+    fetch('../../components/header.html').then(r => r.text()).then(html => {
+      document.getElementById('header-placeholder').innerHTML = html;
+      appNav.init();
+    });
+    fetch('../../components/sidebar.html').then(r => r.text()).then(html => {
+      document.getElementById('sidebar-placeholder').innerHTML = html;
+    });
+
+    const orders = purchaseData.orders;
+    const statusMap = { '已到货': 'badge-success', '运输中': 'badge-info', '待发货': 'badge-warning', '待审核': 'badge-default' };
+    const totalAmount = orders.reduce((s, o) => s + o.amount, 0);
+    const delivered = orders.filter(o => o.status === '已到货').length;
+
+    document.getElementById('stats-grid').innerHTML = `
+      <div class="stat-card"><div class="stat-icon">📋</div><div class="stat-info"><div class="stat-value">${orders.length}</div><div class="stat-label">订单总数</div></div></div>
+      <div class="stat-card"><div class="stat-icon">💰</div><div class="stat-info"><div class="stat-value">${formatMoney(totalAmount)}</div><div class="stat-label">采购总额</div></div></div>
+      <div class="stat-card"><div class="stat-icon">✅</div><div class="stat-info"><div class="stat-value">${delivered}</div><div class="stat-label">已到货</div></div></div>
+    `;
+
+    function renderTable(list) {
+      document.getElementById('order-tbody').innerHTML = list.map(o => `
+        <tr>
+          <td>${o.id}</td>
+          <td>${o.supplierName}</td>
+          <td><strong>${o.item}</strong></td>
+          <td>${o.quantity} ${o.unit}</td>
+          <td>${formatMoney(o.unitPrice)}</td>
+          <td><strong>${formatMoney(o.amount)}</strong></td>
+          <td>${o.createDate}</td>
+          <td>${o.deliveryDate}</td>
+          <td><span class="badge ${statusMap[o.status] || 'badge-default'}">${o.status}</span></td>
+        </tr>
+      `).join('');
+    }
+
+    function filterAndRender() {
+      const kw = document.getElementById('search-input').value.trim().toLowerCase();
+      const status = document.getElementById('status-filter').value;
+      renderTable(orders.filter(o =>
+        (!kw || o.supplierName.includes(kw) || o.item.includes(kw)) &&
+        (!status || o.status === status)
+      ));
+    }
+
+    document.getElementById('search-input').addEventListener('input', filterAndRender);
+    document.getElementById('status-filter').addEventListener('change', filterAndRender);
+    document.getElementById('add-btn').onclick = () => alert('新建采购单功能待实现');
+    renderTable(orders);
+  </script>
+</body>
+</html>

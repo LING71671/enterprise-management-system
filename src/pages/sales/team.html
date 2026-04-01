@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>销售团队 - 小麦科技企业管理平台</title>
+  <link rel="stylesheet" href="../../assets/css/main.css">
+</head>
+<body>
+  <div id="header-placeholder"></div>
+  <div class="layout">
+    <div id="sidebar-placeholder"></div>
+    <main class="main-content">
+      <div class="page-header">
+        <div>
+          <div class="page-title">销售团队</div>
+          <div class="page-subtitle">团队业绩管理</div>
+        </div>
+      </div>
+
+      <div class="stats-grid" id="stats-grid"></div>
+
+      <div class="card">
+        <div class="card-header"><div class="card-title">团队成员业绩</div></div>
+        <div class="table-wrapper">
+          <table class="table">
+            <thead>
+              <tr><th>编号</th><th>姓名</th><th>角色</th><th>负责区域</th><th>目标额</th><th>已完成</th><th>完成率</th></tr>
+            </thead>
+            <tbody id="team-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="../../assets/js/utils/dom.js"></script>
+  <script src="../../assets/js/utils/storage.js"></script>
+  <script src="../../assets/js/utils/format.js"></script>
+  <script src="../../assets/js/modules/auth.js"></script>
+  <script src="../../assets/js/modules/navigation.js"></script>
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../data/sales.js"></script>
+  <script>
+    'use strict';
+    fetch('../../components/header.html').then(r => r.text()).then(html => {
+      document.getElementById('header-placeholder').innerHTML = html;
+      appNav.init();
+    });
+    fetch('../../components/sidebar.html').then(r => r.text()).then(html => {
+      document.getElementById('sidebar-placeholder').innerHTML = html;
+    });
+
+    const team = salesData.team;
+    const totalTarget = team.reduce((s, t) => s + t.target, 0);
+    const totalAchieved = team.reduce((s, t) => s + t.achieved, 0);
+    const avgRate = (totalAchieved / totalTarget * 100).toFixed(1);
+
+    document.getElementById('stats-grid').innerHTML = `
+      <div class="stat-card"><div class="stat-icon">👥</div><div class="stat-info"><div class="stat-value">${team.length}</div><div class="stat-label">团队人数</div></div></div>
+      <div class="stat-card"><div class="stat-icon">🎯</div><div class="stat-info"><div class="stat-value">${formatMoney(totalTarget)}</div><div class="stat-label">团队目标</div></div></div>
+      <div class="stat-card"><div class="stat-icon">💰</div><div class="stat-info"><div class="stat-value">${formatMoney(totalAchieved)}</div><div class="stat-label">已完成</div></div></div>
+      <div class="stat-card"><div class="stat-icon">📊</div><div class="stat-info"><div class="stat-value">${avgRate}%</div><div class="stat-label">平均完成率</div></div></div>
+    `;
+
+    document.getElementById('team-tbody').innerHTML = team.map(t => {
+      const rate = (t.rate * 100).toFixed(1);
+      const color = t.rate >= 0.9 ? 'var(--color-success)' : t.rate >= 0.6 ? 'var(--color-primary)' : 'var(--color-warning)';
+      return `
+        <tr>
+          <td>${t.id}</td>
+          <td><strong>${t.name}</strong></td>
+          <td>${t.role}</td>
+          <td>${t.region}</td>
+          <td>${formatMoney(t.target)}</td>
+          <td>${formatMoney(t.achieved)}</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:8px">
+              <div style="flex:1;height:8px;background:var(--color-bg);border-radius:4px;overflow:hidden">
+                <div style="width:${rate}%;height:100%;background:${color};border-radius:4px"></div>
+              </div>
+              <span style="font-size:var(--font-size-sm);color:var(--color-text-secondary);width:40px">${rate}%</span>
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  </script>
+</body>
+</html>

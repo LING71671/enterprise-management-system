@@ -1,0 +1,110 @@
+/* 异步加载时的骨架占位 */
+#sidebar-placeholder:empty {
+  position: fixed;
+  top: var(--header-height);
+  left: 0;
+  width: var(--sidebar-width);
+  height: calc(100vh - var(--header-height));
+  background: var(--color-bg-sidebar);
+  z-index: 101;
+}
+
+.sidebar {
+  position: fixed;
+  top: var(--header-height);
+  left: 0;
+  width: var(--sidebar-width);
+  height: calc(100vh - var(--header-height));
+  background: var(--color-bg-sidebar);
+  overflow-y: auto;
+  z-index: 101;
+  padding: var(--spacing-md) 0;
+}
+
+.sidebar-nav {
+  padding: 0;
+  animation: componentFadeIn 0.3s ease-out forwards;
+}
+
+.sidebar-section {
+  margin-bottom: var(--spacing-sm);
+}
+
+.sidebar-section-title {
+  font-size: var(--font-size-xs);
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: var(--spacing-sm) var(--spacing-lg);
+  margin-top: var(--spacing-sm);
+}
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: 10px var(--spacing-lg);
+  color: #aaa;
+  font-size: var(--font-size-base);
+  cursor: pointer;
+  transition: var(--transition);
+  border-left: 3px solid transparent;
+  text-decoration: none;
+}
+
+.sidebar-item:hover {
+  background: var(--color-bg-sidebar-hover);
+  color: #fff;
+}
+
+.sidebar-item.active {
+  background: var(--color-bg-sidebar-hover);
+  color: var(--color-primary);
+  border-left-color: var(--color-primary);
+}
+
+.sidebar-item .icon {
+  font-size: var(--font-size-lg);
+  width: 20px;
+  text-align: center;
+}
+
+/* ========== 移动端响应式样式 ========== */
+@media (max-width: 768px) {
+  /* 侧边栏默认隐藏在屏幕左侧 */
+  .sidebar {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    z-index: 1001;
+  }
+
+  /* 侧边栏展开状态 */
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  /* 遮罩层样式 */
+  .sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+
+  .sidebar-overlay.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  /* 占位符也需要适配移动端 */
+  #sidebar-placeholder:empty {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+}

@@ -1,0 +1,119 @@
+# CodeRabbit 配置文件
+# 文档: https://docs.coderabbit.ai/reference/configuration
+
+# 使用中文进行代码审查
+language: "zh-CN"
+
+# 基础设置
+early_access: false
+
+# 代码审查设置
+reviews:
+  # 使用轻松模式，减少过于挑剔的建议
+  profile: "chill"
+  
+  # 生成高级摘要
+  high_level_summary: true
+  
+  # 审查状态信息
+  review_status: true
+  
+  # 不生成诗歌
+  poem: false
+  
+  # 自动审查配置
+  auto_review:
+    enabled: true
+    # 每次推送自动审查
+    auto_incremental_review: true
+    # 不审查草稿 PR
+    drafts: false
+  
+  # 文件路径过滤
+  path_filters:
+    - "!node_modules/**"
+    - "!.git/**"
+    - "!**/*.min.js"
+    - "!**/*.min.css"
+  
+  # 路径特定审查指令
+  path_instructions:
+    - path: "web/src/assets/css/**/*.css"
+      instructions: |
+        CSS 审查要点：
+        - 必须使用 CSS 变量（定义在 variables.css），禁止硬编码颜色、间距值
+        - 选择器层级不超过 3 层
+        - 类名使用小写+连字符格式（如 .login-container）
+        - CSS 变量命名使用小写+连字符（如 --color-primary）
+        - 优先移动端样式，用 @media 扩展桌面端
+        - 所有页面样式应通过 main.css 统一引入
+    
+    - path: "web/src/assets/js/**/*.js"
+      instructions: |
+        JavaScript 审查要点：
+        - 文件顶部使用 'use strict';
+        - 变量使用小驼峰命名（如 userName）
+        - 常量使用大写+下划线（如 MAX_COUNT）
+        - 函数使用小驼峰命名（如 getUserInfo）
+        - 添加必要的函数说明、参数注释
+        - 可能出错的代码使用 try-catch 包裹
+        - 避免全局变量，使用 IIFE 或模块模式
+    
+    - path: "web/src/pages/**/*.html"
+      instructions: |
+        HTML 审查要点：
+        - 文件名使用小写+连字符格式
+        - 必须引入 main.css，禁止单独引入组件样式
+        - 使用语义化 HTML5 标签
+        - 确保 lang="zh-CN"
+        - 必须有正确的 viewport meta 标签
+    
+    - path: "web/docs/**/*.md"
+      instructions: |
+        文档审查要点：
+        - 保持文档与代码同步
+        - 使用清晰的 Markdown 格式
+
+# Git 提交规范检查
+  pre_merge_checks:
+    title:
+      mode: "warning"
+      requirements: |
+        提交信息格式要求：
+        - feat: 新功能
+        - fix: 修复 bug
+        - style: 样式调整
+        - refactor: 代码重构
+        - docs: 文档更新
+        - test: 测试相关
+        - chore: 构建/工具变动
+        
+        示例：
+        - feat: 添加生产计划管理页面
+        - fix: 修复登录页面验证码不显示问题
+        - style: 调整按钮圆角和间距
+
+# 聊天设置
+chat:
+  auto_reply: true
+
+# 工具配置
+tools:
+  # 启用 ESLint 检查
+  eslint:
+    enabled: false  # 项目暂无 ESLint 配置
+  
+  # 启用 Markdown 检查
+  markdownlint:
+    enabled: true
+  
+  # 启用 YAML 检查
+  yamllint:
+    enabled: true
+
+# 知识库配置 - 引入项目规范文档
+knowledge_base:
+  code_files:
+    - "web/docs/DEV_STANDARDS.md"
+    - "web/docs/CSS_JS_SPEC.md"
+    - "web/docs/GIT_GUIDE.md"

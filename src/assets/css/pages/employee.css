@@ -1,0 +1,140 @@
+/* 主布局 */
+.layout {
+  display: flex;
+  min-height: 100vh;
+  padding-top: var(--header-height);
+}
+
+.main-content {
+  margin-left: var(--sidebar-width);
+  flex: 1;
+  padding: var(--spacing-lg);
+  min-height: calc(100vh - var(--header-height));
+}
+
+/* 页面头部 */
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-lg);
+}
+
+.page-title {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.page-subtitle {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin-top: 2px;
+}
+
+/* 统计卡片网格 */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+/* 工具栏 */
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-md);
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+
+.toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+/* 搜索框 */
+.search-box {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-sm);
+  background: var(--color-bg-white);
+  overflow: hidden;
+  transition: var(--transition);
+}
+
+.search-box:focus-within {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-primary-bg);
+}
+
+.search-box input {
+  border: none;
+  outline: none;
+  padding: 7px var(--spacing-sm);
+  font-size: var(--font-size-base);
+  width: 220px;
+  background: transparent;
+}
+
+.search-box .search-icon {
+  padding: 0 var(--spacing-sm);
+  color: var(--color-text-disabled);
+}
+
+/* ========== 移动端响应式样式 ========== */
+@media (max-width: 768px) {
+  /* 主布局取消左侧边距 */
+  .layout {
+    padding-top: var(--header-height);
+  }
+
+  .main-content {
+    margin-left: 0;
+    padding: var(--spacing-md);
+  }
+
+  /* 工具栏堆叠布局 */
+  .toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--spacing-md);
+  }
+
+  .toolbar-left,
+  .toolbar-right {
+    justify-content: flex-start;
+  }
+
+  /* 搜索框响应式宽度 */
+  .search-box input {
+    width: 100%;
+  }
+
+  .search-box {
+    flex: 1;
+    max-width: 100%;
+  }
+
+  /* 页面头部堆叠 */
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-sm);
+  }
+
+  /* 统计卡片单列 */
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+}

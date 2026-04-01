@@ -1,0 +1,5 @@
+name = "enterprise-management-system"
+compatibility_date = "2024-01-01"
+
+# Pages 静态网站配置 - 使用根目录（包含 index.html）
+pages_build_output_dir = "."

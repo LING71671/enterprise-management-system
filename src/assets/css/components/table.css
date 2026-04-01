@@ -1,0 +1,135 @@
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-sm);
+  background: var(--color-bg-white);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-base);
+}
+
+.table thead {
+  background: var(--color-bg);
+}
+
+.table th {
+  padding: 12px var(--spacing-md);
+  text-align: left;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  border-bottom: 1px solid var(--border-color);
+  white-space: nowrap;
+}
+
+.table td {
+  padding: 12px var(--spacing-md);
+  color: var(--color-text-primary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.table tbody tr:hover {
+  background: var(--color-primary-bg);
+}
+
+.table-actions {
+  display: flex;
+  gap: var(--spacing-xs);
+}
+
+/* 状态标签 */
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: var(--font-size-xs);
+  font-weight: 500;
+}
+
+.badge-success { background: #f6ffed; color: var(--color-success); }
+.badge-warning { background: #fffbe6; color: var(--color-warning); }
+.badge-danger { background: #fff1f0; color: var(--color-danger); }
+.badge-info { background: #e6f7ff; color: var(--color-info); }
+.badge-default { background: var(--color-bg); color: var(--color-text-secondary); }
+
+/* ========== 移动端响应式样式 - 卡片视图 ========== */
+@media (max-width: 768px) {
+  /* 隐藏表头 */
+  .table thead {
+    display: none;
+  }
+
+  /* 表格包装器去除横向滚动 */
+  .table-wrapper {
+    overflow-x: visible;
+  }
+
+  /* 表格显示为块级 */
+  .table {
+    display: block;
+  }
+
+  /* 表格主体显示为块级 */
+  .table tbody {
+    display: block;
+  }
+
+  /* 每行显示为卡片 */
+  .table tbody tr {
+    display: block;
+    margin-bottom: var(--spacing-md);
+    background: var(--color-bg-white);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-sm);
+    padding: var(--spacing-md);
+    border: 1px solid var(--border-color);
+  }
+
+  .table tbody tr:last-child {
+    margin-bottom: 0;
+  }
+
+  /* 取消行内hover背景 */
+  .table tbody tr:hover {
+    background: var(--color-bg-white);
+  }
+
+  /* 每个单元格堆叠显示 */
+  .table td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-xs) 0;
+    border-bottom: 1px solid var(--border-color);
+    text-align: right;
+  }
+
+  .table td:last-child {
+    border-bottom: none;
+  }
+
+  /* 使用data-label属性显示列名 */
+  .table td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+    margin-right: var(--spacing-md);
+    text-align: left;
+    flex-shrink: 0;
+  }
+
+  /* 操作按钮容器 */
+  .table td .table-actions {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+}
