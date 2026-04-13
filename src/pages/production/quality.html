@@ -26,7 +26,7 @@
         <div class="table-wrapper">
           <table class="table">
             <thead>
-              <tr><th>记录编号</th><th>订单号</th><th>质检员</th><th>质检日期</th><th>缺陷数</th><th>结果</th></tr>
+              <tr><th>质检编号</th><th>关联订单</th><th>质检员</th><th>质检日期</th><th>缺陷数</th><th>结果</th></tr>
             </thead>
             <tbody id="quality-tbody"></tbody>
           </table>
@@ -42,38 +42,6 @@
   <script src="../../assets/js/modules/navigation.js"></script>
   <script src="../../assets/js/main.js"></script>
   <script src="../../data/production.js"></script>
-  <script>
-    'use strict';
-    fetch('../../components/header.html').then(r => r.text()).then(html => {
-      document.getElementById('header-placeholder').innerHTML = html;
-      appNav.init();
-    });
-    fetch('../../components/sidebar.html').then(r => r.text()).then(html => {
-      document.getElementById('sidebar-placeholder').innerHTML = html;
-    });
-
-    const records = productionData.qualityRecords;
-    const passed = records.filter(r => r.result === '合格').length;
-    const failed = records.filter(r => r.result === '不合格').length;
-    const passRate = ((passed / records.length) * 100).toFixed(1);
-
-    document.getElementById('stats-grid').innerHTML = `
-      <div class="stat-card"><div class="stat-icon">🔍</div><div class="stat-info"><div class="stat-value">${records.length}</div><div class="stat-label">质检总数</div></div></div>
-      <div class="stat-card"><div class="stat-icon">✅</div><div class="stat-info"><div class="stat-value">${passed}</div><div class="stat-label">合格</div></div></div>
-      <div class="stat-card"><div class="stat-icon">❌</div><div class="stat-info"><div class="stat-value">${failed}</div><div class="stat-label">不合格</div></div></div>
-      <div class="stat-card"><div class="stat-icon">📊</div><div class="stat-info"><div class="stat-value">${passRate}%</div><div class="stat-label">合格率</div></div></div>
-    `;
-
-    document.getElementById('quality-tbody').innerHTML = records.map(r => `
-      <tr>
-        <td>${r.id}</td>
-        <td>${r.orderId}</td>
-        <td>${r.inspector}</td>
-        <td>${r.date}</td>
-        <td>${r.defects > 0 ? `<span style="color:var(--color-danger)">${r.defects}</span>` : '0'}</td>
-        <td><span class="badge ${r.result === '合格' ? 'badge-success' : 'badge-danger'}">${r.result}</span></td>
-      </tr>
-    `).join('');
-  </script>
+  <script src="../../assets/js/system/production/quality.js"></script>
 </body>
 </html>

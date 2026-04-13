@@ -15,7 +15,7 @@
       <div class="page-header">
         <div>
           <div class="page-title">任务排产</div>
-          <div class="page-subtitle">生产任务分配与进度跟踪</div>
+          <div class="page-subtitle">生产任务分配与进度</div>
         </div>
       </div>
 
@@ -24,7 +24,7 @@
         <div class="table-wrapper">
           <table class="table">
             <thead>
-              <tr><th>任务编号</th><th>所属计划</th><th>产品</th><th>数量</th><th>负责人</th><th>截止日期</th><th>进度</th></tr>
+              <tr><th>任务编号</th><th>关联计划</th><th>产品</th><th>数量</th><th>负责人</th><th>截止日期</th><th>进度</th></tr>
             </thead>
             <tbody id="task-tbody"></tbody>
           </table>
@@ -40,37 +40,6 @@
   <script src="../../assets/js/modules/navigation.js"></script>
   <script src="../../assets/js/main.js"></script>
   <script src="../../data/production.js"></script>
-  <script>
-    'use strict';
-    fetch('../../components/header.html').then(r => r.text()).then(html => {
-      document.getElementById('header-placeholder').innerHTML = html;
-      appNav.init();
-    });
-    fetch('../../components/sidebar.html').then(r => r.text()).then(html => {
-      document.getElementById('sidebar-placeholder').innerHTML = html;
-    });
-
-    document.getElementById('task-tbody').innerHTML = productionData.tasks.map(t => {
-      const color = t.progress === 100 ? 'var(--color-success)' : t.progress >= 60 ? 'var(--color-primary)' : 'var(--color-warning)';
-      return `
-        <tr>
-          <td>${t.id}</td>
-          <td>${t.planId}</td>
-          <td><strong>${t.productName}</strong></td>
-          <td>${t.quantity}</td>
-          <td>${t.assignee}</td>
-          <td>${t.deadline}</td>
-          <td>
-            <div style="display:flex;align-items:center;gap:8px">
-              <div style="flex:1;height:8px;background:var(--color-bg);border-radius:4px;overflow:hidden">
-                <div style="width:${t.progress}%;height:100%;background:${color};border-radius:4px"></div>
-              </div>
-              <span style="font-size:var(--font-size-sm);color:var(--color-text-secondary);width:36px">${t.progress}%</span>
-            </div>
-          </td>
-        </tr>
-      `;
-    }).join('');
-  </script>
+  <script src="../../assets/js/system/production/scheduling.js"></script>
 </body>
 </html>

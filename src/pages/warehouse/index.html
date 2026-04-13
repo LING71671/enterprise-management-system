@@ -15,41 +15,39 @@
       <div class="page-header">
         <div>
           <div class="page-title">仓储管理</div>
-          <div class="page-subtitle">仓储全流程管理</div>
+          <div class="page-subtitle">库存与仓库全流程管理</div>
         </div>
       </div>
 
       <div class="stats-grid" id="stats-grid"></div>
 
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:var(--spacing-md);margin-top:var(--spacing-lg)">
-        <a href="operation.html" class="stat-card" style="text-decoration:none">
-          <div class="stat-icon">📦</div>
-          <div class="stat-info"><div class="stat-value" style="font-size:var(--font-size-lg)">基本操作</div><div class="stat-label">出入库操作记录</div></div>
-        </a>
+      <div class="dashboard-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:var(--spacing-md);margin-top:var(--spacing-lg)">
         <a href="layout.html" class="stat-card" style="text-decoration:none">
           <div class="stat-icon">🗺️</div>
-          <div class="stat-info"><div class="stat-value" style="font-size:var(--font-size-lg)">货位管理</div><div class="stat-label">仓库货位与容量</div></div>
+          <div class="stat-info"><div class="stat-value" style="font-size:var(--font-size-lg)">货位管理</div><div class="stat-label">仓库货位规划</div></div>
         </a>
-        <a href="warning.html" class="stat-card" style="text-decoration:none">
-          <div class="stat-icon">⚠️</div>
-          <div class="stat-info"><div class="stat-value" style="font-size:var(--font-size-lg)">库存预警</div><div class="stat-label">库存不足提醒</div></div>
+        <a href="operation.html" class="stat-card" style="text-decoration:none">
+          <div class="stat-icon">📦</div>
+          <div class="stat-info"><div class="stat-value" style="font-size:var(--font-size-lg)">基本操作</div><div class="stat-label">入库/出库/盘点</div></div>
         </a>
         <a href="transport.html" class="stat-card" style="text-decoration:none">
           <div class="stat-icon">🚚</div>
-          <div class="stat-info"><div class="stat-value" style="font-size:var(--font-size-lg)">运输跟踪</div><div class="stat-label">出库运输状态</div></div>
+          <div class="stat-info"><div class="stat-value" style="font-size:var(--font-size-lg)">运输跟踪</div><div class="stat-label">物流运输状态</div></div>
+        </a>
+        <a href="warning.html" class="stat-card" style="text-decoration:none">
+          <div class="stat-icon">⚠️</div>
+          <div class="stat-info"><div class="stat-value" style="font-size:var(--font-size-lg)">库存预警</div><div class="stat-label">库存预警管理</div></div>
         </a>
       </div>
 
-      <!-- 库存概览 -->
       <div class="card" style="margin-top:var(--spacing-lg)">
         <div class="card-header">
           <div class="card-title">库存概览</div>
-          <a href="warning.html" class="btn btn-ghost btn-sm">查看预警</a>
         </div>
         <div class="table-wrapper">
           <table class="table">
             <thead>
-              <tr><th>编号</th><th>物品名称</th><th>分类</th><th>货位</th><th>当前库存</th><th>最低库存</th><th>状态</th></tr>
+              <tr><th>物料编号</th><th>物料名称</th><th>类别</th><th>位置</th><th>库存数量</th><th>安全库存</th><th>状态</th></tr>
             </thead>
             <tbody id="inventory-tbody"></tbody>
           </table>
@@ -65,59 +63,7 @@
 <script src="../../assets/js/modules/navigation.js"></script>
 <script src="../../assets/js/modules/mobile-nav.js"></script>
 <script src="../../assets/js/main.js"></script>
-  <script src="../../data/warehouse.js"></script>
-<script>
-'use strict';
-let headerLoaded = false;
-let sidebarLoaded = false;
-
-function tryInitMobileNav() {
-  if (headerLoaded && sidebarLoaded) {
-    if (typeof MobileNav !== 'undefined') MobileNav.init();
-  }
-}
-
-fetch('../../components/header.html').then(r => r.text()).then(html => {
-  document.getElementById('header-placeholder').innerHTML = html;
-  appNav.init();
-  headerLoaded = true;
-  tryInitMobileNav();
-});
-fetch('../../components/sidebar.html').then(r => r.text()).then(html => {
-  document.getElementById('sidebar-placeholder').innerHTML = html;
-  sidebarLoaded = true;
-  tryInitMobileNav();
-});
-
-    const { inventory, inbound, outbound, locations } = warehouseData;
-    const totalItems = inventory.length;
-    const lowStock = inventory.filter(i => i.stock < i.minStock).length;
-    const totalInbound = inbound.length;
-    const totalOutbound = outbound.length;
-
-    document.getElementById('stats-grid').innerHTML = `
-      <div class="stat-card"><div class="stat-icon">📦</div><div class="stat-info"><div class="stat-value">${totalItems}</div><div class="stat-label">库存品类</div></div></div>
-      <div class="stat-card"><div class="stat-icon">⚠️</div><div class="stat-info"><div class="stat-value">${lowStock}</div><div class="stat-label">库存预警</div></div></div>
-      <div class="stat-card"><div class="stat-icon">📥</div><div class="stat-info"><div class="stat-value">${totalInbound}</div><div class="stat-label">近期入库</div></div></div>
-      <div class="stat-card"><div class="stat-icon">📤</div><div class="stat-info"><div class="stat-value">${totalOutbound}</div><div class="stat-label">近期出库</div></div></div>
-    `;
-
-    document.getElementById('inventory-tbody').innerHTML = inventory.map(i => {
-      const isLow = i.stock < i.minStock;
-      const statusClass = isLow ? 'badge-danger' : 'badge-success';
-      const statusText = isLow ? '库存不足' : '正常';
-      return `
-        <tr>
-          <td>${i.id}</td>
-          <td><strong>${i.name}</strong></td>
-          <td>${i.category}</td>
-          <td>${i.location}</td>
-          <td>${isLow ? `<span style="color:var(--color-danger);font-weight:600">${i.stock}</span>` : i.stock} ${i.unit}</td>
-          <td>${i.minStock} ${i.unit}</td>
-          <td><span class="badge ${statusClass}">${statusText}</span></td>
-        </tr>
-      `;
-    }).join('');
-  </script>
+<script src="../../data/warehouse.js"></script>
+<script src="../../assets/js/system/warehouse/index.js"></script>
 </body>
 </html>
