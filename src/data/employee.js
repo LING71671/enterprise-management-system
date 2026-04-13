@@ -15,7 +15,7 @@ const employeeData = {
   ],
 
   attendance: [
-    { id: 'A001', empId: 'E001', empName: '张伟', month: '2026-03', workDays: 22, actualDays: 21, lateTimes: 1, leaveDays: 0, overtimeHours: 8 },
+    { id: 'A001', empId: 'E001', empName: '小王', month: '2026-03', workDays: 22, actualDays: 21, lateTimes: 1, leaveDays: 0, overtimeHours: 8 },
     { id: 'A002', empId: 'E002', empName: '李娜', month: '2026-03', workDays: 22, actualDays: 22, lateTimes: 0, leaveDays: 0, overtimeHours: 12 },
     { id: 'A003', empId: 'E003', empName: '王磊', month: '2026-03', workDays: 22, actualDays: 20, lateTimes: 0, leaveDays: 2, overtimeHours: 4 },
     { id: 'A004', empId: 'E005', empName: '陈浩', month: '2026-03', workDays: 22, actualDays: 22, lateTimes: 0, leaveDays: 0, overtimeHours: 20 },
@@ -30,7 +30,7 @@ const employeeData = {
   ],
 
   performance: [
-    { id: 'P001', empId: 'E001', empName: '张伟', dept: '技术部', period: '2026-Q1', score: 92, grade: 'A', comment: '工作积极，代码质量高' },
+    { id: 'P001', empId: 'E001', empName: '小王', dept: '技术部', period: '2026-Q1', score: 92, grade: 'A', comment: '工作积极，代码质量高' },
     { id: 'P002', empId: 'E002', empName: '李娜', dept: '销售部', period: '2026-Q1', score: 96, grade: 'A+', comment: '超额完成销售目标' },
     { id: 'P003', empId: 'E003', empName: '王磊', dept: '生产部', period: '2026-Q1', score: 85, grade: 'B+', comment: '生产管理稳定' },
     { id: 'P004', empId: 'E005', empName: '陈浩', dept: '技术部', period: '2026-Q1', score: 90, grade: 'A', comment: '技术能力强，加班积极' },

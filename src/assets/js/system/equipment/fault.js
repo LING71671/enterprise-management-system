@@ -24,24 +24,75 @@ function renderStats() {
   `;
 }
 
+// 渲染表格 - 使用 DOM API 避免 XSS
 function renderTable() {
-  document.getElementById('fault-tbody').innerHTML = list.map(f => `
-    <tr>
-      <td>${f.id}</td>
-      <td><strong>${f.equipName}</strong></td>
-      <td>${f.faultDate}</td>
-      <td style="max-width:260px;color:var(--color-text-secondary)">${f.description}</td>
-      <td><span class="badge ${severityMap[f.severity] || 'badge-default'}">${f.severity}</span></td>
-      <td>${f.handler}</td>
-      <td><span class="badge ${statusMap[f.status] || 'badge-default'}">${f.status}</span></td>
-      <td>
-        <div class="table-actions">
-          <button class="btn btn-danger btn-sm" onclick="deleteItem('${f.id}')">删除</button>
-        </div>
-      </td>
-    </tr>
-  `).join('');
+  const tbody = document.getElementById('fault-tbody');
+  tbody.innerHTML = '';
+
+  list.forEach(f => {
+    const tr = document.createElement('tr');
+
+    const tdId = document.createElement('td');
+    tdId.textContent = f.id;
+    tr.appendChild(tdId);
+
+    const tdEquipName = document.createElement('td');
+    const strong = document.createElement('strong');
+    strong.textContent = f.equipName;
+    tdEquipName.appendChild(strong);
+    tr.appendChild(tdEquipName);
+
+    const tdFaultDate = document.createElement('td');
+    tdFaultDate.textContent = f.faultDate;
+    tr.appendChild(tdFaultDate);
+
+    const tdDescription = document.createElement('td');
+    tdDescription.style.maxWidth = '260px';
+    tdDescription.style.color = 'var(--color-text-secondary)';
+    tdDescription.textContent = f.description;
+    tr.appendChild(tdDescription);
+
+    const tdSeverity = document.createElement('td');
+    const severityBadge = document.createElement('span');
+    severityBadge.className = `badge ${severityMap[f.severity] || 'badge-default'}`;
+    severityBadge.textContent = f.severity;
+    tdSeverity.appendChild(severityBadge);
+    tr.appendChild(tdSeverity);
+
+    const tdHandler = document.createElement('td');
+    tdHandler.textContent = f.handler;
+    tr.appendChild(tdHandler);
+
+    const tdStatus = document.createElement('td');
+    const statusBadge = document.createElement('span');
+    statusBadge.className = `badge ${statusMap[f.status] || 'badge-default'}`;
+    statusBadge.textContent = f.status;
+    tdStatus.appendChild(statusBadge);
+    tr.appendChild(tdStatus);
+
+    const tdAction = document.createElement('td');
+    const actionsDiv = document.createElement('div');
+    actionsDiv.className = 'table-actions';
+    const btn = document.createElement('button');
+    btn.className = 'btn btn-danger btn-sm btn-delete';
+    btn.textContent = '删除';
+    btn.setAttribute('data-id', f.id);
+    actionsDiv.appendChild(btn);
+    tdAction.appendChild(actionsDiv);
+    tr.appendChild(tdAction);
+
+    tbody.appendChild(tr);
+  });
 }
+
+// 事件委托监听表格点击
+document.getElementById('fault-tbody').addEventListener('click', function(e) {
+  const btn = e.target.closest('.btn-delete');
+  if (btn) {
+    const id = btn.getAttribute('data-id');
+    deleteItem(id);
+  }
+});
 
 function deleteItem(id) {
   if (!confirm('确认删除该故障记录？')) return;

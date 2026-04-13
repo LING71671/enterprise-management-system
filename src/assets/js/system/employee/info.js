@@ -16,27 +16,94 @@ let editId = null;
 
 const statusMap = { '在职': 'badge-success', '试用期': 'badge-warning', '离职': 'badge-danger' };
 
+// 渲染表格 - 使用 DOM API 避免 XSS
 function renderTable(list) {
-  document.getElementById('info-tbody').innerHTML = list.map(e => `
-    <tr>
-      <td>${e.id}</td>
-      <td><strong>${e.name}</strong></td>
-      <td>${e.gender}</td>
-      <td>${e.dept}</td>
-      <td>${e.position}</td>
-      <td>${e.phone}</td>
-      <td>${e.entryDate}</td>
-      <td>${formatMoney(e.salary)}</td>
-      <td><span class="badge ${statusMap[e.status] || 'badge-default'}">${e.status}</span></td>
-      <td>
-        <div class="table-actions">
-          <button class="btn btn-outline btn-sm" onclick="openEdit('${e.id}')">编辑</button>
-          <button class="btn btn-danger btn-sm" onclick="deleteEmp('${e.id}')">删除</button>
-        </div>
-      </td>
-    </tr>
-  `).join('');
+  const tbody = document.getElementById('info-tbody');
+  tbody.innerHTML = '';
+
+  list.forEach(e => {
+    const tr = document.createElement('tr');
+
+    const tdId = document.createElement('td');
+    tdId.textContent = e.id;
+    tr.appendChild(tdId);
+
+    const tdName = document.createElement('td');
+    const strong = document.createElement('strong');
+    strong.textContent = e.name;
+    tdName.appendChild(strong);
+    tr.appendChild(tdName);
+
+    const tdGender = document.createElement('td');
+    tdGender.textContent = e.gender;
+    tr.appendChild(tdGender);
+
+    const tdDept = document.createElement('td');
+    tdDept.textContent = e.dept;
+    tr.appendChild(tdDept);
+
+    const tdPosition = document.createElement('td');
+    tdPosition.textContent = e.position;
+    tr.appendChild(tdPosition);
+
+    const tdPhone = document.createElement('td');
+    tdPhone.textContent = e.phone;
+    tr.appendChild(tdPhone);
+
+    const tdEntryDate = document.createElement('td');
+    tdEntr yDate.tex tConten t = e.entry Date;   
+    tr.appendChild(tdEntryDate);
+
+    const tdSalary = document.createElement('td');
+    tdSalary.textContent = formatMoney(e.salary);
+    tr.appendChild(tdSalary);
+
+    const tdStatus = document.createElement('td');
+    const badge = document.createElement('span');
+    badge.className = `badge ${statusMap[e.status] || 'badge-default'}`;
+    badge.textContent = e.status;
+    tdStatus.appendChild(badge);
+    tr.appendChild(tdStatus);
+
+    const tdAction = document.createElement('td');
+    const actionsDiv = document.createElement('div');
+    actionsDiv.className = 'table-actions';
+
+    const editBtn = document.createElement('button');
+    editBtn.className = 'btn btn-outline btn-sm';
+    editBtn.textContent = '编辑';
+    editBtn.setAttribute('data-action', 'edit');
+    editBtn.setAttribute('data-employee-id', e.id);
+
+    const deleteBtn = document.createElement('button');
+    deleteBtn.className = 'btn btn-danger btn-sm';
+    deleteBtn.textContent = '删除';
+    deleteBtn.setAttribute('data-action', 'delete');
+    deleteBtn.setAttribute('data-employee-id', e.id);
+
+    actionsDiv.appendChild(editBtn);
+    actionsDiv.appendChild(deleteBtn);
+    tdAction.appendChild(actionsDiv);
+    tr.appendChild(tdAction);
+
+    tbody.appendChild(tr);
+  });
 }
+
+// 事件委托监听表格点击
+document.getElementById('info-tbody').addEventListener('click', function(e) {
+  const btn = e.target.closest('[data-action]');
+  if (!btn) return;
+
+  const action = btn.getAttribute('data-action');
+  const id = btn.getAttribute('data-employee-id');
+
+  if (action === 'edit') {
+    openEdit(id);
+  } else if (action === 'delete') {
+    deleteEmp(id);
+  }
+});
 
 function openModal(title) {
   document.getElementById('modal-title').textContent = title;
@@ -136,7 +203,16 @@ document.getElementById('modal-save').onclick = function () {
     emp.entryDate = entryDate;
     emp.salary = Number(document.getElementById('f-salary').value) || 0;
   } else {
-    const newId = 'E' + String(employees.length + 1).padStart(3, '0');
+    // 生成新的ID：找到最大数字后缀并加1
+    let maxNum = 0;
+    employees.forEach(emp => {
+      const match = emp.id.match(/^E(\d+)$/);
+      if (match) {
+        const num = parseInt(match[1], 10);
+        if (num > maxNum) maxNum = num;
+      }
+    });
+    const newId = 'E' + String(maxNum + 1).padStart(3, '0');
     employees.push({
       id: newId,
       name,

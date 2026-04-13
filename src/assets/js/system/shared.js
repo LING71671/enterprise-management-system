@@ -78,7 +78,108 @@ function renderTable(tbodyId, data, rowRenderer) {
 }
 
 /**
- * 状态徽章映射
+ * 员工状态徽章映射
+ */
+const EmployeeStatusBadgeMap = {
+  '在职': 'badge-success',
+  '试用期': 'badge-warning',
+  '离职': 'badge-danger'
+};
+
+/**
+ * 设备状态徽章映射
+ */
+const EquipmentStatusBadgeMap = {
+  '运行中': 'badge-success',
+  '维修中': 'badge-warning',
+  '停机': 'badge-danger'
+};
+
+/**
+ * 生产订单状态徽章映射
+ */
+const ProductionOrderStatusBadgeMap = {
+  '已完成': 'badge-success',
+  '生产中': 'badge-info',
+  '待生产': 'badge-warning',
+  '待审核': 'badge-default'
+};
+
+/**
+ * 销售订单状态徽章映射
+ */
+const SalesOrderStatusBadgeMap = {
+  '已完成': 'badge-success',
+  '配送中': 'badge-info',
+  '待发货': 'badge-warning',
+  '待审核': 'badge-default'
+};
+
+/**
+ * 采购订单状态徽章映射
+ */
+const PurchaseOrderStatusBadgeMap = {
+  '已到货': 'badge-success',
+  '运输中': 'badge-info',
+  '待发货': 'badge-warning',
+  '待审核': 'badge-default'
+};
+
+/**
+ * 生产计划状态徽章映射
+ */
+const ProductionPlanStatusBadgeMap = {
+  '进行中': 'badge-success',
+  '待启动': 'badge-warning',
+  '已完成': 'badge-info'
+};
+
+/**
+ * 维护计划状态徽章映射
+ */
+const MaintenanceStatusBadgeMap = {
+  '待执行': 'badge-warning',
+  '进行中': 'badge-info',
+  '已完成': 'badge-success'
+};
+
+/**
+ * 质检结果徽章映射
+ */
+const QCStatusBadgeMap = {
+  '合格': 'badge-success',
+  '不合格': 'badge-danger'
+};
+
+/**
+ * 客户等级徽章映射
+ */
+const CustomerLevelBadgeMap = {
+  'VIP': 'badge-danger',
+  '重要': 'badge-warning',
+  '普通': 'badge-default'
+};
+
+/**
+ * 供应商状态徽章映射
+ */
+const SupplierStatusBadgeMap = {
+  '合作中': 'badge-success',
+  '暂停': 'badge-warning'
+};
+
+/**
+ * 招聘状态徽章映射
+ */
+const RecruitmentStatusBadgeMap = {
+  '招聘中': 'badge-success',
+  '已完成': 'badge-info',
+  '待发布': 'badge-default'
+};
+
+/**
+ * 通用状态徽章映射（向后兼容）
+ * @deprecated 建议使用特定领域的映射
  */
 const StatusBadgeMap = {
   // 通用状态
@@ -86,65 +187,52 @@ const StatusBadgeMap = {
   'inactive': 'badge-default',
   'pending': 'badge-warning',
   'completed': 'badge-success',
-  'failed': 'badge-danger',
-
-  // 员工状态
-  '在职': 'badge-success',
-  '试用期': 'badge-warning',
-  '离职': 'badge-danger',
-
-  // 设备状态
-  '运行中': 'badge-success',
-  '维修中': 'badge-warning',
-  '停机': 'badge-danger',
-
-  // 订单状态
-  '已完成': 'badge-success',
-  '生产中': 'badge-info',
-  '待生产': 'badge-warning',
-  '待审核': 'badge-default',
-  '配送中': 'badge-info',
-  '待发货': 'badge-warning',
-
-  // 采购状态
-  '已到货': 'badge-success',
-  '运输中': 'badge-info',
-  '待发货': 'badge-warning',
-
-  // 计划状态
-  '进行中': 'badge-success',
-  '待启动': 'badge-warning',
-
-  // 维护状态
-  '待执行': 'badge-warning',
-  '进行中': 'badge-info',
-
-  // 质检结果
-  '合格': 'badge-success',
-  '不合格': 'badge-danger',
-
-  // 客户等级
-  'VIP': 'badge-danger',
-  '重要': 'badge-warning',
-  '普通': 'badge-default',
-
-  // 供应商状态
-  '合作中': 'badge-success',
-  '暂停': 'badge-warning',
-
-  // 招聘状态
-  '招聘中': 'badge-success',
-  '已完成': 'badge-info',
-  '待发布': 'badge-default'
+  'failed': 'badge-danger'
 };
 
 /**
- * 获取状态徽章类名
+ * 获取员工状态徽章类名
  * @param {string} status - 状态值
  * @returns {string} 徽章类名
  */
-function getStatusBadgeClass(status) {
-  return StatusBadgeMap[status] || 'badge-default';
+function getEmployeeStatusBadgeClass(status) {
+  return EmployeeStatusBadgeMap[status] || 'badge-default';
+}
+
+/**
+ * 获取设备状态徽章类名
+ * @param {string} status - 状态值
+ * @returns {string} 徽章类名
+ */
+function getEquipmentStatusBadgeClass(status) {
+  return EquipmentStatusBadgeMap[status] || 'badge-default';
+}
+
+/**
+ * 获取生产订单状态徽章类名
+ * @param {string} status - 状态值
+ * @returns {string} 徽章类名
+ */
+function getProductionOrderStatusBadgeClass(status) {
+  return ProductionOrderStatusBadgeMap[status] || 'badge-default';
+}
+
+/**
+ * 获取销售订单状态徽章类名
+ * @param {string} status - 状态值
+ * @returns {string} 徽章类名
+ */
+function getSalesOrderStatusBadgeClass(status) {
+  return SalesOrderStatusBadgeMap[status] || 'badge-default';
+}
+
+/**
+ * 获取采购订单状态徽章类名
+ * @param {string} status - 状态值
+ * @returns {string} 徽章类名
+ */
+function getPurchaseOrderStatusBadgeClass(status) {
+  return PurchaseOrderStatusBadgeMap[status] || 'badge-default';
 }
 
 /**
@@ -227,8 +315,23 @@ if (typeof module !== 'undefined' && module.exports) {
     initPageComponents,
     renderStatsGrid,
     renderTable,
+    EmployeeStatusBadgeMap,
+    EquipmentStatusBadgeMap,
+    ProductionOrderStatusBadgeMap,
+    SalesOrderStatusBadgeMap,
+    PurchaseOrderStatusBadgeMap,
+    ProductionPlanStatusBadgeMap,
+    MaintenanceStatusBadgeMap,
+    QCStatusBadgeMap,
+    CustomerLevelBadgeMap,
+    SupplierStatusBadgeMap,
+    RecruitmentStatusBadgeMap,
     StatusBadgeMap,
-    getStatusBadgeClass,
+    getEmployeeStatusBadgeClass,
+    getEquipmentStatusBadgeClass,
+    getProductionOrderStatusBadgeClass,
+    getSalesOrderStatusBadgeClass,
+    getPurchaseOrderStatusBadgeClass,
     createModalController,
     filterByKeyword,
     confirmDelete,
