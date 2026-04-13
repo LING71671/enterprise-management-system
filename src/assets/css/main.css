@@ -1,9 +1,9 @@
-/* 1. 基础样式 */
+/* 1. 基础样式 base */
 @import './base/reset.css';
 @import './base/variables.css';
 @import './base/typography.css';
 
-/* 2. 组件样式 */
+/* 2. 组件样式 components */
 @import './components/header.css';
 @import './components/sidebar.css';
 @import './components/button.css';
@@ -12,7 +12,7 @@
 @import './components/card.css';
 @import './components/modal.css';
 
-/* 3. 页面样式 */
+/* 3. 页面样式  pages*/
 @import './pages/login.css';
 @import './pages/production.css';
 @import './pages/sales.css';
@@ -22,31 +22,33 @@
 @import './pages/employee.css';
 @import './pages/landing.css';
 
-/* 4. 共享动画 */
+/* 4. 动画样式 */
+/* @keyframes：CSS用来创建动画的规则 */
 @keyframes componentFadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from { opacity: 0; } /* 透明度为0% */
+  to { opacity: 1; } /* 透明度为100% */
 }
 
-/* =====================
-   自定义鼠标跟随动画 (Antigravity 风格)
-   ===================== */
-.custom-cursor {
+
+/*自定义鼠标跟随动画*/
+.custom-cursor {  /*类选择器*/
   position: fixed;
   top: 0;
   left: 0;
   width: 20px;
   height: 20px;
-  border: 2px solid var(--color-primary);
-  border-radius: 50%;
-  pointer-events: none;
+  border: 2px solid var(--color-primary);  /* 像素为2的实线边框 */
+
+  border-radius: 50%;  /* 把四个角拉成圆 看起来像个圆环 */
+  pointer-events: none;  /* 不会拦截鼠标事件 */
   transform: translate(-50%, -50%);
-  z-index: 99999;
+  z-index: 99999;  /* 置顶自定义鼠标 */
+  /* transition：过渡动画，让变化更平滑 */
   transition: width 0.3s cubic-bezier(0.25, 1, 0.5, 1), 
               height 0.3s cubic-bezier(0.25, 1, 0.5, 1), 
               background-color 0.3s cubic-bezier(0.25, 1, 0.5, 1),
               opacity 0.3s;
-  mix-blend-mode: difference;
+  mix-blend-mode: difference;  /* 混合模式：不同背景上产生反差感 */
 }
 
 .custom-cursor.hover {
@@ -71,11 +73,14 @@
   transition: opacity 0.2s;
 }
 
+/*为自定义鼠标元素 再额外创建一个“中心小圆点”*/
 .custom-cursor.hover::after {
   opacity: 0;
 }
 
+/*媒体查询：适配移动端*/
 @media (max-width: 768px) {
+  /*选中所有类名为custom-cursor的元素*/
   .custom-cursor {
     display: none; /* 移动端隐藏自定义鼠标 */
   }
