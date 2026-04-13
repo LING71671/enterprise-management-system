@@ -51,7 +51,7 @@ function renderTable(list) {
     tr.appendChild(tdPhone);
 
     const tdEntryDate = document.createElement('td');
-    tdEntr yDate.tex tConten t = e.entry Date;   
+    tdEntryDate.textContent = e.entryDate;
     tr.appendChild(tdEntryDate);
 
     const tdSalary = document.createElement('td');
