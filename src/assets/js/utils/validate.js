@@ -48,7 +48,7 @@ const validators = {
     // 检查三个条件：不是 null、不是 undefined、去掉空格后不是空字符串
     // String(value) 将值转换成字符串（防止数字等非字符串类型）
     // .trim() 去掉字符串首尾的空格
-    return value !== null && value !== undefined && String(value).trim() !== ''
+    return (value !== null) && (value !== undefined) && (String(value).trim() !== '')
       ? null  // 验证通过，返回 null
       : message;  // 验证失败，返回错误信息
   },

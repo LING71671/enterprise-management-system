@@ -1,17 +1,20 @@
 'use strict';
 
 // 员工信息页逻辑
-fetch('../../components/header.html').then(r => r.text()).then(html => {
-  document.getElementById('header-placeholder').innerHTML = html;
+// 使用 Promise.all 等待 header 和 sidebar 都加载完成后再初始化导航
+Promise.all([
+  fetch('../../components/header.html').then(r => r.text()),
+  fetch('../../components/sidebar.html').then(r => r.text())
+]).then(([headerHtml, sidebarHtml]) => {
+  document.getElementById('header-placeholder').innerHTML = headerHtml;
+  document.getElementById('sidebar-placeholder').innerHTML = sidebarHtml;
+  // 确保 DOM 都插入后再初始化导航
   appNav.init();
 });
 
-fetch('../../components/sidebar.html').then(r => r.text()).then(html => {
-  document.getElementById('sidebar-placeholder').innerHTML = html;
-});
-
 // 使用本地副本支持增删改
-let employees = [...employeeData.employees];
+// 使用 map 创建浅拷贝的对象，避免修改原始数据中的对象引用
+let employees = employeeData.employees.map(emp => ({ ...emp }));
 let editId = null;
 
 const statusMap = { '在职': 'badge-success', '试用期': 'badge-warning', '离职': 'badge-danger' };
@@ -88,7 +91,7 @@ function renderTable(list) {
 
     tbody.appendChild(tr);
   });
-}
+} 
 
 // 事件委托监听表格点击
 document.getElementById('info-tbody').addEventListener('click', function(e) {
@@ -115,7 +118,7 @@ function closeModal() {
   removeClass(document.getElementById('modal-overlay'), 'active');
   editId = null;
 }
-
+       
 function openAdd() {
   editId = null;
   ['name','gender','dept','position','phone','email','entryDate','salary'].forEach(f => {
@@ -158,6 +161,7 @@ document.getElementById('modal-save').onclick = function () {
   const phone = document.getElementById('f-phone').value.trim();
   const email = document.getElementById('f-email').value.trim();
   const entryDate = document.getElementById('f-entryDate').value;
+  const salaryStr = document.getElementById('f-salary').value.trim();
 
   if (!name) {
     document.getElementById('form-error').textContent = '姓名为必填项';
@@ -192,6 +196,17 @@ document.getElementById('modal-save').onclick = function () {
     return;
   }
 
+  // 薪资验证
+  let salary = null;
+  if (salaryStr) {
+    const parsedSalary = parseFloat(salaryStr);
+    if (!isFinite(parsedSalary) || parsedSalary < 0) {
+      document.getElementById('form-error').textContent = '薪资必须是有效的非负数';
+      return;
+    }
+    salary = parsedSalary;
+  }
+
   if (editId) {
     const emp = employees.find(e => e.id === editId);
     emp.name = name;
@@ -201,8 +216,14 @@ document.getElementById('modal-save').onclick = function () {
     emp.phone = phone;
     emp.email = email;
     emp.entryDate = entryDate;
-    emp.salary = Number(document.getElementById('f-salary').value) || 0;
+    // 如果薪资输入为空，保留原值；否则使用新值
+    emp.salary = salary !== null ? salary : emp.salary;
   } else {
+    // 新增员工时，薪资为必填项
+    if (salary === null) {
+      document.getElementById('form-error').textContent = '薪资为必填项';
+      return;
+    }
     // 生成新的ID：找到最大数字后缀并加1
     let maxNum = 0;
     employees.forEach(emp => {
@@ -222,7 +243,7 @@ document.getElementById('modal-save').onclick = function () {
       phone,
       email,
       entryDate,
-      salary: Number(document.getElementById('f-salary').value) || 0,
+      salary,
       status: '试用期'
     });
   }
