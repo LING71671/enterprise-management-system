@@ -1,81 +1,29 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" type="image/x-icon" href="src/assets/images/logo.ico">
-<title>小麦科技</title>
-  <link rel="stylesheet" href="src/assets/css/pages/loader.css">
-  <!-- JS 禁用时的降级方案 -->
-  <meta http-equiv="refresh" content="3.5;url=src/pages/landing.html">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小麦科技</title>
 </head>
 <body>
-  <div class="loader-wrapper" id="loaderWrapper">
-    <!-- 背景层 -->
-    <div class="bg-layer"></div>
-    <div class="light-sweep"></div>
-    <div class="grid-bg"></div>
+<p>正在跳转...</p>
 
-    <!-- 波纹 -->
-    <div class="ripple-container">
-      <div class="ripple"></div>
-      <div class="ripple"></div>
-      <div class="ripple"></div>
-    </div>
+<script>
+    //落地动画
+    const url = new URL(window.location.href);//获取当前页面的完整 URL 地址
+    const campaign = url.searchParams.get('campaign');//从网址里拿参数的值
+    //抖音专版
+    if (campaign === 'douyin')
+        window.location.href = 'src/pages/landing.html';
+    //window.location:当前浏览器窗口正在打开的网页地址
+    else if (navigator.userAgent.includes('Mobile'))
+        //navigator.userAgent 是浏览器自动发给网站的「身份自我介绍字符串」
+        window.location.href = 'src/pages/landing.html';
+    //默认
+    else
+        window.location.href = 'src/pages/landing.html';
+</script>
 
-    <!-- 中心光球 -->
-    <div class="center-orb"></div>
-
-    <!-- 粒子系统 -->
-    <div class="particles">
-      <!-- 飞散粒子 -->
-      <div class="particle"></div><div class="particle"></div><div class="particle"></div>
-      <div class="particle"></div><div class="particle"></div><div class="particle"></div>
-      <div class="particle"></div><div class="particle"></div><div class="particle"></div>
-      <div class="particle"></div><div class="particle"></div><div class="particle"></div>
-      <div class="particle"></div><div class="particle"></div><div class="particle"></div>
-      <div class="particle"></div><div class="particle"></div><div class="particle"></div>
-      <div class="particle"></div><div class="particle"></div>
-      <!-- 悬浮粒子 -->
-      <div class="float-particle"></div><div class="float-particle"></div>
-      <div class="float-particle"></div><div class="float-particle"></div>
-      <div class="float-particle"></div><div class="float-particle"></div>
-      <div class="float-particle"></div><div class="float-particle"></div>
-      <div class="float-particle"></div><div class="float-particle"></div>
-    </div>
-
-    <!-- 主内容 -->
-    <div class="loader-content">
-      <div class="loader-brand">小麦科技</div>
-      <div class="loader-tagline">年轻人的智能科技平台</div>
-      <div class="loader-divider"></div>
-      <div class="loader-motto">北京有小米 · 南京有小麦</div>
-    </div>
-
-    <!-- 底部进度 -->
-    <div class="progress-container">
-      <div class="progress-track">
-        <div class="progress-fill"></div>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    (function() {
-      var wrapper = document.getElementById('loaderWrapper');
-      var redirectUrl = 'src/pages/landing.html';
-      var duration = 2800; // 动画展示时间
-
-      // 动画播放完毕后执行退出动画并跳转
-      setTimeout(function() {
-        wrapper.classList.add('exit');
-        
-        // 等待退出动画完成后跳转
-        setTimeout(function() {
-          window.location.href = redirectUrl;
-        }, 800);
-      }, duration);
-    })();
-  </script>
+<script>window.location.href = 'src/pages/landing.html';</script>
 </body>
 </html>

@@ -4,7 +4,7 @@ const auth = {
   USER_KEY: 'xm_user',
 
   login(username, password) {
-    // 模拟账号验证
+    // 管理员账号
     if (username === 'admin' && password === '123456') {
       const user = { username, role: '管理员', loginTime: Date.now() };
       storage.session.set(this.USER_KEY, user);
@@ -20,7 +20,7 @@ const auth = {
     const pagesIndex = pathParts.lastIndexOf('pages');
     if (pagesIndex !== -1) {
       // 计算从当前位置到pages目录的路径
-      const depth = pathParts.length - pagesIndex - 1;
+      const depth = pathParts.length - pagesIndex - 2;
       const relativePath = depth > 0 ? '../'.repeat(depth) : './';
       // 首页在pages目录下，直接从pages进入
       window.location.href = relativePath + 'landing.html';
