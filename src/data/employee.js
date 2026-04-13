@@ -2,7 +2,7 @@
 
 const employeeData = {
   employees: [
-    { id: 'E001', name: '张伟', gender: '男', dept: '技术部', position: '前端工程师', phone: '13800001001', email: 'zhangwei@xiaomai.com', entryDate: '2023-03-15', salary: 18000, status: '在职' },
+    { id: 'E001', name: '小王', gender: '男', dept: '技术部', position: '前端工程师', phone: '13800001001', email: 'wang@xiaomai.com', entryDate: '2023-03-15', salary: 18000, status: '在职' },
     { id: 'E002', name: '李娜', gender: '女', dept: '销售部', position: '销售经理', phone: '13800001002', email: 'lina@xiaomai.com', entryDate: '2022-07-01', salary: 22000, status: '在职' },
     { id: 'E003', name: '王磊', gender: '男', dept: '生产部', position: '生产主管', phone: '13800001003', email: 'wanglei@xiaomai.com', entryDate: '2021-11-20', salary: 16000, status: '在职' },
     { id: 'E004', name: '赵敏', gender: '女', dept: '人事部', position: 'HR专员', phone: '13800001004', email: 'zhaomin@xiaomai.com', entryDate: '2023-06-10', salary: 12000, status: '在职' },
