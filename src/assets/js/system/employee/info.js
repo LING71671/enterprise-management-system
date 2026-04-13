@@ -86,19 +86,54 @@ document.getElementById('modal-overlay').onclick = e => { if (e.target === e.cur
 
 document.getElementById('modal-save').onclick = function () {
   const name = document.getElementById('f-name').value.trim();
+  const dept = document.getElementById('f-dept').value.trim();
+  const position = document.getElementById('f-position').value.trim();
+  const phone = document.getElementById('f-phone').value.trim();
+  const email = document.getElementById('f-email').value.trim();
+  const entryDate = document.getElementById('f-entryDate').value;
+
   if (!name) {
     document.getElementById('form-error').textContent = '姓名为必填项';
     return;
   }
+  if (!dept) {
+    document.getElementById('form-error').textContent = '部门为必填项';
+    return;
+  }
+  if (!position) {
+    document.getElementById('form-error').textContent = '职位为必填项';
+    return;
+  }
+  if (!phone) {
+    document.getElementById('form-error').textContent = '手机号为必填项';
+    return;
+  }
+  if (!/^1[3-9]\d{9}$/.test(phone)) {
+    document.getElementById('form-error').textContent = '手机号格式不正确';
+    return;
+  }
+  if (!email) {
+    document.getElementById('form-error').textContent = '邮箱为必填项';
+    return;
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    document.getElementById('form-error').textContent = '邮箱格式不正确';
+    return;
+  }
+  if (!entryDate) {
+    document.getElementById('form-error').textContent = '入职日期为必填项';
+    return;
+  }
+
   if (editId) {
     const emp = employees.find(e => e.id === editId);
     emp.name = name;
     emp.gender = document.getElementById('f-gender').value;
-    emp.dept = document.getElementById('f-dept').value.trim();
-    emp.position = document.getElementById('f-position').value.trim();
-    emp.phone = document.getElementById('f-phone').value.trim();
-    emp.email = document.getElementById('f-email').value.trim();
-    emp.entryDate = document.getElementById('f-entryDate').value;
+    emp.dept = dept;
+    emp.position = position;
+    emp.phone = phone;
+    emp.email = email;
+    emp.entryDate = entryDate;
     emp.salary = Number(document.getElementById('f-salary').value) || 0;
   } else {
     const newId = 'E' + String(employees.length + 1).padStart(3, '0');
@@ -106,11 +141,11 @@ document.getElementById('modal-save').onclick = function () {
       id: newId,
       name,
       gender: document.getElementById('f-gender').value,
-      dept: document.getElementById('f-dept').value.trim(),
-      position: document.getElementById('f-position').value.trim(),
-      phone: document.getElementById('f-phone').value.trim(),
-      email: document.getElementById('f-email').value.trim(),
-      entryDate: document.getElementById('f-entryDate').value,
+      dept,
+      position,
+      phone,
+      email,
+      entryDate,
       salary: Number(document.getElementById('f-salary').value) || 0,
       status: '试用期'
     });
