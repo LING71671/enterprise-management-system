@@ -64,10 +64,8 @@ function initCustomCursor() {
   if (window.innerWidth <= 768) return; // 移动端不加载
   const cursor = document.createElement('div');
   cursor.className = 'custom-cursor';
-  // 初始时设置为透明，当鼠标第一次移动时再显示
-  cursor.style.opacity = '0';
-  // 确保伪元素也透明
-  cursor.style.setProperty('--cursor-opacity', '0');
+  // 初始时设置为不显示，当鼠标第一次移动时再显示
+  cursor.style.display = 'none';
   document.body.appendChild(cursor);
 
   // 初始鼠标位置
@@ -101,9 +99,7 @@ function initCustomCursor() {
     if (!hasMousePosition) {
       cursorX = mouseX;
       cursorY = mouseY;
-      cursor.style.opacity = '1';
-      // 确保伪元素也显示
-      cursor.style.setProperty('--cursor-opacity', '1');
+      cursor.style.display = 'block';
       hasMousePosition = true;
     }
   });
