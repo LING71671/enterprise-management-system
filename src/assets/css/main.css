@@ -4,6 +4,11 @@
 @import './base/typography.css';
 @import './base/animations.css';
 
+/* 隐藏默认鼠标光标 */
+body {
+  cursor: none;
+}
+
 /* 2. 组件样式 components */
 @import './components/header.css';
 @import './components/sidebar.css';
