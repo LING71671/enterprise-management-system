@@ -64,44 +64,28 @@ function initCustomCursor() {
   if (window.innerWidth <= 768) return; // 移动端不加载
   const cursor = document.createElement('div');
   cursor.className = 'custom-cursor';
-  // 初始时设置为不显示，当鼠标第一次移动时再显示
-  cursor.style.display = 'none';
   document.body.appendChild(cursor);
 
-  // 初始鼠标位置
-  let mouseX = 0;
-  let mouseY = 0;
-  let cursorX = 0;
-  let cursorY = 0;
-  
-  // 标记是否已经获取到鼠标位置
-  let hasMousePosition = false;
+  // 避免初始未移动前的卡顿滞后感
+  let mouseX = window.innerWidth / 2;
+  let mouseY = window.innerHeight / 2;
+  let cursorX = mouseX;
+  let cursorY = mouseY;
   
   // 使用 requestAnimationFrame 平滑移动
   function updateCursor() {
-    if (hasMousePosition) {
-      const dx = mouseX - cursorX;
-      const dy = mouseY - cursorY;
-      cursorX += dx * 0.2;
-      cursorY += dy * 0.2;
-      cursor.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0) translate(-50%, -50%)`;
-    }
+    const dx = mouseX - cursorX;
+    const dy = mouseY - cursorY;
+    cursorX += dx * 0.2;
+    cursorY += dy * 0.2;
+    cursor.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0) translate(-50%, -50%)`;
     requestAnimationFrame(updateCursor);
   }
   requestAnimationFrame(updateCursor);
 
-  // 鼠标移动事件监听器
   document.addEventListener('mousemove', (e) => {
     mouseX = e.clientX;
     mouseY = e.clientY;
-    
-    // 第一次获取鼠标位置时，直接设置光标位置并显示
-    if (!hasMousePosition) {
-      cursorX = mouseX;
-      cursorY = mouseY;
-      cursor.style.display = 'block';
-      hasMousePosition = true;
-    }
   });
 
   // 为可点击元素增加 hover 态
