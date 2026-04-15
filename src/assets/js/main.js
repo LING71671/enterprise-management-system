@@ -64,33 +64,28 @@ function initCustomCursor() {
   if (window.innerWidth <= 768) return; // 移动端不加载
   const cursor = document.createElement('div');
   cursor.className = 'custom-cursor';
+  // 初始时设置为透明，当鼠标第一次移动时再显示
+  cursor.style.opacity = '0';
   document.body.appendChild(cursor);
 
-  // 从sessionStorage获取之前的鼠标位置，如果没有则使用屏幕中心
-  let mouseX = window.innerWidth / 2;
-  let mouseY = window.innerHeight / 2;
+  // 初始鼠标位置
+  let mouseX = 0;
+  let mouseY = 0;
+  let cursorX = 0;
+  let cursorY = 0;
   
-  try {
-    const savedPosition = sessionStorage.getItem('mousePosition');
-    if (savedPosition) {
-      const { x, y } = JSON.parse(savedPosition);
-      mouseX = x;
-      mouseY = y;
-    }
-  } catch (e) {
-    console.error('Error getting saved mouse position:', e);
-  }
-  
-  let cursorX = mouseX;
-  let cursorY = mouseY;
+  // 标记是否已经获取到鼠标位置
+  let hasMousePosition = false;
   
   // 使用 requestAnimationFrame 平滑移动
   function updateCursor() {
-    const dx = mouseX - cursorX;
-    const dy = mouseY - cursorY;
-    cursorX += dx * 0.2;
-    cursorY += dy * 0.2;
-    cursor.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0) translate(-50%, -50%)`;
+    if (hasMousePosition) {
+      const dx = mouseX - cursorX;
+      const dy = mouseY - cursorY;
+      cursorX += dx * 0.2;
+      cursorY += dy * 0.2;
+      cursor.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0) translate(-50%, -50%)`;
+    }
     requestAnimationFrame(updateCursor);
   }
   requestAnimationFrame(updateCursor);
@@ -100,20 +95,12 @@ function initCustomCursor() {
     mouseX = e.clientX;
     mouseY = e.clientY;
     
-    // 保存鼠标位置到sessionStorage
-    try {
-      sessionStorage.setItem('mousePosition', JSON.stringify({ x: mouseX, y: mouseY }));
-    } catch (e) {
-      console.error('Error saving mouse position:', e);
-    }
-  });
-  
-  // 页面卸载事件监听器，在页面卸载时保存当前鼠标位置
-  window.addEventListener('beforeunload', () => {
-    try {
-      sessionStorage.setItem('mousePosition', JSON.stringify({ x: mouseX, y: mouseY }));
-    } catch (e) {
-      console.error('Error saving mouse position on unload:', e);
+    // 第一次获取鼠标位置时，直接设置光标位置并显示
+    if (!hasMousePosition) {
+      cursorX = mouseX;
+      cursorY = mouseY;
+      cursor.style.opacity = '1';
+      hasMousePosition = true;
     }
   });
 
