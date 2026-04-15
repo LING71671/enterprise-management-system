@@ -55,7 +55,12 @@
 }
 
 .login-side-content img {
+  height: 120px;
+  margin-bottom: 24px;
   filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .login-side-content h1 {
@@ -63,6 +68,7 @@
   margin-bottom: 16px;
   font-weight: 700;
   letter-spacing: 1px;
+  color: #ffffff;
 }
 
 .login-side-content p {
