@@ -15,31 +15,30 @@
       <div class="page-header">
         <div>
           <div class="page-title">运输跟踪</div>
-          <div class="page-subtitle">出库运输状态跟踪</div>
+          <div class="page-subtitle">物流运输状态</div>
         </div>
       </div>
 
       <div class="stats-grid" id="stats-grid"></div>
 
       <div class="card">
-        <div class="card-header"><div class="card-title">出库运输记录</div></div>
+        <div class="card-header"><div class="card-title">出库运输</div></div>
         <div class="table-wrapper">
           <table class="table">
             <thead>
-              <tr><th>出库单号</th><th>物品</th><th>数量</th><th>目的地</th><th>出库日期</th><th>操作员</th><th>距今天数</th></tr>
+              <tr><th>出库单号</th><th>物料名称</th><th>数量</th><th>客户</th><th>出库日期</th><th>操作人</th><th>状态</th></tr>
             </thead>
             <tbody id="transport-tbody"></tbody>
           </table>
         </div>
       </div>
 
-      <!-- 入库来源追踪 -->
       <div class="card" style="margin-top:var(--spacing-lg)">
-        <div class="card-header"><div class="card-title">入库来源追踪</div></div>
+        <div class="card-header"><div class="card-title">入库来源</div></div>
         <div class="table-wrapper">
           <table class="table">
             <thead>
-              <tr><th>入库单号</th><th>物品</th><th>数量</th><th>来源</th><th>入库日期</th><th>操作员</th></tr>
+              <tr><th>入库单号</th><th>物料名称</th><th>数量</th><th>供应商</th><th>入库日期</th><th>操作人</th></tr>
             </thead>
             <tbody id="source-tbody"></tbody>
           </table>
@@ -55,57 +54,6 @@
   <script src="../../assets/js/modules/navigation.js"></script>
   <script src="../../assets/js/main.js"></script>
   <script src="../../data/warehouse.js"></script>
-  <script>
-    'use strict';
-    fetch('../../components/header.html').then(r => r.text()).then(html => {
-      document.getElementById('header-placeholder').innerHTML = html;
-      appNav.init();
-    });
-    fetch('../../components/sidebar.html').then(r => r.text()).then(html => {
-      document.getElementById('sidebar-placeholder').innerHTML = html;
-    });
-
-    const { inbound, outbound } = warehouseData;
-    const today = new Date();
-    const totalOutQty = outbound.reduce((s, o) => s + o.quantity, 0);
-    const totalInQty = inbound.reduce((s, i) => s + i.quantity, 0);
-
-    document.getElementById('stats-grid').innerHTML = `
-      <div class="stat-card"><div class="stat-icon">📤</div><div class="stat-info"><div class="stat-value">${outbound.length}</div><div class="stat-label">出库单数</div></div></div>
-      <div class="stat-card"><div class="stat-icon">🚚</div><div class="stat-info"><div class="stat-value">${totalOutQty}</div><div class="stat-label">出库总量</div></div></div>
-      <div class="stat-card"><div class="stat-icon">📥</div><div class="stat-info"><div class="stat-value">${inbound.length}</div><div class="stat-label">入库单数</div></div></div>
-      <div class="stat-card"><div class="stat-icon">📦</div><div class="stat-info"><div class="stat-value">${totalInQty}</div><div class="stat-label">入库总量</div></div></div>
-    `;
-
-    document.getElementById('transport-tbody').innerHTML = outbound.map(o => {
-      const outDate = new Date(o.date);
-      const daysSince = Math.ceil((today - outDate) / (1000 * 60 * 60 * 24));
-      const daysIcon = daysSince < 0 ? `<span class="badge badge-info">计划中 (${Math.abs(daysSince)}天后)</span>` :
-        daysSince === 0 ? '<span class="badge badge-warning">今日</span>' :
-        `<span class="badge badge-default">${daysSince} 天前</span>`;
-      return `
-        <tr>
-          <td>${o.id}</td>
-          <td><strong>${o.item}</strong></td>
-          <td>${o.quantity} ${o.unit}</td>
-          <td>${o.customer}</td>
-          <td>${o.date}</td>
-          <td>${o.operator}</td>
-          <td>${daysIcon}</td>
-        </tr>
-      `;
-    }).join('');
-
-    document.getElementById('source-tbody').innerHTML = inbound.map(i => `
-      <tr>
-        <td>${i.id}</td>
-        <td><strong>${i.item}</strong></td>
-        <td>${i.quantity} ${i.unit}</td>
-        <td>${i.supplier}</td>
-        <td>${i.date}</td>
-        <td>${i.operator}</td>
-      </tr>
-    `).join('');
-  </script>
+  <script src="../../assets/js/system/warehouse/transport.js"></script>
 </body>
 </html>

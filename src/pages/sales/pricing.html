@@ -15,17 +15,17 @@
       <div class="page-header">
         <div>
           <div class="page-title">定价促销</div>
-          <div class="page-subtitle">产品定价与折扣管理</div>
+          <div class="page-subtitle">产品价格与促销管理</div>
         </div>
         <button class="btn btn-primary" id="add-btn">+ 新增定价</button>
       </div>
 
       <div class="card">
-        <div class="card-header"><div class="card-title">定价列表</div></div>
+        <div class="card-header"><div class="card-title">产品价格表</div></div>
         <div class="table-wrapper">
           <table class="table">
             <thead>
-              <tr><th>编号</th><th>产品</th><th>标准价</th><th>当前价</th><th>折扣</th><th>有效期</th><th>状态</th></tr>
+              <tr><th>产品编号</th><th>产品名称</th><th>标准价</th><th>当前价</th><th>折扣</th><th>有效期</th><th>状态</th></tr>
             </thead>
             <tbody id="pricing-tbody"></tbody>
           </table>
@@ -41,29 +41,6 @@
   <script src="../../assets/js/modules/navigation.js"></script>
   <script src="../../assets/js/main.js"></script>
   <script src="../../data/sales.js"></script>
-  <script>
-    'use strict';
-    fetch('../../components/header.html').then(r => r.text()).then(html => {
-      document.getElementById('header-placeholder').innerHTML = html;
-      appNav.init();
-    });
-    fetch('../../components/sidebar.html').then(r => r.text()).then(html => {
-      document.getElementById('sidebar-placeholder').innerHTML = html;
-    });
-
-    document.getElementById('pricing-tbody').innerHTML = salesData.pricing.map(p => `
-      <tr>
-        <td>${p.id}</td>
-        <td><strong>${p.product}</strong></td>
-        <td>${formatMoney(p.standardPrice)}</td>
-        <td><strong style="color:var(--color-primary)">${formatMoney(p.currentPrice)}</strong></td>
-        <td>${p.discount < 1 ? `<span class="badge badge-warning">${(p.discount * 10).toFixed(1)}折</span>` : '—'}</td>
-        <td>${p.validFrom} ~ ${p.validTo}</td>
-        <td><span class="badge badge-success">${p.status}</span></td>
-      </tr>
-    `).join('');
-
-    document.getElementById('add-btn').onclick = () => alert('新增定价功能待实现');
-  </script>
+  <script src="../../assets/js/system/sales/pricing.js"></script>
 </body>
 </html>

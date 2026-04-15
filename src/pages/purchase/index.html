@@ -15,41 +15,39 @@
       <div class="page-header">
         <div>
           <div class="page-title">采购管理</div>
-          <div class="page-subtitle">采购全流程管理</div>
+          <div class="page-subtitle">供应商与采购全流程管理</div>
         </div>
       </div>
 
       <div class="stats-grid" id="stats-grid"></div>
 
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:var(--spacing-md);margin-top:var(--spacing-lg)">
+      <div class="dashboard-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:var(--spacing-md);margin-top:var(--spacing-lg)">
         <a href="supplier.html" class="stat-card" style="text-decoration:none">
           <div class="stat-icon">🤝</div>
-          <div class="stat-info"><div class="stat-value" style="font-size:var(--font-size-lg)">供应商信息</div><div class="stat-label">供应商档案与评价</div></div>
+          <div class="stat-info"><div class="stat-value" style="font-size:var(--font-size-lg)">供应商信息</div><div class="stat-label">供应商档案与评级</div></div>
         </a>
         <a href="process.html" class="stat-card" style="text-decoration:none">
-          <div class="stat-icon">📋</div>
-          <div class="stat-info"><div class="stat-value" style="font-size:var(--font-size-lg)">采购流程</div><div class="stat-label">采购订单管理</div></div>
+          <div class="stat-icon">📝</div>
+          <div class="stat-info"><div class="stat-value" style="font-size:var(--font-size-lg)">采购流程</div><div class="stat-label">采购申请与审批</div></div>
         </a>
         <a href="tracking.html" class="stat-card" style="text-decoration:none">
           <div class="stat-icon">🚚</div>
-          <div class="stat-info"><div class="stat-value" style="font-size:var(--font-size-lg)">订单跟踪</div><div class="stat-label">采购订单状态跟踪</div></div>
+          <div class="stat-info"><div class="stat-value" style="font-size:var(--font-size-lg)">订单跟踪</div><div class="stat-label">采购订单物流跟踪</div></div>
         </a>
         <a href="analysis.html" class="stat-card" style="text-decoration:none">
           <div class="stat-icon">📊</div>
-          <div class="stat-info"><div class="stat-value" style="font-size:var(--font-size-lg)">数据分析</div><div class="stat-label">采购数据统计分析</div></div>
+          <div class="stat-info"><div class="stat-value" style="font-size:var(--font-size-lg)">数据分析</div><div class="stat-label">采购数据分析报表</div></div>
         </a>
       </div>
 
-      <!-- 近期采购订单 -->
       <div class="card" style="margin-top:var(--spacing-lg)">
         <div class="card-header">
           <div class="card-title">近期采购订单</div>
-          <a href="process.html" class="btn btn-ghost btn-sm">查看全部</a>
         </div>
         <div class="table-wrapper">
           <table class="table">
             <thead>
-              <tr><th>订单号</th><th>供应商</th><th>采购项目</th><th>金额</th><th>交货日期</th><th>状态</th></tr>
+              <tr><th>订单编号</th><th>供应商</th><th>采购物品</th><th>金额</th><th>交货日期</th><th>状态</th></tr>
             </thead>
             <tbody id="order-tbody"></tbody>
           </table>
@@ -65,53 +63,7 @@
 <script src="../../assets/js/modules/navigation.js"></script>
 <script src="../../assets/js/modules/mobile-nav.js"></script>
 <script src="../../assets/js/main.js"></script>
-  <script src="../../data/purchase.js"></script>
-<script>
-'use strict';
-let headerLoaded = false;
-let sidebarLoaded = false;
-
-function tryInitMobileNav() {
-  if (headerLoaded && sidebarLoaded) {
-    if (typeof MobileNav !== 'undefined') MobileNav.init();
-  }
-}
-
-fetch('../../components/header.html').then(r => r.text()).then(html => {
-  document.getElementById('header-placeholder').innerHTML = html;
-  appNav.init();
-  headerLoaded = true;
-  tryInitMobileNav();
-});
-fetch('../../components/sidebar.html').then(r => r.text()).then(html => {
-  document.getElementById('sidebar-placeholder').innerHTML = html;
-  sidebarLoaded = true;
-  tryInitMobileNav();
-});
-
-    const { suppliers, orders, analysis } = purchaseData;
-    const totalAmount = orders.reduce((s, o) => s + o.amount, 0);
-    const delivered = orders.filter(o => o.status === '已到货').length;
-    const activeSuppliers = suppliers.filter(s => s.status === '合作中').length;
-
-    document.getElementById('stats-grid').innerHTML = `
-      <div class="stat-card"><div class="stat-icon">🤝</div><div class="stat-info"><div class="stat-value">${activeSuppliers}</div><div class="stat-label">合作供应商</div></div></div>
-      <div class="stat-card"><div class="stat-icon">📋</div><div class="stat-info"><div class="stat-value">${orders.length}</div><div class="stat-label">采购订单</div></div></div>
-      <div class="stat-card"><div class="stat-icon">💰</div><div class="stat-info"><div class="stat-value">${formatMoney(totalAmount)}</div><div class="stat-label">采购总额</div></div></div>
-      <div class="stat-card"><div class="stat-icon">✅</div><div class="stat-info"><div class="stat-value">${delivered}</div><div class="stat-label">已到货</div></div></div>
-    `;
-
-    const statusMap = { '已到货': 'badge-success', '运输中': 'badge-info', '待发货': 'badge-warning', '待审核': 'badge-default' };
-    document.getElementById('order-tbody').innerHTML = orders.map(o => `
-      <tr>
-        <td>${o.id}</td>
-        <td>${o.supplierName}</td>
-        <td><strong>${o.item}</strong></td>
-        <td><strong>${formatMoney(o.amount)}</strong></td>
-        <td>${o.deliveryDate}</td>
-        <td><span class="badge ${statusMap[o.status] || 'badge-default'}">${o.status}</span></td>
-      </tr>
-    `).join('');
-  </script>
+<script src="../../data/purchase.js"></script>
+<script src="../../assets/js/system/purchase/index.js"></script>
 </body>
 </html>

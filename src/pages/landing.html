@@ -1,7 +1,15 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 
+
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>小麦科技 - 北京有小米，南京有小麦</title>
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <!--  link：引入 CSS 样式表，也可用于引入网站图标、预加载资源等-->
+  <!--  relationship（关系）：明确当前 HTML 文档与被链接文件的关系-->
+  <!--  href="":指定要引入的 CSS 文件的路径-->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>小麦科技 - 北京有小米，南京有小麦</title>
@@ -11,7 +19,10 @@
   <!--  href="":指定要引入的 CSS 文件的路径-->
 </head>
 
+
 <body>
+  <!-- 导航栏区域（finished） -->
+  <header id="navbar">
   <!-- 导航栏区域（finished） -->
   <header id="navbar">
     <div class="navbar-container container">
@@ -41,7 +52,10 @@
       </div>
     </div>
   </header>
+  </header>
 
+  <!-- Hero首屏区域 -->
+  <section id="hero">
   <!-- Hero首屏区域 -->
   <section id="hero">
     <div class="hero-container container">
@@ -51,9 +65,18 @@
         <a href="login.html" class="btn btn-primary btn-lg">立即体验</a>
         <a href="#about" class="btn btn-outline btn-lg">了解更多</a>
       </div>
+      <h1 class="hero-title">北京有小米，南京有小麦</h1>
+      <p class="hero-subtitle">年轻人的智能科技平台</p>
+      <div class="hero-actions">
+        <a href="login.html" class="btn btn-primary btn-lg">立即体验</a>
+        <a href="#about" class="btn btn-outline btn-lg">了解更多</a>
+      </div>
     </div>
   </section>
+  </section>
 
+  <!-- 公司介绍区域 -->
+  <section id="about" class="landing-section">
   <!-- 公司介绍区域 -->
   <section id="about" class="landing-section">
     <div class="container">
@@ -73,9 +96,28 @@
           <div class="stat-label">创新专利</div>
         </div>
       </div>
+      <h2 class="section-title">关于小麦</h2>
+      <p class="section-subtitle">致力于用科技改变生活，让智能触手可及。</p>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-number">500+</div>
+          <div class="stat-label">服务企业</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">100万+</div>
+          <div class="stat-label">用户规模</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">50+</div>
+          <div class="stat-label">创新专利</div>
+        </div>
+      </div>
     </div>
   </section>
+  </section>
 
+  <!-- 技术展示区域 -->
+  <section id="technology" class="landing-section">
   <!-- 技术展示区域 -->
   <section id="technology" class="landing-section">
     <div class="container">
@@ -101,12 +143,57 @@
           <p>实时计算与智能决策</p>
         </div>
       </div>
+      <h2 class="section-title">核心技术</h2>
+      <p class="section-subtitle">持续投入研发，打造领先的技术能力。</p>
+      <div class="tech-grid">
+        <div class="tech-card">
+          <img src="../assets/images/tech/tech-1.png" alt="AI智能引擎"
+            style="height: 120px; object-fit: contain; margin-bottom: 24px;display: block;margin-left: auto; margin-right: auto;">
+          <h3>AI智能引擎</h3>
+          <p>机器学习与自然语言处理</p>
+        </div>
+        <div class="tech-card">
+          <img src="../assets/images/tech/tech-2.png" alt="云计算平台"
+            style="height: 120px; object-fit: contain; margin-bottom: 24px;display: block;margin-left: auto; margin-right: auto;">
+          <h3>云计算平台</h3>
+          <p>分布式架构，弹性扩展</p>
+        </div>
+        <div class="tech-card">
+          <img src="../assets/images/tech/tech-3.png" alt="大数据分析"
+            style="height: 120px; object-fit: contain; margin-bottom: 24px;display: block;margin-left: auto; margin-right: auto;">
+          <h3>大数据分析</h3>
+          <p>实时计算与智能决策</p>
+        </div>
+      </div>
     </div>
+  </section>
   </section>
 
   <!-- 产品服务区域（finished） -->
   <section id="products" class="landing-section">
+  <!-- 产品服务区域（finished） -->
+  <section id="products" class="landing-section">
     <div class="container">
+      <h2 class="section-title">产品服务</h2>
+      <p class="section-subtitle">致力于为客户群体提供最佳产品服务</p>
+      <div class="products-grid">
+        <!-- 小麦手机 -->
+        <div class="product-card">
+          <img src="../assets/images/products/product-1.jpg" alt="小麦最新手机"
+            style="height: 180px; width: 100%; object-fit: cover; border-radius: 8px; margin-bottom: 24px;">
+          <h3>小麦手机</h3>
+          <p>智能高效的好伙伴</p>
+        </div>
+        <!-- 小麦平板 -->
+        <div class="product-card">
+          <img src="../assets/images/products/product-2.jpg" alt="小麦最新平板"
+            style="height: 180px; width: 100%; object-fit: cover; border-radius: 8px; margin-bottom: 24px;">
+          <h3>小麦平板</h3>
+          <p>追剧游戏的最佳搭档</p>
+        </div>
+        <!-- 小麦笔记本电脑 -->
+        <div class="product-card">
+          <img src="../assets/images/products/product-3.jpg" alt="小麦最新笔记本电脑" style="height: 180px;
       <h2 class="section-title">产品服务</h2>
       <p class="section-subtitle">致力于为客户群体提供最佳产品服务</p>
       <div class="products-grid">
@@ -134,6 +221,12 @@
         <!-- 小麦台式电脑 -->
         <div class="product-card">
           <img src="../assets/images/products/product-4.jpg" alt="小麦最新台式电脑" style="height: 180px;
+          <h3>小麦笔记本电脑</h3>
+          <p>轻便能抗 学习工作的好战友</p>
+        </div>
+        <!-- 小麦台式电脑 -->
+        <div class="product-card">
+          <img src="../assets/images/products/product-4.jpg" alt="小麦最新台式电脑" style="height: 180px;
                 width: 100%; object-fit: cover; border-radius: 8px; margin-bottom: 24px;">
           <h3>小麦最新台式电脑</h3>
           <p>性能一绝的游戏办公搭子</p>
@@ -148,18 +241,45 @@
         <!-- 小麦扫地机器人 -->
         <div class="product-card">
           <img src="../assets/images/products/product-6.jpg" alt="小麦最新扫地机器人" style="height: 180px;
+          <h3>小麦手表</h3>
+          <p>身心健康的守护者</p>
+        </div>
+        <!-- 小麦扫地机器人 -->
+        <div class="product-card">
+          <img src="../assets/images/products/product-6.jpg" alt="小麦最新扫地机器人" style="height: 180px;
                 width: 100%; object-fit: cover; border-radius: 8px; margin-bottom: 24px;">
+          <h3>小麦扫地机器人</h3>
+          <p>居家生活的好助手</p>
+        </div>
+      </div>
           <h3>小麦扫地机器人</h3>
           <p>居家生活的好助手</p>
         </div>
       </div>
     </div>
   </section>
+  </section>
 
+  <!-- 合作伙伴区域（finished） -->
+  <section id="partners" class="landing-section">
   <!-- 合作伙伴区域（finished） -->
   <section id="partners" class="landing-section">
     <!-- 合作伙伴的css样式 -->
     <style>
+      .partners-grid {
+        display: grid;
+        /* 网格布局 */
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        /* 自动生成响应式列数*/
+        gap: 32px;
+        /* 网格项之间的间距 */
+        align-items: center;
+        /* 网格项垂直居中 */
+        justify-items: center;
+        /* 网格项水平居中 */
+        padding: 20px 0;
+        /* 内边距 */
+      }
       .partners-grid {
         display: grid;
         /* 网格布局 */
@@ -182,7 +302,18 @@
         transition: 0.3s;
         /* 过渡效果 */
       }
+      .partner-logo {
+        padding: 16px;
+        opacity: 0.6;
+        /* 透明度 */
+        transition: 0.3s;
+        /* 过渡效果 */
+      }
 
+      .partner-logo:hover {
+        opacity: 1;
+        /* 鼠标悬停时 透明度为100% */
+      }
       .partner-logo:hover {
         opacity: 1;
         /* 鼠标悬停时 透明度为100% */
@@ -195,7 +326,18 @@
         /* 保持图片比例 */
         transition: transform 0.3s;
       }
+      .partner-logo img {
+        width: 80px;
+        height: 80px;
+        object-fit: contain;
+        /* 保持图片比例 */
+        transition: transform 0.3s;
+      }
 
+      .partner-logo:hover img {
+        transform: scale(1.1);
+        /* 鼠标悬停时 图片放大1.1倍 */
+      }
       .partner-logo:hover img {
         transform: scale(1.1);
         /* 鼠标悬停时 图片放大1.1倍 */
@@ -207,7 +349,19 @@
           grid-template-columns: repeat(3, 1fr);
           /* 响应式布局 三列 */
         }
+      /* 响应式布局 */
+      @media (max-width: 768px) {
+        .partners-grid {
+          grid-template-columns: repeat(3, 1fr);
+          /* 响应式布局 三列 */
+        }
 
+        .partner-logo img {
+          width: 60px;
+          height: 60px;
+          /* 响应式布局 图片大小从80x80变成60x60 */
+        }
+      }
         .partner-logo img {
           width: 60px;
           height: 60px;
@@ -248,9 +402,43 @@
           <img src="../assets/images/partners/huggingface-color.svg" alt="Hugging Face">
         </div>
       </div>
+      <h2 class="section-title">合作伙伴</h2>
+      <p class="section-subtitle">与全球领先企业携手，共建智能生态。</p>
+      <div class="partners-grid">
+        <div class="partner-logo">
+          <img src="../assets/images/partners/alibabacloud-color.svg" alt="阿里云">
+        </div>
+        <div class="partner-logo">
+          <img src="../assets/images/partners/alibabadotcom-color.svg" alt="阿里巴巴">
+        </div>
+        <div class="partner-logo">
+          <img src="../assets/images/partners/alipay-color.svg" alt="支付宝">
+        </div>
+        <div class="partner-logo">
+          <img src="../assets/images/partners/xiaomi-color.svg" alt="小米">
+        </div>
+        <div class="partner-logo">
+          <img src="../assets/images/partners/tiktok-color.svg" alt="字节跳动">
+        </div>
+        <div class="partner-logo">
+          <img src="../assets/images/partners/nvidia-color.svg" alt="英伟达">
+        </div>
+        <div class="partner-logo">
+          <img src="../assets/images/partners/tesla-color.svg" alt="特斯拉">
+        </div>
+        <div class="partner-logo">
+          <img src="../assets/images/partners/facebook-color.svg" alt="Meta">
+        </div>
+        <div class="partner-logo">
+          <img src="../assets/images/partners/huggingface-color.svg" alt="Hugging Face">
+        </div>
+      </div>
     </div>
   </section>
+  </section>
 
+  <!-- 创始人团队区域（finished） -->
+  <section id="founders" class="landing-section" style="background: var(--color-bg);">
   <!-- 创始人团队区域（finished） -->
   <section id="founders" class="landing-section" style="background: var(--color-bg);">
     <div class="container">
@@ -300,7 +488,10 @@
       </div>
     </div>
   </section>
+  </section>
 
+  <!-- 行动号召区域 -->
+  <section id="cta">
   <!-- 行动号召区域 -->
   <section id="cta">
     <div class="container">
@@ -310,7 +501,14 @@
         <a href="register.html" class="btn btn-white btn-lg" style="color: var(--color-primary);">免费注册</a>
         <a href="login.html" class="btn btn-outline btn-lg" style="color: white; border-color: white;">立即登录</a>
       </div>
+      <h2 class="cta-title">加入小麦，共创未来</h2>
+      <p class="cta-subtitle">立即注册，开启您的智能之旅</p>
+      <div style="display: flex; gap: 16px; justify-content: center; align-items: center;">
+        <a href="register.html" class="btn btn-white btn-lg" style="color: var(--color-primary);">免费注册</a>
+        <a href="login.html" class="btn btn-outline btn-lg" style="color: white; border-color: white;">立即登录</a>
+      </div>
     </div>
+  </section>
   </section>
 
   <!-- 页脚区域(finished) -->
@@ -333,8 +531,11 @@
       <div class="footer-copyright">© 2026 小麦科技 All Rights Reserved.</div>
     </div>
   </footer>
+  </footer>
 
   <script src="../assets/js/modules/landing.js"></script>
+  <script src="../assets/js/modules/landing.js"></script>
 </body>
+
 
 </html>

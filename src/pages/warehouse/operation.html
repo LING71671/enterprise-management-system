@@ -15,32 +15,30 @@
       <div class="page-header">
         <div>
           <div class="page-title">基本操作</div>
-          <div class="page-subtitle">出入库操作记录</div>
+          <div class="page-subtitle">入库/出库/盘点</div>
         </div>
       </div>
 
       <div class="stats-grid" id="stats-grid"></div>
 
-      <!-- 入库记录 -->
       <div class="card">
-        <div class="card-header"><div class="card-title">📥 入库记录</div></div>
+        <div class="card-header"><div class="card-title">入库记录</div></div>
         <div class="table-wrapper">
           <table class="table">
             <thead>
-              <tr><th>单号</th><th>物品</th><th>数量</th><th>来源</th><th>入库日期</th><th>操作员</th></tr>
+              <tr><th>入库单号</th><th>物料名称</th><th>数量</th><th>供应商</th><th>入库日期</th><th>操作人</th></tr>
             </thead>
             <tbody id="inbound-tbody"></tbody>
           </table>
         </div>
       </div>
 
-      <!-- 出库记录 -->
       <div class="card" style="margin-top:var(--spacing-lg)">
-        <div class="card-header"><div class="card-title">📤 出库记录</div></div>
+        <div class="card-header"><div class="card-title">出库记录</div></div>
         <div class="table-wrapper">
           <table class="table">
             <thead>
-              <tr><th>单号</th><th>物品</th><th>数量</th><th>去向</th><th>出库日期</th><th>操作员</th></tr>
+              <tr><th>出库单号</th><th>物料名称</th><th>数量</th><th>客户</th><th>出库日期</th><th>操作人</th></tr>
             </thead>
             <tbody id="outbound-tbody"></tbody>
           </table>
@@ -56,48 +54,6 @@
   <script src="../../assets/js/modules/navigation.js"></script>
   <script src="../../assets/js/main.js"></script>
   <script src="../../data/warehouse.js"></script>
-  <script>
-    'use strict';
-    fetch('../../components/header.html').then(r => r.text()).then(html => {
-      document.getElementById('header-placeholder').innerHTML = html;
-      appNav.init();
-    });
-    fetch('../../components/sidebar.html').then(r => r.text()).then(html => {
-      document.getElementById('sidebar-placeholder').innerHTML = html;
-    });
-
-    const { inbound, outbound } = warehouseData;
-    const inTotal = inbound.reduce((s, i) => s + i.quantity, 0);
-    const outTotal = outbound.reduce((s, o) => s + o.quantity, 0);
-
-    document.getElementById('stats-grid').innerHTML = `
-      <div class="stat-card"><div class="stat-icon">📥</div><div class="stat-info"><div class="stat-value">${inbound.length}</div><div class="stat-label">入库单数</div></div></div>
-      <div class="stat-card"><div class="stat-icon">📤</div><div class="stat-info"><div class="stat-value">${outbound.length}</div><div class="stat-label">出库单数</div></div></div>
-      <div class="stat-card"><div class="stat-icon">📦</div><div class="stat-info"><div class="stat-value">${inTotal}</div><div class="stat-label">入库总量</div></div></div>
-      <div class="stat-card"><div class="stat-icon">🚚</div><div class="stat-info"><div class="stat-value">${outTotal}</div><div class="stat-label">出库总量</div></div></div>
-    `;
-
-    document.getElementById('inbound-tbody').innerHTML = inbound.map(i => `
-      <tr>
-        <td>${i.id}</td>
-        <td><strong>${i.item}</strong></td>
-        <td>${i.quantity} ${i.unit}</td>
-        <td>${i.supplier}</td>
-        <td>${i.date}</td>
-        <td>${i.operator}</td>
-      </tr>
-    `).join('');
-
-    document.getElementById('outbound-tbody').innerHTML = outbound.map(o => `
-      <tr>
-        <td>${o.id}</td>
-        <td><strong>${o.item}</strong></td>
-        <td>${o.quantity} ${o.unit}</td>
-        <td>${o.customer}</td>
-        <td>${o.date}</td>
-        <td>${o.operator}</td>
-      </tr>
-    `).join('');
-  </script>
+  <script src="../../assets/js/system/warehouse/operation.js"></script>
 </body>
 </html>

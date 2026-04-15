@@ -34,7 +34,7 @@
         <div class="table-wrapper">
           <table class="table">
             <thead>
-              <tr><th>订单号</th><th>客户</th><th>产品</th><th>数量</th><th>创建日期</th><th>交货日期</th><th>状态</th></tr>
+              <tr><th>订单编号</th><th>客户</th><th>产品</th><th>数量</th><th>下单日期</th><th>交货日期</th><th>状态</th></tr>
             </thead>
             <tbody id="order-tbody"></tbody>
           </table>
@@ -50,47 +50,6 @@
   <script src="../../assets/js/modules/navigation.js"></script>
   <script src="../../assets/js/main.js"></script>
   <script src="../../data/production.js"></script>
-  <script>
-    'use strict';
-    fetch('../../components/header.html').then(r => r.text()).then(html => {
-      document.getElementById('header-placeholder').innerHTML = html;
-      appNav.init();
-    });
-    fetch('../../components/sidebar.html').then(r => r.text()).then(html => {
-      document.getElementById('sidebar-placeholder').innerHTML = html;
-    });
-
-    const orders = productionData.orders;
-    const statusMap = { '已完成': 'badge-success', '生产中': 'badge-info', '待生产': 'badge-warning', '待审核': 'badge-default' };
-
-    const done = orders.filter(o => o.status === '已完成').length;
-    const inProd = orders.filter(o => o.status === '生产中').length;
-    document.getElementById('stats-grid').innerHTML = `
-      <div class="stat-card"><div class="stat-icon">📋</div><div class="stat-info"><div class="stat-value">${orders.length}</div><div class="stat-label">订单总数</div></div></div>
-      <div class="stat-card"><div class="stat-icon">⚡</div><div class="stat-info"><div class="stat-value">${inProd}</div><div class="stat-label">生产中</div></div></div>
-      <div class="stat-card"><div class="stat-icon">✅</div><div class="stat-info"><div class="stat-value">${done}</div><div class="stat-label">已完成</div></div></div>
-    `;
-
-    function renderTable(list) {
-      document.getElementById('order-tbody').innerHTML = list.map(o => `
-        <tr>
-          <td>${o.id}</td>
-          <td>${o.customer}</td>
-          <td><strong>${o.product}</strong></td>
-          <td>${o.quantity}</td>
-          <td>${o.createDate}</td>
-          <td>${o.deliveryDate}</td>
-          <td><span class="badge ${statusMap[o.status] || 'badge-default'}">${o.status}</span></td>
-        </tr>
-      `).join('');
-    }
-
-    document.getElementById('search-input').addEventListener('input', function () {
-      const kw = this.value.trim().toLowerCase();
-      renderTable(orders.filter(o => !kw || o.customer.includes(kw) || o.product.includes(kw)));
-    });
-
-    renderTable(orders);
-  </script>
+  <script src="../../assets/js/system/production/order.js"></script>
 </body>
 </html>

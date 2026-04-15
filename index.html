@@ -9,21 +9,8 @@
 <p>正在跳转...</p>
 
 <script>
-    //落地动画
-    const url = new URL(window.location.href);//获取当前页面的完整 URL 地址
-    const campaign = url.searchParams.get('campaign');//从网址里拿参数的值
-    //抖音专版
-    if (campaign === 'douyin')
-        window.location.href = 'src/pages/landing.html';
-    //window.location:当前浏览器窗口正在打开的网页地址
-    else if (navigator.userAgent.includes('Mobile'))
-        //navigator.userAgent 是浏览器自动发给网站的「身份自我介绍字符串」
-        window.location.href = 'src/pages/landing.html';
-    //默认
-    else
-        window.location.href = 'src/pages/landing.html';
+    const redirectUrl = 'src/pages/landing.html';
+    window.location.href = redirectUrl;
 </script>
-
-<script>window.location.href = 'src/pages/landing.html';</script>
 </body>
 </html>
