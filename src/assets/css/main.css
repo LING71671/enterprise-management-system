@@ -5,8 +5,13 @@
 @import './base/animations.css';
 
 /* 隐藏默认鼠标光标 */
-body {
-  cursor: none;
+* {
+  cursor: none !important;
+}
+
+/* 确保自定义光标容器也有正确的光标设置 */
+.custom-cursor {
+  cursor: none !important;
 }
 
 /* 2. 组件样式 components */
