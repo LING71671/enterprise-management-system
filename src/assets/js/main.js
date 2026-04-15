@@ -107,6 +107,15 @@ function initCustomCursor() {
       console.error('Error saving mouse position:', e);
     }
   });
+  
+  // 页面卸载事件监听器，在页面卸载时保存当前鼠标位置
+  window.addEventListener('beforeunload', () => {
+    try {
+      sessionStorage.setItem('mousePosition', JSON.stringify({ x: mouseX, y: mouseY }));
+    } catch (e) {
+      console.error('Error saving mouse position on unload:', e);
+    }
+  });
 
   // 为可点击元素增加 hover 态
   const addHover = () => cursor.classList.add('hover');
