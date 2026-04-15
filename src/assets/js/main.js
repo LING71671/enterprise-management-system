@@ -66,6 +66,8 @@ function initCustomCursor() {
   cursor.className = 'custom-cursor';
   // 初始时设置为透明，当鼠标第一次移动时再显示
   cursor.style.opacity = '0';
+  // 确保伪元素也透明
+  cursor.style.setProperty('--cursor-opacity', '0');
   document.body.appendChild(cursor);
 
   // 初始鼠标位置
@@ -100,6 +102,8 @@ function initCustomCursor() {
       cursorX = mouseX;
       cursorY = mouseY;
       cursor.style.opacity = '1';
+      // 确保伪元素也显示
+      cursor.style.setProperty('--cursor-opacity', '1');
       hasMousePosition = true;
     }
   });
