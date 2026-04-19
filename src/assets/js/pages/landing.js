@@ -24,20 +24,10 @@ window.appPages.landing = (function () {
    * 原因：拦截浏览器默认的瞬间跳转，改为平滑滚动到目标位置，提升用户体验。
    */
   function handleAnchorClick(e) {
+    e.preventDefault();
     const targetId = this.getAttribute('href');
-    if (!targetId || targetId === '#') {
-      return;
-    }
-
-    let target = null;
-    try {
-      target = document.querySelector(targetId);
-    } catch {
-      return;
-    }
-
+    const target = document.querySelector(targetId);
     if (target) {
-      e.preventDefault();
       target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   }
@@ -121,7 +111,7 @@ window.appPages.landing = (function () {
       element.classList.add('fade-in', `delay-${(index % 4) * 100}`);
     } else if (element.classList.contains('partner-logo')) {
       element.classList.add('scale-in', `delay-${(index % 9) * 100}`);
-    } else if (element.id === 'cta' || element.classList.contains('cta')) {
+    } else if (element.classList.contains('cta')) {
       element.classList.add('slide-up');
     }
   }

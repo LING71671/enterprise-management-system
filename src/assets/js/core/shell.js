@@ -1,29 +1,6 @@
 'use strict';
 
 const appShell = (function() {
-  const FALLBACK_COMPONENTS = {
-    'header-placeholder': `
-      <header class="header">
-        <button class="hamburger-btn" id="hamburger-btn" aria-label="打开菜单" aria-expanded="false" aria-controls="sidebar"><span></span><span></span><span></span></button>
-        <div class="header-logo"><img alt="小麦" id="header-logo-img" style="height: 42px; width: auto; object-fit: contain;"><span class="brand-name">小麦科技 · 企业管理平台</span></div>
-        <div class="header-right"><div class="header-user"><div class="avatar"></div><span class="username">管理员</span></div><button id="logout-btn" class="btn btn-ghost btn-sm">退出</button></div>
-      </header>
-    `,
-    'sidebar-placeholder': `
-      <div class="sidebar-overlay" id="sidebar-overlay"></div>
-      <nav class="sidebar" id="sidebar"><ul class="sidebar-nav">
-        <li><a href="#" data-page="dashboard.html" class="sidebar-item"><span class="icon">📊</span><span>仪表盘</span></a></li>
-        <li><a href="#" data-page="production/index.html" class="sidebar-item"><span class="icon">🏭</span><span>生产管理</span></a></li>
-        <li><a href="#" data-page="sales/index.html" class="sidebar-item"><span class="icon">📈</span><span>销售管理</span></a></li>
-        <li><a href="#" data-page="equipment/index.html" class="sidebar-item"><span class="icon">⚙️</span><span>设备管理</span></a></li>
-        <li><a href="#" data-page="purchase/index.html" class="sidebar-item"><span class="icon">🛒</span><span>采购管理</span></a></li>
-        <li><a href="#" data-page="warehouse/index.html" class="sidebar-item"><span class="icon">🏬</span><span>仓储管理</span></a></li>
-        <li><a href="#" data-page="employee/index.html" class="sidebar-item"><span class="icon">👥</span><span>员工管理</span></a></li>
-      </ul></nav>
-    `,
-    'footer-placeholder': '<footer class="footer"><span>© 2026 小麦科技 版权所有</span></footer>'
-  };
-
   /**
    * 为当前页面加载公共外壳片段。
    * @param {{rootPath: string}} pageMeta 当前页面资源根路径。
@@ -72,12 +49,6 @@ const appShell = (function() {
       placeholder.innerHTML = await response.text();
       placeholder.dataset.loaded = '1';
     } catch (error) {
-      if (FALLBACK_COMPONENTS[placeholderId]) {
-        placeholder.innerHTML = FALLBACK_COMPONENTS[placeholderId];
-        placeholder.dataset.loaded = '1';
-        console.warn('Using fallback component:', placeholderId, error);
-        return;
-      }
       console.error('Failed to load component:', url, error);
     }
   }

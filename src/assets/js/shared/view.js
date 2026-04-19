@@ -53,8 +53,8 @@ const EnterpriseView = (function() {
    * @returns {string} 统计卡片 HTML。
    */
   function renderStats(items) {
-    return items.map((item, index) => `
-      <div class="stat-card slide-up delay-${(index % 4) * 100}"><div class="stat-icon">${item.icon}</div><div class="stat-info"><div class="stat-value">${item.value}</div><div class="stat-label">${item.label}</div></div></div>
+    return items.map((item) => `
+      <div class="stat-card"><div class="stat-icon">${item.icon}</div><div class="stat-info"><div class="stat-value">${item.value}</div><div class="stat-label">${item.label}</div></div></div>
     `).join('');
   }
 
@@ -89,34 +89,6 @@ const EnterpriseView = (function() {
     }
 
     tbody.innerHTML = list.map(rowRenderer).join('');
-    applyTableLabels(tbody);
-  }
-
-  /**
-   * 为移动端卡片表格补充列名。
-   * @param {HTMLElement} tbody 表格 body。
-   * @returns {void}
-   *
-   * 原因：CSS 在窄屏下通过 td[data-label] 展示字段名，统一补齐可避免每个业务行模板重复维护。
-   */
-  function applyTableLabels(tbody) {
-    const table = tbody.closest('table');
-    if (!table) return;
-
-    const labels = Array.from(table.querySelectorAll('thead th')).map((th) => th.textContent.trim());
-    if (!labels.length) return;
-
-    Array.from(tbody.querySelectorAll('tr')).forEach((row) => {
-      const cells = Array.from(row.children).filter((cell) => cell.tagName === 'TD');
-      const isEmptyRow = cells.length === 1 && cells[0].hasAttribute('colspan');
-      if (isEmptyRow) return;
-
-      cells.forEach((cell, index) => {
-        if (labels[index] && !cell.hasAttribute('data-label')) {
-          cell.setAttribute('data-label', labels[index]);
-        }
-      });
-    });
   }
 
   /**

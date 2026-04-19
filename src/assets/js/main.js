@@ -15,13 +15,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     await loadCoreRuntime(initialMeta.rootPath);
 
     const pageMeta = appRouter.getPageMeta();
+    const pageController = getPageController(pageMeta);
+    await loadPageDependencies(pageMeta, pageController);
+
     if (!appRouter.isPublicPage(pageMeta) && typeof auth !== 'undefined' && !auth.isLoggedIn()) {
       auth.guard();
       return;
     }
-
-    const pageController = getPageController(pageMeta);
-    await loadPageDependencies(pageMeta, pageController);
 
     appCursor.init();
     appRouter.initPathObserver();

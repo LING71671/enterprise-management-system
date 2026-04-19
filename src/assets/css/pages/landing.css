@@ -297,14 +297,6 @@
 
 
 
-.product-card {
-  background: #fff;
-}
-
-.product-card::before {
-  display: none;
-}
-
 .product-icon {
   font-size: 48px;
   margin-bottom: 16px;

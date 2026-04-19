@@ -5,7 +5,6 @@ const MobileNav = {
   overlay: null,
   hamburgerBtn: null,
   isOpen: false,
-  isBound: false,
 
   /**
    * 初始化后台移动端抽屉导航。
@@ -34,10 +33,6 @@ const MobileNav = {
    * 原因：抽屉导航需要同时支持鼠标、键盘和响应式宽度变化。
    */
   bindEvents() {
-    if (this.isBound) {
-      return;
-    }
-
     this.hamburgerBtn.addEventListener('click', () => this.toggleSidebar());
     this.overlay.addEventListener('click', () => this.closeSidebar());
 
@@ -48,14 +43,6 @@ const MobileNav = {
     });
 
     window.addEventListener('resize', () => this.handleResize());
-
-    document.addEventListener('click', (e) => {
-      if (this.isOpen && e.target.closest('.sidebar-item')) {
-        this.closeSidebar();
-      }
-    });
-
-    this.isBound = true;
   },
 
   /**
