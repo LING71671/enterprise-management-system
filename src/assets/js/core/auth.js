@@ -13,8 +13,17 @@ const auth = {
    */
   login(username, password) {
     try {
-      if (username === 'admin' && password === '123456') {
-        const user = { username, role: '管理员', loginTime: Date.now() };
+      const normalizedName = String(username || '').trim();
+      const users = storage.get('xm_users') || [];
+      const registeredUser = users.find((user) => user.username === normalizedName && user.password === password);
+      const isDefaultAdmin = normalizedName === 'admin' && password === '123456';
+
+      if (isDefaultAdmin || registeredUser) {
+        const user = {
+          username: normalizedName,
+          role: isDefaultAdmin ? '管理员' : '注册用户',
+          loginTime: Date.now()
+        };
         storage.session.set(this.USER_KEY, user);
         return true;
       }
@@ -81,12 +90,15 @@ const auth = {
         let depth = 0;
         for (let i = 0; i < pathParts.length; i += 1) {
           if (pathParts[i] === 'pages') {
-            depth = pathParts.length - i - 1;
+            depth = pathParts.length - i - 2;
             break;
           }
         }
-        const basePath = '../'.repeat(depth > 0 ? depth : 1);
-        window.location.href = basePath + 'pages/login.html';
+        const pagesPath = depth > 0 ? '../'.repeat(depth) : './';
+        const loginUrl = pagesPath + 'login.html';
+        if (!window.location.pathname.endsWith('/login.html')) {
+          window.location.replace(loginUrl);
+        }
       }
     } catch (error) {
       console.error('auth.guard failed:', error);
