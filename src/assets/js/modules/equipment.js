@@ -1,6 +1,7 @@
 ﻿'use strict';
 
 const equipmentModule = (function(system) {
+  // 设备管理兼容入口，真实页面逻辑由 equipmentSystem 负责。
   function init() {
     if (system && typeof system.init === 'function') {
       system.init();

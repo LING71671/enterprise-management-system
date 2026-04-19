@@ -2,7 +2,110 @@
 
 window.productionSystem = window.productionSystem || {};
 
+// 生产管理页面控制器：负责生产总览、库存、物料、订单、计划、质检和排产页。
 productionSystem.pages = (function(store, actions, renderers, view) {
+  function renderTaskRow(item) {
+    return `
+      <tr>
+        <td>${item.id}</td>
+        <td><strong>${item.productName}</strong></td>
+        <td>${item.quantity}</td>
+        <td>${item.assignee}</td>
+        <td>${item.deadline}</td>
+        <td>${renderers.renderProgress(item.progress)}</td>
+      </tr>
+    `;
+  }
+
+  function renderInventoryRow(item) {
+    const ratio = item.required ? item.stock / item.required : 0;
+    const statusClass = ratio >= 1 ? 'badge-success' : ratio >= 0.5 ? 'badge-warning' : 'badge-danger';
+    const statusText = ratio >= 1 ? '充足' : ratio >= 0.5 ? '偏低' : '严重不足';
+
+    return `
+      <tr>
+        <td>${item.id}</td>
+        <td><strong>${item.name}</strong></td>
+        <td>${item.spec}</td>
+        <td>${item.unit}</td>
+        <td>${item.stock}</td>
+        <td>${item.required}</td>
+        <td><span class="badge ${statusClass}">${statusText}</span></td>
+      </tr>
+    `;
+  }
+
+  function renderMaterialRow(item) {
+    return `
+      <tr>
+        <td>${item.id}</td>
+        <td><strong>${item.name}</strong></td>
+        <td>${item.spec}</td>
+        <td>${item.unit}</td>
+        <td>${item.required}</td>
+        <td>${item.stock}</td>
+        <td>${item.shortage > 0 ? `<span style="color:var(--color-danger);font-weight:600">${item.shortage}</span>` : '—'}</td>
+        <td><span class="badge ${item.shortage > 0 ? 'badge-danger' : 'badge-success'}">${item.shortage > 0 ? '短缺' : '充足'}</span></td>
+      </tr>
+    `;
+  }
+
+  function renderOrderRow(item) {
+    return `
+      <tr>
+        <td>${item.id}</td>
+        <td>${item.customer}</td>
+        <td><strong>${item.product}</strong></td>
+        <td>${item.quantity}</td>
+        <td>${item.createDate}</td>
+        <td>${item.deliveryDate}</td>
+        <td><span class="badge ${renderers.orderStatusMap[item.status] || 'badge-default'}">${item.status}</span></td>
+      </tr>
+    `;
+  }
+
+  function renderPlanRow(item) {
+    return `
+      <tr>
+        <td>${item.id}</td>
+        <td><strong>${item.name}</strong></td>
+        <td>${item.startDate}</td>
+        <td>${item.endDate}</td>
+        <td>${item.products.join('、')}</td>
+        <td><span class="badge ${renderers.planStatusMap[item.status] || 'badge-default'}">${item.status}</span></td>
+        <td><button class="btn btn-danger btn-sm" data-action="delete" data-id="${item.id}">删除</button></td>
+      </tr>
+    `;
+  }
+
+  function renderSchedulingRow(item) {
+    return `
+      <tr>
+        <td>${item.id}</td>
+        <td>${item.planId}</td>
+        <td><strong>${item.productName}</strong></td>
+        <td>${item.quantity}</td>
+        <td>${item.assignee}</td>
+        <td>${item.deadline}</td>
+        <td>${renderers.renderProgress(item.progress)}</td>
+      </tr>
+    `;
+  }
+
+  function renderQualityRow(item) {
+    return `
+      <tr>
+        <td>${item.id}</td>
+        <td>${item.orderId}</td>
+        <td>${item.inspector}</td>
+        <td>${item.date}</td>
+        <td>${item.defects > 0 ? `<span style="color:var(--color-danger)">${item.defects}</span>` : '0'}</td>
+        <td><span class="badge ${item.result === '合格' ? 'badge-success' : 'badge-danger'}">${item.result}</span></td>
+      </tr>
+    `;
+  }
+
+  // 初始化生产管理首页。
   function initIndexPage() {
     const tbody = document.getElementById('task-tbody');
     if (!tbody || tbody.dataset.bound === '1') return;
@@ -15,44 +118,22 @@ productionSystem.pages = (function(store, actions, renderers, view) {
       { icon: '⚠️', value: data.materials.filter((item) => item.shortage > 0).length, label: '物料短缺项' }
     ]);
 
-    tbody.innerHTML = data.tasks.map((item) => `
-      <tr>
-        <td>${item.id}</td>
-        <td><strong>${item.productName}</strong></td>
-        <td>${item.quantity}</td>
-        <td>${item.assignee}</td>
-        <td>${item.deadline}</td>
-        <td>${renderers.renderProgress(item.progress)}</td>
-      </tr>
-    `).join('');
+    view.renderRows(tbody, data.tasks, renderTaskRow, { colspan: 6, text: '暂无生产任务' });
 
     tbody.dataset.bound = '1';
   }
 
+  // 初始化生产库存页。
   function initInventoryPage() {
     const tbody = document.getElementById('inventory-tbody');
     if (!tbody || tbody.dataset.bound === '1') return;
 
-    tbody.innerHTML = store.sync().materials.map((item) => {
-      const ratio = item.required ? item.stock / item.required : 0;
-      const statusClass = ratio >= 1 ? 'badge-success' : ratio >= 0.5 ? 'badge-warning' : 'badge-danger';
-      const statusText = ratio >= 1 ? '充足' : ratio >= 0.5 ? '偏低' : '严重不足';
-      return `
-        <tr>
-          <td>${item.id}</td>
-          <td><strong>${item.name}</strong></td>
-          <td>${item.spec}</td>
-          <td>${item.unit}</td>
-          <td>${item.stock}</td>
-          <td>${item.required}</td>
-          <td><span class="badge ${statusClass}">${statusText}</span></td>
-        </tr>
-      `;
-    }).join('');
+    view.renderRows(tbody, store.sync().materials, renderInventoryRow, { colspan: 7, text: '暂无物料库存' });
 
     tbody.dataset.bound = '1';
   }
 
+  // 初始化物料需求页。
   function initMaterialPage() {
     const tbody = document.getElementById('material-tbody');
     if (!tbody || tbody.dataset.bound === '1') return;
@@ -64,22 +145,12 @@ productionSystem.pages = (function(store, actions, renderers, view) {
       { icon: '⚠️', value: materials.filter((item) => item.shortage > 0).length, label: '库存短缺' }
     ]);
 
-    tbody.innerHTML = materials.map((item) => `
-      <tr>
-        <td>${item.id}</td>
-        <td><strong>${item.name}</strong></td>
-        <td>${item.spec}</td>
-        <td>${item.unit}</td>
-        <td>${item.required}</td>
-        <td>${item.stock}</td>
-        <td>${item.shortage > 0 ? `<span style="color:var(--color-danger);font-weight:600">${item.shortage}</span>` : '—'}</td>
-        <td><span class="badge ${item.shortage > 0 ? 'badge-danger' : 'badge-success'}">${item.shortage > 0 ? '短缺' : '充足'}</span></td>
-      </tr>
-    `).join('');
+    view.renderRows(tbody, materials, renderMaterialRow, { colspan: 8, text: '暂无物料需求' });
 
     tbody.dataset.bound = '1';
   }
 
+  // 初始化生产订单页。
   function initOrderPage() {
     const tbody = document.getElementById('order-tbody');
     if (!tbody || tbody.dataset.bound === '1') return;
@@ -92,72 +163,50 @@ productionSystem.pages = (function(store, actions, renderers, view) {
     ]);
 
     function render(list) {
-      tbody.innerHTML = list.map((item) => `
-        <tr>
-          <td>${item.id}</td>
-          <td>${item.customer}</td>
-          <td><strong>${item.product}</strong></td>
-          <td>${item.quantity}</td>
-          <td>${item.createDate}</td>
-          <td>${item.deliveryDate}</td>
-          <td><span class="badge ${renderers.orderStatusMap[item.status] || 'badge-default'}">${item.status}</span></td>
-        </tr>
-      `).join('');
+      view.renderRows(tbody, list, renderOrderRow, { colspan: 7, text: '暂无生产订单' });
     }
 
     on(document.getElementById('search-input'), 'input', function() {
-      const keyword = this.value.trim().toLowerCase();
-      render(orders.filter((item) => {
-        const text = `${item.customer} ${item.product}`.toLowerCase();
-        return !keyword || text.includes(keyword);
-      }));
+      render(view.filterByKeyword(orders, this.value, ['customer', 'product']));
     });
 
     tbody.dataset.bound = '1';
     render(orders);
   }
 
+  // 初始化生产计划页。
   function initPlanPage() {
     const tbody = document.getElementById('plan-tbody');
     if (!tbody || tbody.dataset.bound === '1') return;
 
     function render() {
-      tbody.innerHTML = store.sync().plans.map((item) => `
-        <tr>
-          <td>${item.id}</td>
-          <td><strong>${item.name}</strong></td>
-          <td>${item.startDate}</td>
-          <td>${item.endDate}</td>
-          <td>${item.products.join('、')}</td>
-          <td><span class="badge ${renderers.planStatusMap[item.status] || 'badge-default'}">${item.status}</span></td>
-          <td><button class="btn btn-danger btn-sm" data-action="delete" data-id="${item.id}">删除</button></td>
-        </tr>
-      `).join('');
+      view.renderRows(tbody, store.sync().plans, renderPlanRow, { colspan: 7, text: '暂无生产计划' });
     }
 
     on(document.getElementById('add-btn'), 'click', () => {
-      const name = window.prompt('计划名称');
-      if (!name) return;
+      const payload = view.promptFields([
+        { name: 'name', label: '计划名称', required: true },
+        { name: 'productsText', label: '产品列表，使用中文逗号分隔', defaultValue: '产品A，产品B' },
+        { name: 'status', label: '计划状态（待启动/进行中/已完成）', defaultValue: '待启动' }
+      ]);
+      if (!payload) return;
 
-      const productText = window.prompt('产品列表，使用中文逗号分隔', '产品A，产品B') || '新品';
       actions.createPlan({
-        name,
-        status: window.prompt('计划状态（待启动/进行中/已完成）', '待启动') || '待启动',
-        products: productText.split(/[，,]/).map((item) => item.trim()).filter(Boolean)
+        name: payload.name,
+        status: payload.status,
+        products: payload.productsText.split(/[，,]/).map((item) => item.trim()).filter(Boolean)
       });
       render();
     });
     delegate(tbody, '[data-action="delete"]', 'click', function() {
-      if (window.confirm('确认删除该计划？')) {
-        actions.deletePlan(this.dataset.id);
-        render();
-      }
+      view.confirmDelete('确认删除该计划？', () => actions.deletePlan(this.dataset.id), render);
     });
 
     tbody.dataset.bound = '1';
     render();
   }
 
+  // 初始化质量检验页。
   function initQualityPage() {
     const tbody = document.getElementById('quality-tbody');
     if (!tbody || tbody.dataset.bound === '1') return;
@@ -174,39 +223,22 @@ productionSystem.pages = (function(store, actions, renderers, view) {
       { icon: '📊', value: passRate + '%', label: '合格率' }
     ]);
 
-    tbody.innerHTML = records.map((item) => `
-      <tr>
-        <td>${item.id}</td>
-        <td>${item.orderId}</td>
-        <td>${item.inspector}</td>
-        <td>${item.date}</td>
-        <td>${item.defects > 0 ? `<span style="color:var(--color-danger)">${item.defects}</span>` : '0'}</td>
-        <td><span class="badge ${item.result === '合格' ? 'badge-success' : 'badge-danger'}">${item.result}</span></td>
-      </tr>
-    `).join('');
+    view.renderRows(tbody, records, renderQualityRow, { colspan: 6, text: '暂无质检记录' });
 
     tbody.dataset.bound = '1';
   }
 
+  // 初始化生产排程页。
   function initSchedulingPage() {
     const tbody = document.getElementById('task-tbody');
     if (!tbody || tbody.dataset.bound === '1') return;
 
-    tbody.innerHTML = store.sync().tasks.map((item) => `
-      <tr>
-        <td>${item.id}</td>
-        <td>${item.planId}</td>
-        <td><strong>${item.productName}</strong></td>
-        <td>${item.quantity}</td>
-        <td>${item.assignee}</td>
-        <td>${item.deadline}</td>
-        <td>${renderers.renderProgress(item.progress)}</td>
-      </tr>
-    `).join('');
+    view.renderRows(tbody, store.sync().tasks, renderSchedulingRow, { colspan: 7, text: '暂无排产任务' });
 
     tbody.dataset.bound = '1';
   }
 
+  // 按当前生产管理子页面分发初始化逻辑。
   function init() {
     switch (view.pageName()) {
       case 'index.html':
@@ -240,6 +272,7 @@ productionSystem.pages = (function(store, actions, renderers, view) {
   };
 })(productionSystem.store, productionSystem.actions, productionSystem.renderers, EnterpriseView);
 
+// 对外暴露生产管理初始化入口，供 modules/production.js 调用。
 productionSystem.init = function() {
   try {
     productionSystem.pages.init();
@@ -248,6 +281,7 @@ productionSystem.init = function() {
   }
 };
 
+// 对外暴露生产管理状态快照，供调试和兼容 API 使用。
 productionSystem.getState = function() {
   return productionSystem.store.snapshot();
 };

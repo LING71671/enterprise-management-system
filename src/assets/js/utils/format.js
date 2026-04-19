@@ -1,5 +1,6 @@
 'use strict';
 
+// 格式化企业管理系统中的日期字段。
 function formatDate(date, pattern = 'YYYY-MM-DD') {
   const d = date instanceof Date ? date : new Date(date);
   if (isNaN(d)) return '';
@@ -14,6 +15,7 @@ function formatDate(date, pattern = 'YYYY-MM-DD') {
   return pattern.replace(/YYYY|MM|DD|HH|mm|ss/g, m => map[m]);
 }
 
+// 格式化后台统计数字，统一中文区域千分位。
 function formatNumber(num, decimals = 0) {
   return Number(num).toLocaleString('zh-CN', {
     minimumFractionDigits: decimals,
@@ -21,10 +23,12 @@ function formatNumber(num, decimals = 0) {
   });
 }
 
+// 格式化企业管理系统中的金额字段。
 function formatMoney(amount, currency = '¥') {
   return currency + formatNumber(amount, 2);
 }
 
+// 格式化企业管理系统中的百分比字段。
 function formatPercent(value, decimals = 1) {
   return (Number(value) * 100).toFixed(decimals) + '%';
 }

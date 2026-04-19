@@ -2,7 +2,9 @@
 
 window.employeeSystem = window.employeeSystem || {};
 
+// 员工管理页面控制器：负责员工首页、考勤、绩效、招聘和档案页。
 employeeSystem.pages = (function(store, actions, renderers, view) {
+  // 打开员工首页的档案详情弹窗。
   function showEmployeeDetail(id) {
     const employee = store.sync().employees.find((item) => item.id === id);
     const title = document.getElementById('modal-title');
@@ -29,6 +31,7 @@ employeeSystem.pages = (function(store, actions, renderers, view) {
     addClass(document.getElementById('modal-overlay'), 'active');
   }
 
+  // 统计员工总数、在职人数、试用期人数和部门数。
   function renderEmployeeStats(list) {
     renderers.stats([
       { icon: '👥', value: list.length, label: '员工总数' },
@@ -38,6 +41,7 @@ employeeSystem.pages = (function(store, actions, renderers, view) {
     ]);
   }
 
+  // 根据员工数据刷新部门筛选下拉框。
   function renderDeptFilter(list) {
     const select = document.getElementById('dept-filter');
     if (!select) return;
@@ -54,6 +58,92 @@ employeeSystem.pages = (function(store, actions, renderers, view) {
     select.value = currentValue;
   }
 
+  function renderEmployeeIndexRow(item) {
+    return `
+      <tr>
+        <td>${item.id}</td>
+        <td><strong>${item.name}</strong></td>
+        <td>${item.gender}</td>
+        <td>${item.dept}</td>
+        <td>${item.position}</td>
+        <td>${item.entryDate}</td>
+        <td>${renderers.employeeStatus(item.status)}</td>
+        <td><div class="table-actions"><button class="btn btn-outline btn-sm" data-action="detail" data-id="${item.id}">详情</button></div></td>
+      </tr>
+    `;
+  }
+
+  function renderAttendanceRow(item) {
+    const rate = ((item.actualDays / item.workDays) * 100).toFixed(1);
+    const rateClass = rate >= 95 ? 'badge-success' : rate >= 85 ? 'badge-warning' : 'badge-danger';
+
+    return `
+      <tr>
+        <td>${item.empId}</td>
+        <td><strong>${item.empName}</strong></td>
+        <td>${item.workDays} 天</td>
+        <td>${item.actualDays} 天</td>
+        <td>${item.lateTimes > 0 ? `<span class="badge badge-warning">${item.lateTimes} 次</span>` : '—'}</td>
+        <td>${item.leaveDays > 0 ? item.leaveDays + ' 天' : '—'}</td>
+        <td>${item.overtimeHours} h</td>
+        <td><span class="badge ${rateClass}">${rate}%</span></td>
+      </tr>
+    `;
+  }
+
+  function renderPerformanceRow(item) {
+    return `
+      <tr>
+        <td>${item.empId}</td>
+        <td><strong>${item.empName}</strong></td>
+        <td>${item.dept}</td>
+        <td>${item.period}</td>
+        <td><strong>${item.score}</strong></td>
+        <td><span class="badge ${renderers.gradeMap[item.grade] || 'badge-default'}">${item.grade}</span></td>
+        <td style="color:var(--color-text-secondary)">${item.comment}</td>
+      </tr>
+    `;
+  }
+
+  function renderRecruitmentRow(item) {
+    return `
+      <tr>
+        <td>${item.id}</td>
+        <td><strong>${item.position}</strong></td>
+        <td>${item.dept}</td>
+        <td>${item.headcount} 人</td>
+        <td>${item.publishDate}</td>
+        <td>${item.deadline}</td>
+        <td>${item.applicants}</td>
+        <td><span class="badge ${renderers.recruitmentStatusMap[item.status] || 'badge-default'}">${item.status}</span></td>
+        <td><div class="table-actions"><button class="btn btn-danger btn-sm" data-action="delete" data-id="${item.id}">删除</button></div></td>
+      </tr>
+    `;
+  }
+
+  function renderEmployeeInfoRow(item) {
+    return `
+      <tr>
+        <td>${item.id}</td>
+        <td><strong>${item.name}</strong></td>
+        <td>${item.gender}</td>
+        <td>${item.dept}</td>
+        <td>${item.position}</td>
+        <td>${item.phone}</td>
+        <td>${item.entryDate}</td>
+        <td>${formatMoney(item.salary)}</td>
+        <td>${renderers.employeeStatus(item.status)}</td>
+        <td>
+          <div class="table-actions">
+            <button class="btn btn-outline btn-sm" data-action="edit" data-id="${item.id}">编辑</button>
+            <button class="btn btn-danger btn-sm" data-action="delete" data-id="${item.id}">删除</button>
+          </div>
+        </td>
+      </tr>
+    `;
+  }
+
+  // 初始化员工管理首页。
   function initIndexPage() {
     const tbody = document.getElementById('employee-tbody');
     if (!tbody || tbody.dataset.bound === '1') return;
@@ -66,25 +156,12 @@ employeeSystem.pages = (function(store, actions, renderers, view) {
       const employees = store.sync().employees;
       const keyword = searchInput ? searchInput.value.trim().toLowerCase() : '';
       const dept = deptFilter ? deptFilter.value : '';
-      const filtered = employees.filter((item) => {
-        const text = `${item.name} ${item.dept} ${item.position}`.toLowerCase();
-        return (!keyword || text.includes(keyword)) && (!dept || item.dept === dept);
-      });
+      const filtered = view.filterByKeyword(employees, keyword, ['name', 'dept', 'position'])
+        .filter((item) => !dept || item.dept === dept);
 
       renderEmployeeStats(employees);
       renderDeptFilter(employees);
-      tbody.innerHTML = filtered.map((item) => `
-        <tr>
-          <td>${item.id}</td>
-          <td><strong>${item.name}</strong></td>
-          <td>${item.gender}</td>
-          <td>${item.dept}</td>
-          <td>${item.position}</td>
-          <td>${item.entryDate}</td>
-          <td>${renderers.employeeStatus(item.status)}</td>
-          <td><div class="table-actions"><button class="btn btn-outline btn-sm" data-action="detail" data-id="${item.id}">详情</button></div></td>
-        </tr>
-      `).join('');
+      view.renderRows(tbody, filtered, renderEmployeeIndexRow, { colspan: 8, text: '暂无匹配员工' });
     }
 
     view.bindModalClose(closeModal);
@@ -98,6 +175,7 @@ employeeSystem.pages = (function(store, actions, renderers, view) {
     refresh();
   }
 
+  // 初始化考勤统计页。
   function initAttendancePage() {
     const tbody = document.getElementById('attendance-tbody');
     if (!tbody || tbody.dataset.bound === '1') return;
@@ -110,26 +188,12 @@ employeeSystem.pages = (function(store, actions, renderers, view) {
       { icon: '⚠️', value: list.reduce((sum, item) => sum + item.lateTimes, 0), label: '迟到次数' }
     ]);
 
-    tbody.innerHTML = list.map((item) => {
-      const rate = ((item.actualDays / item.workDays) * 100).toFixed(1);
-      const rateClass = rate >= 95 ? 'badge-success' : rate >= 85 ? 'badge-warning' : 'badge-danger';
-      return `
-        <tr>
-          <td>${item.empId}</td>
-          <td><strong>${item.empName}</strong></td>
-          <td>${item.workDays} 天</td>
-          <td>${item.actualDays} 天</td>
-          <td>${item.lateTimes > 0 ? `<span class="badge badge-warning">${item.lateTimes} 次</span>` : '—'}</td>
-          <td>${item.leaveDays > 0 ? item.leaveDays + ' 天' : '—'}</td>
-          <td>${item.overtimeHours} h</td>
-          <td><span class="badge ${rateClass}">${rate}%</span></td>
-        </tr>
-      `;
-    }).join('');
+    view.renderRows(tbody, list, renderAttendanceRow, { colspan: 8, text: '暂无考勤记录' });
 
     tbody.dataset.bound = '1';
   }
 
+  // 初始化绩效管理页。
   function initPerformancePage() {
     const tbody = document.getElementById('perf-tbody');
     if (!tbody || tbody.dataset.bound === '1') return;
@@ -144,21 +208,12 @@ employeeSystem.pages = (function(store, actions, renderers, view) {
       { icon: '🏆', value: aCount, label: 'A级人数' }
     ]);
 
-    tbody.innerHTML = list.map((item) => `
-      <tr>
-        <td>${item.empId}</td>
-        <td><strong>${item.empName}</strong></td>
-        <td>${item.dept}</td>
-        <td>${item.period}</td>
-        <td><strong>${item.score}</strong></td>
-        <td><span class="badge ${renderers.gradeMap[item.grade] || 'badge-default'}">${item.grade}</span></td>
-        <td style="color:var(--color-text-secondary)">${item.comment}</td>
-      </tr>
-    `).join('');
+    view.renderRows(tbody, list, renderPerformanceRow, { colspan: 7, text: '暂无绩效记录' });
 
     tbody.dataset.bound = '1';
   }
 
+  // 初始化招聘管理页。
   function initRecruitmentPage() {
     const tbody = document.getElementById('recruit-tbody');
     if (!tbody || tbody.dataset.bound === '1') return;
@@ -172,44 +227,30 @@ employeeSystem.pages = (function(store, actions, renderers, view) {
         { icon: '📨', value: list.reduce((sum, item) => sum + item.applicants, 0), label: '总投递数' }
       ]);
 
-      tbody.innerHTML = list.map((item) => `
-        <tr>
-          <td>${item.id}</td>
-          <td><strong>${item.position}</strong></td>
-          <td>${item.dept}</td>
-          <td>${item.headcount} 人</td>
-          <td>${item.publishDate}</td>
-          <td>${item.deadline}</td>
-          <td>${item.applicants}</td>
-          <td><span class="badge ${renderers.recruitmentStatusMap[item.status] || 'badge-default'}">${item.status}</span></td>
-          <td><div class="table-actions"><button class="btn btn-danger btn-sm" data-action="delete" data-id="${item.id}">删除</button></div></td>
-        </tr>
-      `).join('');
+      view.renderRows(tbody, list, renderRecruitmentRow, { colspan: 9, text: '暂无招聘计划' });
     }
 
     on(document.getElementById('add-btn'), 'click', () => {
-      const position = window.prompt('职位名称');
-      if (!position) return;
+      const payload = view.promptFields([
+        { name: 'position', label: '职位名称', required: true },
+        { name: 'dept', label: '所属部门', defaultValue: '人事部' },
+        { name: 'headcount', label: '招聘人数', defaultValue: '1' },
+        { name: 'status', label: '状态（招聘中/待发布/已完成）', defaultValue: '招聘中' }
+      ]);
+      if (!payload) return;
 
-      actions.createRecruitment({
-        position,
-        dept: window.prompt('所属部门', '人事部') || '人事部',
-        headcount: window.prompt('招聘人数', '1') || '1',
-        status: window.prompt('状态（招聘中/待发布/已完成）', '招聘中') || '招聘中'
-      });
+      actions.createRecruitment(payload);
       render();
     });
     delegate(tbody, '[data-action="delete"]', 'click', function() {
-      if (window.confirm('确认删除该招聘计划？')) {
-        actions.deleteRecruitment(this.dataset.id);
-        render();
-      }
+      view.confirmDelete('确认删除该招聘计划？', () => actions.deleteRecruitment(this.dataset.id), render);
     });
 
     tbody.dataset.bound = '1';
     render();
   }
 
+  // 初始化员工档案维护页。
   function initInfoPage() {
     const tbody = document.getElementById('info-tbody');
     if (!tbody || tbody.dataset.bound === '1') return;
@@ -249,45 +290,24 @@ employeeSystem.pages = (function(store, actions, renderers, view) {
 
     function readForm() {
       return {
-        name: ((document.getElementById('f-name') || {}).value || '').trim(),
-        gender: (document.getElementById('f-gender') || {}).value || '男',
-        dept: ((document.getElementById('f-dept') || {}).value || '').trim(),
-        position: ((document.getElementById('f-position') || {}).value || '').trim(),
-        phone: ((document.getElementById('f-phone') || {}).value || '').trim(),
-        email: ((document.getElementById('f-email') || {}).value || '').trim(),
-        entryDate: (document.getElementById('f-entryDate') || {}).value || '',
-        salary: (document.getElementById('f-salary') || {}).value || 0
+        name: view.getTrimmedValue('f-name'),
+        gender: view.getValue('f-gender', '男') || '男',
+        dept: view.getTrimmedValue('f-dept'),
+        position: view.getTrimmedValue('f-position'),
+        phone: view.getTrimmedValue('f-phone'),
+        email: view.getTrimmedValue('f-email'),
+        entryDate: view.getValue('f-entryDate'),
+        salary: view.getValue('f-salary', 0)
       };
     }
 
     function render(list) {
-      tbody.innerHTML = list.map((item) => `
-        <tr>
-          <td>${item.id}</td>
-          <td><strong>${item.name}</strong></td>
-          <td>${item.gender}</td>
-          <td>${item.dept}</td>
-          <td>${item.position}</td>
-          <td>${item.phone}</td>
-          <td>${item.entryDate}</td>
-          <td>${formatMoney(item.salary)}</td>
-          <td>${renderers.employeeStatus(item.status)}</td>
-          <td>
-            <div class="table-actions">
-              <button class="btn btn-outline btn-sm" data-action="edit" data-id="${item.id}">编辑</button>
-              <button class="btn btn-danger btn-sm" data-action="delete" data-id="${item.id}">删除</button>
-            </div>
-          </td>
-        </tr>
-      `).join('');
+      view.renderRows(tbody, list, renderEmployeeInfoRow, { colspan: 10, text: '暂无员工档案' });
     }
 
     function refresh() {
-      const keyword = ((document.getElementById('search-input') || {}).value || '').trim().toLowerCase();
-      const list = store.sync().employees.filter((item) => {
-        const text = `${item.id} ${item.name}`.toLowerCase();
-        return !keyword || text.includes(keyword);
-      });
+      const keyword = view.getTrimmedValue('search-input');
+      const list = view.filterByKeyword(store.sync().employees, keyword, ['id', 'name']);
       render(list);
     }
 
@@ -323,16 +343,14 @@ employeeSystem.pages = (function(store, actions, renderers, view) {
       openModal('编辑员工');
     });
     delegate(tbody, '[data-action="delete"]', 'click', function() {
-      if (window.confirm('确认删除该员工？')) {
-        actions.deleteEmployee(this.dataset.id);
-        refresh();
-      }
+      view.confirmDelete('确认删除该员工？', () => actions.deleteEmployee(this.dataset.id), refresh);
     });
 
     tbody.dataset.bound = '1';
     refresh();
   }
 
+  // 按当前员工管理子页面分发初始化逻辑。
   function init() {
     switch (view.pageName()) {
       case 'index.html':
@@ -360,6 +378,7 @@ employeeSystem.pages = (function(store, actions, renderers, view) {
   };
 })(employeeSystem.store, employeeSystem.actions, employeeSystem.renderers, EnterpriseView);
 
+// 对外暴露员工管理初始化入口，供 modules/employee.js 调用。
 employeeSystem.init = function() {
   try {
     employeeSystem.pages.init();
@@ -368,6 +387,7 @@ employeeSystem.init = function() {
   }
 };
 
+// 对外暴露员工管理状态快照，供调试和兼容 API 使用。
 employeeSystem.getState = function() {
   return employeeSystem.store.snapshot();
 };

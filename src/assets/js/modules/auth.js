@@ -3,6 +3,7 @@
 const auth = {
   USER_KEY: 'xm_user',
 
+  // 演示系统登录：当前无后端，使用固定管理员账号写入 sessionStorage。
   login(username, password) {
     try {
       if (username === 'admin' && password === '123456') {
@@ -16,6 +17,7 @@ const auth = {
     return false;
   },
 
+  // 清除当前管理员会话，并按当前页面深度返回落地页。
   logout() {
     try {
       storage.session.remove(this.USER_KEY);
@@ -33,6 +35,7 @@ const auth = {
     window.location.href = 'landing.html';
   },
 
+  // 获取当前浏览器会话中的登录用户。
   getUser() {
     try {
       return storage.session.get(this.USER_KEY);
@@ -42,10 +45,12 @@ const auth = {
     }
   },
 
+  // 判断是否存在有效演示会话。
   isLoggedIn() {
     return !!this.getUser();
   },
 
+  // 保护后台业务页面，未登录时重定向到登录页。
   guard() {
     try {
       if (!this.isLoggedIn()) {
@@ -65,6 +70,7 @@ const auth = {
     }
   },
 
+  // 注册演示账号到 localStorage，供注册页完成无后端闭环。
   register(username, email, password) {
     try {
       const users = storage.get('xm_users') || [];

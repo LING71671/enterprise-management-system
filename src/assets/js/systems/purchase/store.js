@@ -2,6 +2,7 @@
 
 window.purchaseSystem = window.purchaseSystem || {};
 
+// 采购管理本地状态：供应商、采购订单、采购分析。
 purchaseSystem.store = EnterpriseState.createStore({
   storageKey: 'xm_purchase_state',
   fields: [

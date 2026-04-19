@@ -2,6 +2,7 @@
 
 window.productionSystem = window.productionSystem || {};
 
+// 生产管理本地状态：计划、任务、物料、订单、质检。
 productionSystem.store = EnterpriseState.createStore({
   storageKey: 'xm_production_state',
   fields: [

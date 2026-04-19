@@ -2,6 +2,7 @@
 
 window.salesSystem = window.salesSystem || {};
 
+// 销售管理本地状态：客户、订单、报表、定价、团队。
 salesSystem.store = EnterpriseState.createStore({
   storageKey: 'xm_sales_state',
   fields: [

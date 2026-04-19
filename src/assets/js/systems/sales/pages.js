@@ -2,7 +2,96 @@
 
 window.salesSystem = window.salesSystem || {};
 
+// 销售管理页面控制器：负责销售总览、客户、订单、定价、报表和团队页。
 salesSystem.pages = (function(store, actions, renderers, view) {
+  function renderSalesIndexRow(item) {
+    return `
+      <tr>
+        <td>${item.id}</td>
+        <td>${item.customerName}</td>
+        <td>${item.product}</td>
+        <td><strong>${formatMoney(item.amount)}</strong></td>
+        <td><span class="badge ${renderers.orderStatusMap[item.status] || 'badge-default'}">${item.status}</span></td>
+      </tr>
+    `;
+  }
+
+  function renderCustomerRow(item) {
+    return `
+      <tr>
+        <td>${item.id}</td>
+        <td><strong>${item.name}</strong></td>
+        <td>${item.contact}</td>
+        <td>${item.phone}</td>
+        <td>${item.city}</td>
+        <td><span class="badge ${renderers.levelMap[item.level] || 'badge-default'}">${item.level}</span></td>
+        <td>${formatMoney(item.totalAmount)}</td>
+        <td><div class="table-actions"><button class="btn btn-danger btn-sm" data-action="delete" data-id="${item.id}">删除</button></div></td>
+      </tr>
+    `;
+  }
+
+  function renderOrderRow(item) {
+    return `
+      <tr>
+        <td>${item.id}</td>
+        <td>${item.customerName}</td>
+        <td><strong>${item.product}</strong></td>
+        <td>${item.quantity}</td>
+        <td>${formatMoney(item.unitPrice)}</td>
+        <td><strong>${formatMoney(item.amount)}</strong></td>
+        <td>${item.createDate}</td>
+        <td>${item.deliveryDate}</td>
+        <td><span class="badge ${renderers.orderStatusMap[item.status] || 'badge-default'}">${item.status}</span></td>
+      </tr>
+    `;
+  }
+
+  function renderPricingRow(item) {
+    return `
+      <tr>
+        <td>${item.id}</td>
+        <td><strong>${item.product}</strong></td>
+        <td>${formatMoney(item.standardPrice)}</td>
+        <td><strong style="color:var(--color-primary)">${formatMoney(item.currentPrice)}</strong></td>
+        <td>${item.discount < 1 ? `<span class="badge badge-warning">${(item.discount * 10).toFixed(1)}折</span>` : '—'}</td>
+        <td>${item.validFrom} ~ ${item.validTo}</td>
+        <td><span class="badge badge-success">${item.status}</span></td>
+      </tr>
+    `;
+  }
+
+  function renderMonthlyReportRow(maxRevenue) {
+    return (item) => {
+      const barWidth = maxRevenue ? Math.round((item.revenue / maxRevenue) * 100) : 0;
+      return `
+        <tr>
+          <td>${item.month}</td>
+          <td><strong>${formatMoney(item.revenue)}</strong></td>
+          <td>${item.orders}</td>
+          <td>${item.newCustomers}</td>
+          <td>${barWidth}%</td>
+        </tr>
+      `;
+    };
+  }
+
+  function renderTeamRow(item) {
+    return `
+      <tr>
+        <td>${item.id}</td>
+        <td><strong>${item.name}</strong></td>
+        <td>${item.role}</td>
+        <td>${item.region}</td>
+        <td>${formatMoney(item.target)}</td>
+        <td>${formatMoney(item.achieved)}</td>
+        <td>${(item.rate * 100).toFixed(1)}%</td>
+      </tr>
+    `;
+  }
+
+
+  // 初始化销售管理首页。
   function initIndexPage() {
     const tbody = document.getElementById('order-tbody');
     if (!tbody || tbody.dataset.bound === '1') return;
@@ -15,19 +104,12 @@ salesSystem.pages = (function(store, actions, renderers, view) {
       { icon: '⭐', value: data.customers.filter((item) => item.level === 'VIP').length, label: 'VIP客户' }
     ]);
 
-    tbody.innerHTML = data.orders.slice(0, 5).map((item) => `
-      <tr>
-        <td>${item.id}</td>
-        <td>${item.customerName}</td>
-        <td>${item.product}</td>
-        <td><strong>${formatMoney(item.amount)}</strong></td>
-        <td><span class="badge ${renderers.orderStatusMap[item.status] || 'badge-default'}">${item.status}</span></td>
-      </tr>
-    `).join('');
+    view.renderRows(tbody, data.orders.slice(0, 5), renderSalesIndexRow, { colspan: 5, text: '暂无销售订单' });
 
     tbody.dataset.bound = '1';
   }
 
+  // 初始化客户管理页。
   function initCustomerPage() {
     const tbody = document.getElementById('customer-tbody');
     if (!tbody || tbody.dataset.bound === '1') return;
@@ -40,54 +122,38 @@ salesSystem.pages = (function(store, actions, renderers, view) {
         { icon: '💰', value: formatMoney(customers.reduce((sum, item) => sum + item.totalAmount, 0)), label: '累计销售额' }
       ]);
 
-      tbody.innerHTML = list.map((item) => `
-        <tr>
-          <td>${item.id}</td>
-          <td><strong>${item.name}</strong></td>
-          <td>${item.contact}</td>
-          <td>${item.phone}</td>
-          <td>${item.city}</td>
-          <td><span class="badge ${renderers.levelMap[item.level] || 'badge-default'}">${item.level}</span></td>
-          <td>${formatMoney(item.totalAmount)}</td>
-          <td><div class="table-actions"><button class="btn btn-danger btn-sm" data-action="delete" data-id="${item.id}">删除</button></div></td>
-        </tr>
-      `).join('');
+      view.renderRows(tbody, list, renderCustomerRow, { colspan: 8, text: '暂无客户' });
     }
 
     function refresh() {
-      const keyword = ((document.getElementById('search-input') || {}).value || '').trim().toLowerCase();
-      const list = store.sync().customers.filter((item) => {
-        const text = `${item.name} ${item.contact}`.toLowerCase();
-        return !keyword || text.includes(keyword);
-      });
+      const keyword = view.getTrimmedValue('search-input');
+      const list = view.filterByKeyword(store.sync().customers, keyword, ['name', 'contact']);
       render(list);
     }
 
     on(document.getElementById('search-input'), 'input', refresh);
     on(document.getElementById('add-btn'), 'click', () => {
-      const name = window.prompt('客户名称');
-      if (!name) return;
+      const payload = view.promptFields([
+        { name: 'name', label: '客户名称', required: true },
+        { name: 'contact', label: '联系人', defaultValue: '销售负责人' },
+        { name: 'phone', label: '联系电话', defaultValue: '13900009999' },
+        { name: 'city', label: '所在城市', defaultValue: '北京' },
+        { name: 'level', label: '客户等级（VIP/重要/普通）', defaultValue: '普通' }
+      ]);
+      if (!payload) return;
 
-      actions.createCustomer({
-        name,
-        contact: window.prompt('联系人', '销售负责人') || '销售负责人',
-        phone: window.prompt('联系电话', '13900009999') || '13900009999',
-        city: window.prompt('所在城市', '北京') || '北京',
-        level: window.prompt('客户等级（VIP/重要/普通）', '普通') || '普通'
-      });
+      actions.createCustomer(payload);
       refresh();
     });
     delegate(tbody, '[data-action="delete"]', 'click', function() {
-      if (window.confirm('确认删除该客户？')) {
-        actions.deleteCustomer(this.dataset.id);
-        refresh();
-      }
+      view.confirmDelete('确认删除该客户？', () => actions.deleteCustomer(this.dataset.id), refresh);
     });
 
     tbody.dataset.bound = '1';
     refresh();
   }
 
+  // 初始化销售订单页。
   function initOrderPage() {
     const tbody = document.getElementById('order-tbody');
     if (!tbody || tbody.dataset.bound === '1') return;
@@ -100,45 +166,30 @@ salesSystem.pages = (function(store, actions, renderers, view) {
         { icon: '✅', value: orders.filter((item) => item.status === '已完成').length, label: '已完成' }
       ]);
 
-      tbody.innerHTML = list.map((item) => `
-        <tr>
-          <td>${item.id}</td>
-          <td>${item.customerName}</td>
-          <td><strong>${item.product}</strong></td>
-          <td>${item.quantity}</td>
-          <td>${formatMoney(item.unitPrice)}</td>
-          <td><strong>${formatMoney(item.amount)}</strong></td>
-          <td>${item.createDate}</td>
-          <td>${item.deliveryDate}</td>
-          <td><span class="badge ${renderers.orderStatusMap[item.status] || 'badge-default'}">${item.status}</span></td>
-        </tr>
-      `).join('');
+      view.renderRows(tbody, list, renderOrderRow, { colspan: 9, text: '暂无销售订单' });
     }
 
     function refresh() {
-      const keyword = ((document.getElementById('search-input') || {}).value || '').trim().toLowerCase();
-      const status = (document.getElementById('status-filter') || {}).value || '';
-      const list = store.sync().orders.filter((item) => {
-        const text = `${item.customerName} ${item.product}`.toLowerCase();
-        return (!keyword || text.includes(keyword)) && (!status || item.status === status);
-      });
+      const keyword = view.getTrimmedValue('search-input');
+      const status = view.getValue('status-filter');
+      const list = view.filterByKeyword(store.sync().orders, keyword, ['customerName', 'product'])
+        .filter((item) => !status || item.status === status);
       render(list);
     }
 
     on(document.getElementById('search-input'), 'input', refresh);
     on(document.getElementById('status-filter'), 'change', refresh);
     on(document.getElementById('add-btn'), 'click', () => {
-      const customerName = window.prompt('客户名称');
-      const product = window.prompt('产品名称');
-      if (!customerName || !product) return;
+      const payload = view.promptFields([
+        { name: 'customerName', label: '客户名称', required: true },
+        { name: 'product', label: '产品名称', required: true },
+        { name: 'quantity', label: '数量', defaultValue: '10' },
+        { name: 'unitPrice', label: '单价', defaultValue: '1000' },
+        { name: 'status', label: '状态（待审核/待发货/配送中/已完成）', defaultValue: '待审核' }
+      ]);
+      if (!payload) return;
 
-      actions.createOrder({
-        customerName,
-        product,
-        quantity: window.prompt('数量', '10') || '10',
-        unitPrice: window.prompt('单价', '1000') || '1000',
-        status: window.prompt('状态（待审核/待发货/配送中/已完成）', '待审核') || '待审核'
-      });
+      actions.createOrder(payload);
       refresh();
     });
 
@@ -146,33 +197,24 @@ salesSystem.pages = (function(store, actions, renderers, view) {
     refresh();
   }
 
+  // 初始化价格策略页。
   function initPricingPage() {
     const tbody = document.getElementById('pricing-tbody');
     if (!tbody || tbody.dataset.bound === '1') return;
 
     function render() {
-      tbody.innerHTML = store.sync().pricing.map((item) => `
-        <tr>
-          <td>${item.id}</td>
-          <td><strong>${item.product}</strong></td>
-          <td>${formatMoney(item.standardPrice)}</td>
-          <td><strong style="color:var(--color-primary)">${formatMoney(item.currentPrice)}</strong></td>
-          <td>${item.discount < 1 ? `<span class="badge badge-warning">${(item.discount * 10).toFixed(1)}折</span>` : '—'}</td>
-          <td>${item.validFrom} ~ ${item.validTo}</td>
-          <td><span class="badge badge-success">${item.status}</span></td>
-        </tr>
-      `).join('');
+      view.renderRows(tbody, store.sync().pricing, renderPricingRow, { colspan: 7, text: '暂无价格策略' });
     }
 
     on(document.getElementById('add-btn'), 'click', () => {
-      const product = window.prompt('产品名称');
-      if (!product) return;
+      const payload = view.promptFields([
+        { name: 'product', label: '产品名称', required: true },
+        { name: 'standardPrice', label: '标准价', defaultValue: '1000' },
+        { name: 'currentPrice', label: '执行价', defaultValue: '900' }
+      ]);
+      if (!payload) return;
 
-      actions.createPricing({
-        product,
-        standardPrice: window.prompt('标准价', '1000') || '1000',
-        currentPrice: window.prompt('执行价', '900') || '900'
-      });
+      actions.createPricing(payload);
       render();
     });
 
@@ -180,6 +222,7 @@ salesSystem.pages = (function(store, actions, renderers, view) {
     render();
   }
 
+  // 初始化销售报表页。
   function initReportPage() {
     const tbody = document.getElementById('report-tbody');
     if (!tbody || tbody.dataset.bound === '1') return;
@@ -195,22 +238,12 @@ salesSystem.pages = (function(store, actions, renderers, view) {
       { icon: '📈', value: formatMoney(maxRevenue), label: '单月最高销售额' }
     ]);
 
-    tbody.innerHTML = monthly.map((item) => {
-      const barWidth = maxRevenue ? Math.round((item.revenue / maxRevenue) * 100) : 0;
-      return `
-        <tr>
-          <td>${item.month}</td>
-          <td><strong>${formatMoney(item.revenue)}</strong></td>
-          <td>${item.orders}</td>
-          <td>${item.newCustomers}</td>
-          <td>${barWidth}%</td>
-        </tr>
-      `;
-    }).join('');
+    view.renderRows(tbody, monthly, renderMonthlyReportRow(maxRevenue), { colspan: 5, text: '暂无销售报表' });
 
     tbody.dataset.bound = '1';
   }
 
+  // 初始化销售团队页。
   function initTeamPage() {
     const tbody = document.getElementById('team-tbody');
     if (!tbody || tbody.dataset.bound === '1') return;
@@ -227,21 +260,12 @@ salesSystem.pages = (function(store, actions, renderers, view) {
       { icon: '📊', value: avgRate + '%', label: '平均完成率' }
     ]);
 
-    tbody.innerHTML = team.map((item) => `
-      <tr>
-        <td>${item.id}</td>
-        <td><strong>${item.name}</strong></td>
-        <td>${item.role}</td>
-        <td>${item.region}</td>
-        <td>${formatMoney(item.target)}</td>
-        <td>${formatMoney(item.achieved)}</td>
-        <td>${(item.rate * 100).toFixed(1)}%</td>
-      </tr>
-    `).join('');
+    view.renderRows(tbody, team, renderTeamRow, { colspan: 7, text: '暂无销售团队数据' });
 
     tbody.dataset.bound = '1';
   }
 
+  // 按当前销售管理子页面分发初始化逻辑。
   function init() {
     switch (view.pageName()) {
       case 'index.html':
@@ -272,6 +296,7 @@ salesSystem.pages = (function(store, actions, renderers, view) {
   };
 })(salesSystem.store, salesSystem.actions, salesSystem.renderers, EnterpriseView);
 
+// 对外暴露销售管理初始化入口，供 modules/sales.js 调用。
 salesSystem.init = function() {
   try {
     salesSystem.pages.init();
@@ -280,6 +305,7 @@ salesSystem.init = function() {
   }
 };
 
+// 对外暴露销售管理状态快照，供调试和兼容 API 使用。
 salesSystem.getState = function() {
   return salesSystem.store.snapshot();
 };

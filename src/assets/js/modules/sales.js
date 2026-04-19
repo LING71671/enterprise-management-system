@@ -1,6 +1,7 @@
 ﻿'use strict';
 
 const salesModule = (function(system) {
+  // 销售管理兼容入口，真实页面逻辑由 salesSystem 负责。
   function init() {
     if (system && typeof system.init === 'function') {
       system.init();

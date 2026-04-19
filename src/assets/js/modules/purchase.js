@@ -1,6 +1,7 @@
 ﻿'use strict';
 
 const purchaseModule = (function(system) {
+  // 采购管理兼容入口，真实页面逻辑由 purchaseSystem 负责。
   function init() {
     if (system && typeof system.init === 'function') {
       system.init();

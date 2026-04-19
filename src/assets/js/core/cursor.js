@@ -1,6 +1,7 @@
 'use strict';
 
 const appCursor = (function() {
+  // 前台/后台桌面端使用品牌化光标，移动端跳过以保持触控体验。
   function init() {
     if (window.innerWidth <= 768 || document.querySelector('.custom-cursor')) return;
 

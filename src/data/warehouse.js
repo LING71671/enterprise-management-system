@@ -1,5 +1,6 @@
 'use strict';
 
+// 仓储管理子系统的种子数据，localStorage 为空时用于初始化页面。
 const warehouseData = {
   inventory: [
     { id: 'W001', name: '产品A成品', category: '成品', spec: '标准型', unit: '件', stock: 320, minStock: 100, location: 'A-01-01', lastUpdate: '2026-03-18' },

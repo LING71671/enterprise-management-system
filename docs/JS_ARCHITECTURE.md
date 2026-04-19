@@ -48,6 +48,18 @@ modules/<domain>.js
 
 `modules/<domain>.js` 只作为兼容门面，继续暴露旧的 `window.employeeModule`、`window.salesModule` 等全局 API，避免破坏已有调用。
 
+## 共享组件化工具
+
+`shared/view.js` 承担跨子系统页面组件逻辑：
+
+- `renderRows`：统一渲染业务表格和空状态
+- `filterByKeyword`：统一处理员工、客户、供应商、订单列表搜索
+- `promptFields`：统一处理无后端原型中的新增记录采集
+- `confirmDelete`：统一处理业务记录删除确认和刷新回调
+- `renderStats`、`renderBadge`、`renderProgress`：统一后台统计卡片、状态徽章和生产进度条
+
+业务页面只负责组织本页面的业务字段、事件绑定和刷新流程，不直接重复实现通用交互。
+
 ## 约束
 
 - 不在业务页面恢复内联业务脚本。

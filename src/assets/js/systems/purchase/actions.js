@@ -3,6 +3,7 @@
 window.purchaseSystem = window.purchaseSystem || {};
 
 purchaseSystem.actions = (function(store) {
+  // 新增供应商档案。
   function createSupplier(payload) {
     return store.mutate((state) => {
       const item = {
@@ -20,12 +21,14 @@ purchaseSystem.actions = (function(store) {
     });
   }
 
+  // 删除供应商档案。
   function deleteSupplier(id) {
     store.mutate((state) => {
       state.suppliers = state.suppliers.filter((item) => item.id !== id);
     });
   }
 
+  // 新增采购订单并计算订单金额。
   function createOrder(payload) {
     return store.mutate((state) => {
       const quantity = Number(payload.quantity) || 0;

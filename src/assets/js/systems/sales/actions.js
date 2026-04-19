@@ -3,6 +3,7 @@
 window.salesSystem = window.salesSystem || {};
 
 salesSystem.actions = (function(store) {
+  // 新增客户档案。
   function createCustomer(payload) {
     return store.mutate((state) => {
       const item = {
@@ -21,12 +22,14 @@ salesSystem.actions = (function(store) {
     });
   }
 
+  // 删除客户档案。
   function deleteCustomer(id) {
     store.mutate((state) => {
       state.customers = state.customers.filter((item) => item.id !== id);
     });
   }
 
+  // 新增销售订单并计算订单金额。
   function createOrder(payload) {
     return store.mutate((state) => {
       const quantity = Number(payload.quantity) || 0;
@@ -49,6 +52,7 @@ salesSystem.actions = (function(store) {
     });
   }
 
+  // 新增产品定价策略并计算折扣。
   function createPricing(payload) {
     return store.mutate((state) => {
       const standardPrice = Number(payload.standardPrice) || 0;

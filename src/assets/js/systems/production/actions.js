@@ -3,6 +3,7 @@
 window.productionSystem = window.productionSystem || {};
 
 productionSystem.actions = (function(store) {
+  // 新增生产计划。
   function createPlan(payload) {
     return store.mutate((state) => {
       const item = {
@@ -19,6 +20,7 @@ productionSystem.actions = (function(store) {
     });
   }
 
+  // 删除生产计划。
   function deletePlan(id) {
     store.mutate((state) => {
       state.plans = state.plans.filter((item) => item.id !== id);

@@ -3,6 +3,7 @@
 window.equipmentSystem = window.equipmentSystem || {};
 
 equipmentSystem.actions = (function(store) {
+  // 新增设备档案。
   function createEquipment(payload) {
     return store.mutate((state) => {
       const item = {
@@ -21,12 +22,14 @@ equipmentSystem.actions = (function(store) {
     });
   }
 
+  // 删除设备档案。
   function deleteEquipment(id) {
     store.mutate((state) => {
       state.equipment = state.equipment.filter((item) => item.id !== id);
     });
   }
 
+  // 新增设备维护计划。
   function createMaintenance(payload) {
     return store.mutate((state) => {
       const item = {
@@ -45,12 +48,14 @@ equipmentSystem.actions = (function(store) {
     });
   }
 
+  // 删除设备维护计划。
   function deleteMaintenance(id) {
     store.mutate((state) => {
       state.maintenance = state.maintenance.filter((item) => item.id !== id);
     });
   }
 
+  // 新增设备故障记录。
   function createFault(payload) {
     return store.mutate((state) => {
       const item = {
@@ -69,6 +74,7 @@ equipmentSystem.actions = (function(store) {
     });
   }
 
+  // 删除设备故障记录。
   function deleteFault(id) {
     store.mutate((state) => {
       state.faults = state.faults.filter((item) => item.id !== id);

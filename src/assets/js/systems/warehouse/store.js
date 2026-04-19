@@ -2,6 +2,7 @@
 
 window.warehouseSystem = window.warehouseSystem || {};
 
+// 仓储管理本地状态：库存、入库、出库、货位。
 warehouseSystem.store = EnterpriseState.createStore({
   storageKey: 'xm_warehouse_state',
   fields: [

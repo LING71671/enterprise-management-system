@@ -1,6 +1,7 @@
 ﻿'use strict';
 
 const employeeModule = (function(system) {
+  // 员工管理兼容入口，真实页面逻辑由 employeeSystem 负责。
   function init() {
     if (system && typeof system.init === 'function') {
       system.init();

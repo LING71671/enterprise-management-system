@@ -1,5 +1,6 @@
 'use strict';
 
+// 采购管理子系统的种子数据，localStorage 为空时用于初始化页面。
 const purchaseData = {
   suppliers: [
     { id: 'S001', name: '北京钢铁供应商', contact: '刘总', phone: '13700001001', category: '原材料', rating: 5, status: '合作中' },

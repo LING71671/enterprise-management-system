@@ -1,5 +1,6 @@
 'use strict';
 
+// 员工管理子系统的种子数据，localStorage 为空时用于初始化页面。
 const employeeData = {
   employees: [
     { id: 'E001', name: '张伟', gender: '男', dept: '技术部', position: '前端工程师', phone: '13800001001', email: 'zhangwei@xiaomai.com', entryDate: '2023-03-15', salary: 18000, status: '在职' },

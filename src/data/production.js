@@ -1,5 +1,6 @@
 'use strict';
 
+// 生产管理子系统的种子数据，localStorage 为空时用于初始化页面。
 const productionData = {
   plans: [
     { id: 'PP001', name: '2026年Q1生产计划', startDate: '2026-01-01', endDate: '2026-03-31', status: '进行中', products: ['产品A', '产品B'] },

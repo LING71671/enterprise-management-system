@@ -1,5 +1,6 @@
 'use strict';
 
+// 企业管理系统统一启动入口：加载运行时、公共组件和当前业务子系统。
 document.addEventListener('DOMContentLoaded', async () => {
   const initialMeta = getInitialPageMeta();
 
@@ -24,6 +25,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 });
 
+// 在 router 尚未加载前，先算出静态资源根路径，保证深层业务页面也能加载 core。
 function getInitialPageMeta() {
   const pathParts = window.location.pathname.split('/').filter(Boolean);
   const pagesIndex = pathParts.indexOf('pages');
@@ -45,6 +47,7 @@ function getInitialPageMeta() {
   };
 }
 
+// 按企业管理页面启动所需顺序加载核心能力，避免每个 HTML 重复声明脚本。
 async function loadCoreRuntime(rootPath) {
   const coreScripts = ['module-loader', 'router', 'shell', 'cursor'];
 
@@ -53,6 +56,7 @@ async function loadCoreRuntime(rootPath) {
   }
 }
 
+// 无构建工具场景下的脚本加载器，维持当前纯静态部署方式。
 function loadRuntimeScript(src, key) {
   return new Promise((resolve, reject) => {
     if (document.querySelector('script[data-runtime-script="' + key + '"]')) {

@@ -1,5 +1,6 @@
 'use strict';
 
+// 销售管理子系统的种子数据，localStorage 为空时用于初始化页面。
 const salesData = {
   customers: [
     { id: 'C001', name: '北京科技有限公司', contact: '张总', phone: '13900001001', email: 'zhang@bjtech.com', city: '北京', level: 'VIP', totalAmount: 580000 },

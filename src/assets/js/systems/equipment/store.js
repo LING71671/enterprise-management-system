@@ -2,6 +2,7 @@
 
 window.equipmentSystem = window.equipmentSystem || {};
 
+// 设备管理本地状态：设备档案、维护计划、故障记录。
 equipmentSystem.store = EnterpriseState.createStore({
   storageKey: 'xm_equipment_state',
   fields: [

@@ -3,6 +3,7 @@
 const appRouter = (function() {
   const PUBLIC_PAGES = new Set(['landing.html', 'login.html', 'register.html']);
 
+  // 从 pages 路径解析当前业务域和页面层级。
   function getPageMeta() {
     const pathParts = window.location.pathname.split('/').filter(Boolean);
     const pagesIndex = pathParts.indexOf('pages');
@@ -31,10 +32,12 @@ const appRouter = (function() {
     };
   }
 
+  // 登录、注册、落地页是公开页，其余企业管理页面都需要会话。
   function isPublicPage(pageMeta) {
     return PUBLIC_PAGES.has(pageMeta.pageName);
   }
 
+  // 公共 header/sidebar 注入后，按当前页面层级修正 logo 和侧边栏链接。
   function initPathObserver() {
     function fixComponentPaths() {
       const pageMeta = getPageMeta();

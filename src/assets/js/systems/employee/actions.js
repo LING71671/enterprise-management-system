@@ -3,6 +3,7 @@
 window.employeeSystem = window.employeeSystem || {};
 
 employeeSystem.actions = (function(store) {
+  // 新增员工档案，并生成员工编号。
   function createEmployee(payload) {
     return store.mutate((state) => {
       const employee = {
@@ -23,6 +24,7 @@ employeeSystem.actions = (function(store) {
     });
   }
 
+  // 更新员工档案基础字段。
   function updateEmployee(id, payload) {
     return store.mutate((state) => {
       const employee = state.employees.find((item) => item.id === id);
@@ -42,12 +44,14 @@ employeeSystem.actions = (function(store) {
     });
   }
 
+  // 删除员工档案。
   function deleteEmployee(id) {
     store.mutate((state) => {
       state.employees = state.employees.filter((item) => item.id !== id);
     });
   }
 
+  // 新增招聘计划。
   function createRecruitment(payload) {
     return store.mutate((state) => {
       const item = {
@@ -66,6 +70,7 @@ employeeSystem.actions = (function(store) {
     });
   }
 
+  // 删除招聘计划。
   function deleteRecruitment(id) {
     store.mutate((state) => {
       state.recruitment = state.recruitment.filter((item) => item.id !== id);

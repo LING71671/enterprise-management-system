@@ -2,6 +2,7 @@
 
 window.employeeSystem = window.employeeSystem || {};
 
+// 员工管理本地状态：员工档案、考勤、招聘、绩效。
 employeeSystem.store = EnterpriseState.createStore({
   storageKey: 'xm_employee_state',
   fields: [
