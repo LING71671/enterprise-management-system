@@ -53,52 +53,64 @@ const landing = (function () {
   }
 
   /**
-   * 为落地页展示元素绑定进入视口动画。
+   * 批量为落地页核心展示模块绑定进入视口动画。
    * @returns {void}
    *
    * 原因：IntersectionObserver 能让动画只在元素接近视口时触发，减少首屏加载时的动画压力。
    */
   function initAnimations() {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry, index) => {
-        if (entry.isIntersecting) {
-          // 不同展示块使用不同动画节奏，保持统计、技术、产品和伙伴区的视觉层次。
-          const element = entry.target;
-
-          if (element.classList.contains('hero-container')) {
-            element.classList.add('fade-in');
-          } else if (element.classList.contains('stat-card')) {
-            element.classList.add('slide-up');
-            element.classList.add(`delay-${(index % 3) * 100}`);
-          } else if (element.classList.contains('tech-card')) {
-            element.classList.add('scale-in');
-            element.classList.add(`delay-${(index % 3) * 100}`);
-          } else if (element.classList.contains('product-card')) {
-            element.classList.add('slide-up');
-            element.classList.add(`delay-${(index % 6) * 100}`);
-          } else if (element.classList.contains('founder-card')) {
-            element.classList.add('fade-in');
-            element.classList.add(`delay-${(index % 4) * 100}`);
-          } else if (element.classList.contains('partner-logo')) {
-            element.classList.add('scale-in');
-            element.classList.add(`delay-${(index % 9) * 100}`);
-          } else if (element.classList.contains('cta')) {
-            element.classList.add('slide-up');
-          }
-
-          // 动画只触发一次，避免用户来回滚动时重复闪烁。
-          observer.unobserve(element);
-        }
-      });
-    }, {
+    const observer = new IntersectionObserver(handleIntersection, {
       threshold: 0.1,
       rootMargin: '0px 0px -50px 0px'
     });
 
-    // 只观察落地页核心展示模块，避免把导航和页脚普通元素纳入动画队列。
-    document.querySelectorAll('.hero-container, .stat-card, .tech-card, .product-card, .founder-card, .partner-logo, #cta').forEach(el => {
+    const selectors = '.hero-container, .stat-card, .tech-card, .product-card, .founder-card, .partner-logo, #cta';
+    document.querySelectorAll(selectors).forEach(el => {
       observer.observe(el);
     });
+  }
+
+  /**
+   * 处理 IntersectionObserver 的视口交叉回调。
+   * @param {IntersectionObserverEntry[]} entries 观察器返回的交叉信息数组。
+   * @param {IntersectionObserver} observer 观察器实例，用于取消已完成动画的元素。
+   * @returns {void}
+   *
+   * 原因：将回调逻辑从观察器初始化中分离，使观察器配置与业务处理各司其职。
+   */
+  function handleIntersection(entries, observer) {
+    entries.forEach((entry, index) => {
+      if (entry.isIntersecting) {
+        applyElementAnimation(entry.target, index);
+        observer.unobserve(entry.target);
+      }
+    });
+  }
+
+  /**
+   * 根据元素类型分配对应的入场动画和阶梯延迟。
+   * @param {HTMLElement} element 进入视口的目标元素。
+   * @param {number} index 元素在当前批次中的索引，用于计算阶梯延迟。
+   * @returns {void}
+   *
+   * 原因：将动画规则从观察器回调中分离，新增展示模块时只需在此处追加条件分支。
+   */
+  function applyElementAnimation(element, index) {
+    if (element.classList.contains('hero-container')) {
+      element.classList.add('fade-in');
+    } else if (element.classList.contains('stat-card')) {
+      element.classList.add('slide-up', `delay-${(index % 3) * 100}`);
+    } else if (element.classList.contains('tech-card')) {
+      element.classList.add('scale-in', `delay-${(index % 3) * 100}`);
+    } else if (element.classList.contains('product-card')) {
+      element.classList.add('slide-up', `delay-${(index % 6) * 100}`);
+    } else if (element.classList.contains('founder-card')) {
+      element.classList.add('fade-in', `delay-${(index % 4) * 100}`);
+    } else if (element.classList.contains('partner-logo')) {
+      element.classList.add('scale-in', `delay-${(index % 9) * 100}`);
+    } else if (element.classList.contains('cta')) {
+      element.classList.add('slide-up');
+    }
   }
 
   return {
