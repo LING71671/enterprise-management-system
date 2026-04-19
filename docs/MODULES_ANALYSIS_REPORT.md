@@ -1,5 +1,7 @@
 # `src/assets/js/modules` 模块分析报告
 
+> 更新说明：本报告记录的是早期模块状态。当前业务模块已完成架构重构，`src/assets/js/modules` 只保留兼容门面，真实业务实现已迁移到 `src/assets/js/systems/<domain>/`。新的维护说明请优先参考 `JS_ARCHITECTURE.md`。
+
 ## 1. 文档目的
 
 本文档用于沉淀 `web/src/assets/js/modules` 目录的真实结构与职责边界，明确：

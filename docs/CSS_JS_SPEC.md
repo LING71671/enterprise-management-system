@@ -168,11 +168,23 @@ function validateForm(formData, rules) {}
 JS 入口文件。
 ```javascript
 /* 应包含的功能 */
-// 1. 导入所有模块
+// 1. 加载 core 运行时
 // 2. 初始化应用
-// 3. 绑定全局事件
-// 4. 启动路由
+// 3. 装配公共组件
+// 4. 按页面业务域加载 systems 与 modules 门面
 ```
+
+### `src/assets/js/core/`
+应用运行时能力，包含页面元信息、公共组件加载、业务模块加载、全局光标等。`main.js` 应保持轻量，只做启动编排。
+
+### `src/assets/js/shared/`
+跨业务域复用的状态与展示工具，例如 localStorage 状态容器、统计卡片、徽章、进度条、弹窗关闭绑定等。
+
+### `src/assets/js/systems/<domain>/`
+业务域真实实现目录。每个业务域按 `store.js`、`actions.js`、`renderers.js`、`pages.js` 拆分，分别负责状态、业务操作、展示辅助和页面事件绑定。
+
+### `src/assets/js/modules/<domain>.js`
+业务模块门面层，只暴露 `window.xxxModule` 兼容入口，不承载大段业务实现。
 
 ---
 
