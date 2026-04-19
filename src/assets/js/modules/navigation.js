@@ -54,3 +54,5 @@ const appNav = {
     on(btn, 'click', () => auth.logout());
   }
 };
+
+window.appNav = appNav;

@@ -1,7 +1,7 @@
 const { spawn } = require('child_process');
 const net = require('net');
 
-const START_PORT = 8080;
+const START_PORT = 3000;
 const MAX_PORT = 8100;
 
 function isPortAvailable(port) {
