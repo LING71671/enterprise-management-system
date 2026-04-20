@@ -4,6 +4,7 @@
   box-sizing: border-box;
 }
 
+/* 根元素定义 */
 :root {
   --loader-bg: #07111f;
   --loader-bg-deep: #0b1d33;
@@ -14,27 +15,37 @@
   --loader-line: rgba(255, 255, 255, 0.08);
 }
 
+/* 页面样式 */
 body {
+  /* 多种字体确保在不同操作系统上都能正常显示字体 */
   font-family: "Microsoft YaHei", "PingFang SC", "Segoe UI", sans-serif;
   background:
+    /* 三种径向渐变叠加，此外，未显式指定 size，使用圆心到最远角的距离 */
     radial-gradient(circle at 20% 20%, rgba(45, 114, 255, 0.18), transparent 30%),
     radial-gradient(circle at 80% 25%, rgba(215, 181, 109, 0.15), transparent 28%),
     radial-gradient(circle at 50% 80%, rgba(0, 204, 255, 0.08), transparent 30%),
+    /* 从左上角向右下角线性渐变；0deg:从下到上 90deg:从左到右 180deg:从上到下 */
     linear-gradient(135deg, var(--loader-bg), var(--loader-bg-deep));
   color: var(--loader-white);
   height: 100vh;
+  /* 隐藏超出视口内容 */
   overflow: hidden;
   position: relative;
 }
 
 .loader-grid {
   position: absolute;
+  /* 使元素充满容器 */
   inset: 0;
+  /* 网格背景 */
   background-image:
+    /* 通过线性渐变创建网格，渐变效果与颜色停止点重合达到硬切割效果 */
     linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
   background-size: 48px 48px;
+  /* 使用径向遮罩 */
   mask-image: radial-gradient(circle at center, black 45%, transparent 95%);
+  /* 兼容一部分老版本浏览器 */
   -webkit-mask-image: radial-gradient(circle at center, black 45%, transparent 95%);
   animation: gridMove 10s linear infinite;
   opacity: 0.5;
@@ -44,6 +55,7 @@ body {
   position: absolute;
   inset: 0;
   overflow: hidden;
+  /* 不与鼠标产生交互 */
   pointer-events: none;
 }
 
@@ -53,6 +65,7 @@ body {
   height: 6px;
   border-radius: 50%;
   background: radial-gradient(circle, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.05));
+  /* 阴影 */
   box-shadow: 0 0 18px rgba(255, 255, 255, 0.3);
   animation: floatUp linear infinite;
   opacity: 0.65;
@@ -63,6 +76,7 @@ body {
   width: 320px;
   height: 320px;
   border-radius: 50%;
+  /* 创建模糊效果 */
   filter: blur(80px);
   opacity: 0.18;
   pointer-events: none;
@@ -82,6 +96,7 @@ body {
 
 .loader-shell {
   position: relative;
+  /* 于较高层级显示 */
   z-index: 2;
   width: 100%;
   height: 100vh;
@@ -100,8 +115,11 @@ body {
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   box-shadow:
+    /* 外部阴影 */
     0 20px 80px rgba(0, 0, 0, 0.42),
+    /* 内部阴影 */
     inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    /* 外边框 */
     0 0 0 1px rgba(255, 255, 255, 0.02);
   text-align: center;
   position: relative;
@@ -118,7 +136,7 @@ body {
   animation: shine 2.2s ease-in-out infinite;
 }
 
-.launch-card > * {
+.launch-card>* {
   position: relative;
   z-index: 1;
 }
@@ -245,8 +263,13 @@ body {
 }
 
 @keyframes gridMove {
-  0% { transform: translateY(0) scale(1); }
-  100% { transform: translateY(48px) scale(1.02); }
+  0% {
+    transform: translateY(0) scale(1);
+  }
+
+  100% {
+    transform: translateY(48px) scale(1.02);
+  }
 }
 
 @keyframes floatUp {
@@ -254,7 +277,11 @@ body {
     transform: translateY(20px) scale(0.8);
     opacity: 0;
   }
-  20% { opacity: 0.6; }
+
+  20% {
+    opacity: 0.6;
+  }
+
   100% {
     transform: translateY(-120vh) scale(1.2);
     opacity: 0;
@@ -267,6 +294,7 @@ body {
     transform: translateY(36px) scale(0.96);
     filter: blur(8px);
   }
+
   100% {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -275,14 +303,29 @@ body {
 }
 
 @keyframes shine {
-  0% { transform: translateX(-120%); }
-  55% { transform: translateX(120%); }
-  100% { transform: translateX(120%); }
+  0% {
+    transform: translateX(-120%);
+  }
+
+  55% {
+    transform: translateX(120%);
+  }
+
+  100% {
+    transform: translateX(120%);
+  }
 }
 
 @keyframes pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.04); }
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.04);
+  }
 }
 
 @keyframes ripple {
@@ -290,6 +333,7 @@ body {
     transform: scale(0.92);
     opacity: 0.55;
   }
+
   100% {
     transform: scale(1.18);
     opacity: 0;
@@ -297,8 +341,16 @@ body {
 }
 
 @keyframes cursorBlink {
-  0%, 50% { border-right-color: rgba(215, 181, 109, 0.95); }
-  51%, 100% { border-right-color: transparent; }
+
+  0%,
+  50% {
+    border-right-color: rgba(215, 181, 109, 0.95);
+  }
+
+  51%,
+  100% {
+    border-right-color: transparent;
+  }
 }
 
 @keyframes fadeUp {
@@ -306,6 +358,7 @@ body {
     opacity: 0;
     transform: translateY(16px);
   }
+
   100% {
     opacity: 1;
     transform: translateY(0);
@@ -313,8 +366,13 @@ body {
 }
 
 @keyframes loading {
-  0% { width: 0; }
-  100% { width: 100%; }
+  0% {
+    width: 0;
+  }
+
+  100% {
+    width: 100%;
+  }
 }
 
 @keyframes pageOut {
@@ -323,6 +381,7 @@ body {
     transform: scale(1);
     filter: blur(0);
   }
+
   100% {
     opacity: 0;
     transform: scale(1.03);
