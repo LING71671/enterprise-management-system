@@ -33,6 +33,7 @@ body {
   position: relative;
 }
 
+/* 加载网格 */
 .loader-grid {
   position: absolute;
   /* 使元素充满容器 */
@@ -51,6 +52,7 @@ body {
   opacity: 0.5;
 }
 
+/* 加载粒子 */
 .loader-particles {
   position: absolute;
   inset: 0;
@@ -59,6 +61,7 @@ body {
   pointer-events: none;
 }
 
+/* 单个粒子效果 */
 .loader-particle {
   position: absolute;
   width: 6px;
@@ -71,6 +74,8 @@ body {
   opacity: 0.65;
 }
 
+
+/* 角光效果 */
 .corner-light {
   position: absolute;
   width: 320px;
@@ -106,6 +111,7 @@ body {
   padding: 24px;
 }
 
+/* 加载卡片 */
 .launch-card {
   width: min(92vw, 760px);
   padding: 46px 42px 34px;
@@ -141,6 +147,7 @@ body {
   z-index: 1;
 }
 
+/* 加载logo */
 .logo-ring {
   width: 108px;
   height: 108px;
@@ -152,11 +159,14 @@ body {
   background: radial-gradient(circle at center, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.03));
   border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow:
+    /* 外层淡白色圆环 */
     0 0 0 10px rgba(255, 255, 255, 0.02),
+    /* 金色发光效果 */
     0 0 40px rgba(215, 181, 109, 0.12);
   animation: pulse 2.2s ease-in-out infinite;
 }
 
+/* 共用相同样式 */
 .logo-ring::before,
 .logo-ring::after {
   content: "";
@@ -174,12 +184,15 @@ body {
 .logo-ring img {
   width: 54px;
   height: 54px;
+  /* 图片按比例缩放，完全包含在容器内 */
   object-fit: contain;
   filter: drop-shadow(0 0 18px rgba(255, 255, 255, 0.22));
 }
 
+/* 加载副标题 */
 .loader-subtitle {
   font-size: 14px;
+  /* 增加字母间距 */
   letter-spacing: 3px;
   text-transform: uppercase;
   color: var(--loader-gold);
@@ -204,8 +217,10 @@ body {
   animation: fadeUp 0.9s ease 0.55s both;
 }
 
+/* 加载打字机效果 */
 .typing-text {
   min-height: 30px;
+  /* 防止文本换行 */
   white-space: nowrap;
   overflow: hidden;
   border-right: 2px solid rgba(215, 181, 109, 0.9);
@@ -216,12 +231,14 @@ body {
   animation: cursorBlink 0.8s steps(1) infinite;
 }
 
+/* 加载进度条 */
 .progress-wrap {
   width: min(420px, 100%);
   margin: 0 auto;
   animation: fadeUp 0.9s ease 0.7s both;
 }
 
+/* 进度条文本 */
 .progress-text {
   display: flex;
   justify-content: space-between;
@@ -241,12 +258,15 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
+/* 进度条填充 */
 .progress-fill {
   width: 0;
   height: 100%;
+  /* 继承进度条圆角 */
   border-radius: inherit;
   background: linear-gradient(90deg, rgba(255, 255, 255, 0.75), var(--loader-gold), rgba(255, 255, 255, 0.92));
   box-shadow: 0 0 18px var(--loader-gold-soft);
+  /* 贝塞尔曲线使填充速度先慢后快再慢 */
   animation: loading 2.3s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
 }
 
@@ -262,6 +282,7 @@ body {
   animation: pageOut 0.7s ease forwards;
 }
 
+/* 网格背景动画 */
 @keyframes gridMove {
   0% {
     transform: translateY(0) scale(1);
@@ -272,6 +293,7 @@ body {
   }
 }
 
+/* 粒子浮动动画 */
 @keyframes floatUp {
   0% {
     transform: translateY(20px) scale(0.8);
@@ -288,6 +310,7 @@ body {
   }
 }
 
+/* 卡片进入动画 */
 @keyframes cardEnter {
   0% {
     opacity: 0;
@@ -302,6 +325,7 @@ body {
   }
 }
 
+/* 扫描卡片光效动画 */
 @keyframes shine {
   0% {
     transform: translateX(-120%);
@@ -340,6 +364,7 @@ body {
   }
 }
 
+/* 光标闪烁动画 */
 @keyframes cursorBlink {
 
   0%,
@@ -411,6 +436,7 @@ body {
   }
 
   .typing-text {
+    /* 允许文本换行避免超出宽度 */
     white-space: normal;
     text-align: center;
     min-height: 48px;
