@@ -42,12 +42,9 @@ const auth = {
   logout() {
     try {
       storage.session.remove(this.USER_KEY);
-      const pathParts = window.location.pathname.split('/');
-      const pagesIndex = pathParts.lastIndexOf('pages');
-      if (pagesIndex !== -1) {
-        const depth = pathParts.length - pagesIndex - 2;
-        const relativePath = depth > 0 ? '../'.repeat(depth) : './';
-        window.location.href = relativePath + 'landing.html';
+      if (typeof appRouter !== 'undefined') {
+        const pageMeta = appRouter.getPageMeta();
+        window.location.href = pageMeta.pagesPath + 'landing.html';
         return;
       }
     } catch (error) {
@@ -95,6 +92,12 @@ const auth = {
         normalizedPath.endsWith('/login.html');
 
       if (isLoginPage) {
+        return;
+      }
+
+      if (typeof appRouter !== 'undefined') {
+        const pageMeta = appRouter.getPageMeta();
+        window.location.replace(pageMeta.pagesPath + 'login.html');
         return;
       }
 

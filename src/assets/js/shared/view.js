@@ -44,6 +44,14 @@ const EnterpriseView = (function() {
    * @returns {string} URL 最后一段文件名。
    */
   function pageName() {
+    if (typeof appRouter !== 'undefined') {
+      return appRouter.getPageMeta().pageName;
+    }
+
+    if (window.location.pathname.endsWith('/')) {
+      return 'index.html';
+    }
+
     return window.location.pathname.split('/').pop() || '';
   }
 

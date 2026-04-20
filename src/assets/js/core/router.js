@@ -26,9 +26,11 @@ const appRouter = (function() {
    * 原因：静态多级目录页面需要自己计算 `../` 层级，公共组件和业务脚本才能在任意子页面加载。
    */
   function getPageMeta() {
-    const pathParts = window.location.pathname.split('/').filter(Boolean);
+    const pathname = window.location.pathname;
+    const pathParts = pathname.split('/').filter(Boolean);
     const pagesIndex = pathParts.indexOf('pages');
-    const rawPageName = pathParts[pathParts.length - 1] || '';
+    const isDirectoryUrl = pathname.endsWith('/');
+    const rawPageName = isDirectoryUrl ? 'index.html' : pathParts[pathParts.length - 1] || '';
     const pageName = normalizePageName(rawPageName);
 
     if (pagesIndex === -1) {
@@ -40,7 +42,7 @@ const appRouter = (function() {
       };
     }
 
-    const depth = Math.max(0, pathParts.length - pagesIndex - 2);
+    const depth = Math.max(0, pathParts.length - pagesIndex - (isDirectoryUrl ? 1 : 2));
     const pagesPath = depth > 0 ? '../'.repeat(depth) : '';
     const rootPath = pagesPath + '../';
     const sectionCandidate = pathParts[pagesIndex + 1] || '';

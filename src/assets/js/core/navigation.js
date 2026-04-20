@@ -20,14 +20,22 @@ const appNav = {
    * 原因：组件内链接会被 router 修正，data-page 和 href 两种来源都要兼容。
    */
   highlightActive() {
-    const current = window.location.pathname;
+    const pageMeta = typeof appRouter !== 'undefined' ? appRouter.getPageMeta() : null;
+    const currentPage = pageMeta && pageMeta.section
+      ? pageMeta.section + '/' + pageMeta.pageName
+      : pageMeta ? pageMeta.pageName : '';
+    const currentSectionIndex = pageMeta && pageMeta.section ? pageMeta.section + '/index.html' : currentPage;
+
     $$('.sidebar-item').forEach(item => {
       const href = item.getAttribute('href');
       const dataPage = item.getAttribute('data-page');
-      // data-page 来自组件模板，href 来自修正后的真实链接，两者任意存在即可参与匹配。
-      const page = dataPage || (href ? href.replace(/.*pages\//, '').replace('.html', '') : '');
-      if (page && current.includes(page.replace('.html', ''))) {
+      const page = dataPage || (href ? href.replace(/.*pages\//, '') : '');
+      const isActive = page === currentPage || page === currentSectionIndex;
+
+      if (isActive) {
         addClass(item, 'active');
+      } else {
+        removeClass(item, 'active');
       }
     });
   },

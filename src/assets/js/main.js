@@ -145,9 +145,11 @@ async function loadUtilityRuntime(rootPath) {
  * 原因：core/router.js 自身也需要通过正确路径加载，bootstrap 阶段不能依赖尚未加载的 router。
  */
 function getInitialPageMeta() {
-  const pathParts = window.location.pathname.split('/').filter(Boolean);
+  const pathname = window.location.pathname;
+  const pathParts = pathname.split('/').filter(Boolean);
   const pagesIndex = pathParts.indexOf('pages');
-  const lastSegment = pathParts[pathParts.length - 1] || 'index.html';
+  const isDirectoryUrl = pathname.endsWith('/');
+  const lastSegment = isDirectoryUrl ? 'index.html' : pathParts[pathParts.length - 1] || 'index.html';
   const pageName = lastSegment.includes('.') ? lastSegment : `${lastSegment}.html`;
 
   if (pagesIndex === -1) {
@@ -157,7 +159,7 @@ function getInitialPageMeta() {
     };
   }
 
-  const depth = Math.max(0, pathParts.length - pagesIndex - 2);
+  const depth = Math.max(0, pathParts.length - pagesIndex - (isDirectoryUrl ? 1 : 2));
   const pagesPath = depth > 0 ? '../'.repeat(depth) : '';
 
   return {
