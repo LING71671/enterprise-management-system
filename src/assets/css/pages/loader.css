@@ -340,6 +340,7 @@ body {
   }
 }
 
+/* logo脉冲 */
 @keyframes pulse {
 
   0%,
@@ -352,6 +353,7 @@ body {
   }
 }
 
+/* logo外环波纹 */
 @keyframes ripple {
   0% {
     transform: scale(0.92);
@@ -378,6 +380,7 @@ body {
   }
 }
 
+/* 多种元素入场效果 */
 @keyframes fadeUp {
   0% {
     opacity: 0;
@@ -390,6 +393,7 @@ body {
   }
 }
 
+/* 进度条加载动画 */
 @keyframes loading {
   0% {
     width: 0;
@@ -400,6 +404,7 @@ body {
   }
 }
 
+/* 页面淡出 */
 @keyframes pageOut {
   0% {
     opacity: 1;
@@ -414,6 +419,7 @@ body {
   }
 }
 
+/* 适配移动端 */
 @media (max-width: 768px) {
   .launch-card {
     padding: 36px 24px 28px;
