@@ -1,47 +1,60 @@
+<!--全局左侧菜单-->
+
+<!--Ⅰ 侧边栏遮罩层（交互辅助）-->
 <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+<!--Ⅱ 侧边栏主体（导航区域）-->
 <nav class="sidebar" id="sidebar">
-<ul class="sidebar-nav">
-    <li>
-      <a href="#" data-page="dashboard.html" class="sidebar-item">
-        <span class="icon">📊</span>
-        <span>仪表盘</span>
-      </a>
-    </li>
-    <li>
-      <a href="#" data-page="production/index.html" class="sidebar-item">
-        <span class="icon">🏭</span>
-        <span>生产管理</span>
-      </a>
-    </li>
-    <li>
-      <a href="#" data-page="sales/index.html" class="sidebar-item">
-        <span class="icon">📈</span>
-        <span>销售管理</span>
-      </a>
-    </li>
-    <li>
-      <a href="#" data-page="equipment/index.html" class="sidebar-item">
-        <span class="icon">⚙️</span>
-        <span>设备管理</span>
-      </a>
-    </li>
-    <li>
-      <a href="#" data-page="purchase/index.html" class="sidebar-item">
-        <span class="icon">🛒</span>
-        <span>采购管理</span>
-      </a>
-    </li>
-    <li>
-      <a href="#" data-page="warehouse/index.html" class="sidebar-item">
-        <span class="icon">🏬</span>
-        <span>仓储管理</span>
-      </a>
-    </li>
-    <li>
-      <a href="#" data-page="employee/index.html" class="sidebar-item">
-        <span class="icon">👥</span>
-        <span>员工管理</span>
-      </a>
-    </li>
-  </ul>
+    <ul class="sidebar-nav">
+        <!--1.仪表盘-->
+        <li>
+            <!--href="#" 只是占位，真正目标页写在 data-page 上-->
+            <a href="#" data-page="dashboard.html" class="sidebar-item">
+                <span class="icon">📊</span>
+                <span>仪表盘</span>
+            </a>
+        </li>
+        <!--2.生产管理-->
+        <li>
+            <a href="#" data-page="production/index.html" class="sidebar-item">
+                <span class="icon">🏭</span>
+                <span>生产管理</span>
+            </a>
+        </li>
+        <!--3.销售管理-->
+        <li>
+            <a href="#" data-page="sales/index.html" class="sidebar-item">
+                <span class="icon">📈</span>
+                <span>销售管理</span>
+            </a>
+        </li>
+        <!--4.设备管理-->
+        <li>
+            <a href="#" data-page="equipment/index.html" class="sidebar-item">
+                <span class="icon">⚙️</span>
+                <span>设备管理</span>
+            </a>
+        </li>
+        <!--5.采购管理-->
+        <li>
+            <a href="#" data-page="purchase/index.html" class="sidebar-item">
+                <span class="icon">🛒</span>
+                <span>采购管理</span>
+            </a>
+        </li>
+        <!--6.仓储管理-->
+        <li>
+            <a href="#" data-page="warehouse/index.html" class="sidebar-item">
+                <span class="icon">🏬</span>
+                <span>仓储管理</span>
+            </a>
+        </li>
+        <!--7.员工管理-->
+        <li>
+            <a href="#" data-page="employee/index.html" class="sidebar-item">
+                <span class="icon">👥</span>
+                <span>员工管理</span>
+            </a>
+        </li>
+    </ul>
 </nav>
