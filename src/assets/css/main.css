@@ -1,10 +1,14 @@
-/* 基础层：先加载重置、主题变量、排版和通用动画，保证后续组件可以复用统一令牌。 */
+/* 1.基础层：先加载重置、主题变量、排版和通用动画，保证后续组件可以复用统一令牌。 */
+/*① 清除默认样式*/
 @import './base/reset.css';
+/*② 定义颜色、字号、间距变量*/
 @import './base/variables.css';
+/*③ 定义排版规范*/
 @import './base/typography.css';
+/*④ 定义基础动画*/
 @import './base/animations.css';
 
-/* 组件层：公共导航、侧边栏、表单、表格和弹窗在页面样式之前完成基础定义。 */
+/* 2.组件层：公共导航、侧边栏、表单、表格和弹窗在页面样式之前完成基础定义。 */
 @import './components/header.css';
 @import './components/sidebar.css';
 @import './components/button.css';
@@ -13,7 +17,7 @@
 @import './components/card.css';
 @import './components/modal.css';
 
-/* 页面层：业务页和展示页最后加载，用于承接页面级布局与必要覆盖。 */
+/* 3.页面层：业务页和展示页最后加载，用于承接页面级布局与必要覆盖。 */
 @import './pages/login.css';
 @import './pages/production.css';
 @import './pages/sales.css';
@@ -22,192 +26,209 @@
 @import './pages/warehouse.css';
 @import './pages/employee.css';
 
-/* 后台通用响应式兜底：业务域页面各自保留细节，这里负责统一框架和窄屏密度。 */
+
+/* 4.后台通用响应式兜底：业务域页面各自保留细节，这里负责统一框架和窄屏密度。 */
+/*① 适配手机、平板*/
 @media (max-width: 768px) {
-  .header {
-    padding: 0 var(--spacing-md);
-    z-index: 1002;
-  }
+    .header {
+        padding: 0 var(--spacing-md);
+        z-index: 1106;
+    }
 
-  .header-logo img {
-    height: 34px;
-  }
+    .header-logo img {
+        height: 34px;
+    }
 
-  .header-right .btn {
-    padding: 5px var(--spacing-sm);
-    font-size: var(--font-size-sm);
-  }
+    .header-right .btn {
+        /*内边距：padding 字体大小：font-size*/
+        padding: 5px var(--spacing-sm);
+        font-size: var(--font-size-sm);
+    }
 
-  .layout {
-    min-height: 100vh;
-    padding-top: var(--header-height);
-  }
+    .layout {
+        /*min-height: 100vh：视窗高度等于整个浏览器窗口的高度*/
+        min-height: 100vh;
+        padding-top: var(--header-height);
+    }
 
-  .main-content {
-    margin-left: 0;
-    width: 100%;
-    min-width: 0;
-    padding: var(--spacing-md);
-  }
+    .main-content {
+        /*外边距 margin*/
+        margin-left: 0;
+        width: 100%;
+        min-width: 0;
+        padding: var(--spacing-md);
+    }
 
-  .page-header,
-  .toolbar {
-    align-items: stretch;
-    flex-direction: column;
-    gap: var(--spacing-sm);
-  }
+    /*页面头部区域+工具栏*/
+    .page-header,
+    .toolbar {
+        align-items: stretch; /*横向撑开，尽量和容器一样宽*/
+        flex-direction: column; /*竖着排列*/
+        gap: var(--spacing-sm); /*子元素之间的间距*/
+    }
 
-  .toolbar-left,
-  .toolbar-right {
-    width: 100%;
-    flex-wrap: wrap;
-  }
+    .toolbar-left,
+    .toolbar-right {
+        width: 100%;
+        flex-wrap: wrap;
+    }
 
-  .toolbar .btn,
-  .page-header .btn {
-    width: 100%;
-  }
+    .toolbar .btn,
+    .page-header .btn {
+        width: 100%;
+    }
 
-  .stats-grid {
-    grid-template-columns: 1fr;
-    gap: var(--spacing-sm);
-  }
+    /*数据卡片网格容器*/
+    .stats-grid {
+        /*表示网格只有一列1fr “占满可用宽度的一整列”*/
+        grid-template-columns: 1fr;
+        /*网格项目之间的间距*/
+        gap: var(--spacing-sm);
+    }
 
-  .stat-card,
-  .card {
-    padding: var(--spacing-md);
-  }
+    .stat-card,
+    .card {
+        padding: var(--spacing-md);
+    }
 
-  .card-header {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: var(--spacing-xs);
-  }
+    .card-header {
+        align-items: flex-start; /*子元素竖着排列*/
+        flex-direction: column; /*子元素在交叉轴方向靠起点对齐*/
+        gap: var(--spacing-xs);
+    }
 
-  .page-title {
-    font-size: var(--font-size-lg);
-  }
+    .page-title {
+        font-size: var(--font-size-lg);
+    }
 
-  .page-subtitle {
-    line-height: 1.5;
-  }
+    .page-subtitle {
+        line-height: 1.5;
+    }
 }
 
+/*② 更小屏幕适配：低端手机*/
 @media (max-width: 480px) {
-  .main-content {
-    padding: var(--spacing-sm);
-  }
+    .main-content {
+        padding: var(--spacing-sm);
+    }
 
-  .header-user .avatar {
-    width: 28px;
-    height: 28px;
-  }
+    /*用户头像*/
+    .header-user .avatar {
+        width: 28px;
+        height: 28px;
+    }
 
-  .table td {
-    align-items: flex-start;
-    gap: var(--spacing-sm);
-  }
+    /*表格单元格内容在超小屏幕更适合左对齐和增加间距。*/
+    .table td {
+        align-items: flex-start;
+        gap: var(--spacing-sm);
+    }
 
-  .table td::before {
-    min-width: 72px;
-    flex: 0 0 72px;
-  }
+    /*给表格伪元素预留固定宽度 72px。*/
+    .table td::before {
+        min-width: 72px;
+        flex: 0 0 72px;
+    }
 }
 
-/* 组件异步加载过渡：header/sidebar 注入后使用轻量淡入，避免公共组件闪现。 */
+
+/* 5.组件异步加载过渡：header/sidebar 注入后使用轻量淡入，避免公共组件闪现。 */
 @keyframes componentFadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
-/* =====================
-   自定义鼠标
-   仅在桌面鼠标环境启用：隐藏系统指针，用精准中心点和柔和跟随外圈替代。
-   ===================== */
+
+/*6.自定义鼠标*/
+/*① 仅在桌面鼠标环境启用：隐藏系统指针，用精准中心点和柔和跟随外圈替代。*/
 .has-custom-cursor,
 .has-custom-cursor * {
-  cursor: none !important;
+    cursor: none !important;
 }
 
 .custom-cursor,
 .custom-cursor__dot,
 .custom-cursor__ring {
-  position: fixed;
-  top: 0;
-  left: 0;
-  pointer-events: none;
-  z-index: 99999;
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 99999;
 }
 
 .custom-cursor {
-  opacity: 0;
-  transition: opacity 0.16s ease;
+    opacity: 0;
+    transition: opacity 0.16s ease;
 }
 
 .custom-cursor.is-visible {
-  opacity: 1;
+    opacity: 1;
 }
 
 .custom-cursor__dot {
-  width: 7px;
-  height: 7px;
-  background: var(--color-primary);
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  box-shadow: 0 0 10px rgba(255, 107, 0, 0.35);
-  transition: width 0.18s ease, height 0.18s ease, border-radius 0.18s ease, background-color 0.18s ease;
+    width: 7px;
+    height: 7px;
+    background: var(--color-primary);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 10px rgba(255, 107, 0, 0.35);
+    transition: width 0.18s ease, height 0.18s ease, border-radius 0.18s ease, background-color 0.18s ease;
 }
 
 .custom-cursor__ring {
-  width: 30px;
-  height: 30px;
-  border: 1px solid rgba(255, 107, 0, 0.5);
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  box-shadow: 0 0 18px rgba(255, 107, 0, 0.14);
-  transition: width 0.22s cubic-bezier(0.25, 1, 0.5, 1),
-              height 0.22s cubic-bezier(0.25, 1, 0.5, 1),
-              border-color 0.22s ease,
-              background-color 0.22s ease,
-              box-shadow 0.22s ease;
+    width: 30px;
+    height: 30px;
+    border: 1px solid rgba(255, 107, 0, 0.5);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 18px rgba(255, 107, 0, 0.14);
+    transition: width 0.22s cubic-bezier(0.25, 1, 0.5, 1),
+    height 0.22s cubic-bezier(0.25, 1, 0.5, 1),
+    border-color 0.22s ease,
+    background-color 0.22s ease,
+    box-shadow 0.22s ease;
 }
 
 .custom-cursor.is-hover .custom-cursor__dot {
-  width: 5px;
-  height: 5px;
+    width: 5px;
+    height: 5px;
 }
 
 .custom-cursor.is-hover .custom-cursor__ring {
-  width: 50px;
-  height: 50px;
-  border-color: rgba(255, 107, 0, 0.25);
-  background-color: rgba(255, 107, 0, 0.08);
-  box-shadow: 0 0 28px rgba(255, 107, 0, 0.18);
+    width: 50px;
+    height: 50px;
+    border-color: rgba(255, 107, 0, 0.25);
+    background-color: rgba(255, 107, 0, 0.08);
+    box-shadow: 0 0 28px rgba(255, 107, 0, 0.18);
 }
 
 .custom-cursor.is-text .custom-cursor__dot {
-  width: 2px;
-  height: 24px;
-  border-radius: 999px;
-  background-color: var(--color-primary-dark);
+    width: 2px;
+    height: 24px;
+    border-radius: 999px;
+    background-color: var(--color-primary-dark);
 }
 
 .custom-cursor.is-text .custom-cursor__ring {
-  width: 18px;
-  height: 34px;
-  border-radius: 999px;
-  border-color: rgba(255, 107, 0, 0.22);
-  box-shadow: none;
+    width: 18px;
+    height: 34px;
+    border-radius: 999px;
+    border-color: rgba(255, 107, 0, 0.22);
+    box-shadow: none;
 }
 
-/* 移动端、触屏或减少动效设置下禁用自定义光标。 */
+/* ② 移动端、触屏或减少动效设置下禁用自定义光标。 */
 @media (max-width: 768px), (pointer: coarse), (prefers-reduced-motion: reduce) {
-  .has-custom-cursor,
-  .has-custom-cursor * {
-    cursor: auto !important;
-  }
+    .has-custom-cursor,
+    .has-custom-cursor * {
+        cursor: auto !important;
+    }
 
-  .custom-cursor {
-    display: none;
-  }
+    .custom-cursor {
+        display: none;
+    }
 }
