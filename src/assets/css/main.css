@@ -25,6 +25,7 @@
 @import './pages/purchase.css';
 @import './pages/warehouse.css';
 @import './pages/employee.css';
+@import './pages/loader.css';
 
 
 /* 4.后台通用响应式兜底：业务域页面各自保留细节，这里负责统一框架和窄屏密度。 */
