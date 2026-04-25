@@ -1,263 +1,310 @@
-/* =====================
-   通用进入与退出动画
-   这些关键帧服务落地页、业务卡片和页面切换，不绑定具体业务域。
-   ===================== */
+/*基础动画:通用进入与退出动画*/
+
+
+/* 1. 基础关键帧动画*/
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+    from {
+        /*元素全透明*/
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
 @keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+    from {
+        opacity: 0;
+        /*把元素沿着 Y 轴向下移动 30px。*/
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 @keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+    from {
+        opacity: 0;
+        /*把元素沿 Y 轴向上移动 20px*/
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 @keyframes slideInLeft {
-  from {
-    opacity: 0;
-    transform: translateX(-30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
 
 @keyframes slideInRight {
-  from {
-    opacity: 0;
-    transform: translateX(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
 
+/*缩放进入*/
 @keyframes scaleIn {
-  from {
-    opacity: 0;
-    transform: scale(0.9);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+    from {
+        opacity: 0;
+        /*元素整体按比例变小*/
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
+/*脉冲：变大进入*/
 @keyframes pulse {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.05);
-  }
-  100% {
-    transform: scale(1);
-  }
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
 }
 
+/*页面退出*/
 @keyframes pageOut {
-  0% {
-    opacity: 1;
-    transform: scale(1);
-    filter: blur(0);
-  }
-  100% {
-    opacity: 0;
-    transform: scale(1.03);
-    filter: blur(12px);
-  }
+    0% {
+        opacity: 1;
+        transform: scale(1);
+        /*“模糊滤镜” 模糊半径是 0*/
+        filter: blur(0);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(1.03);
+        filter: blur(12px);
+    }
 }
 
-/* =====================
-   动画工具类
-   JS 只负责给元素追加类名，具体运动轨迹和时长集中在 CSS 中维护。
-   ===================== */
+
+/* 2. 动画工具类*/
+/*JS 只负责给元素追加类名，具体运动轨迹和时长集中在 CSS 中维护。*/
 .fade-in {
-  animation: fadeIn 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+    /*cubic-bezier：速度变化曲线，控制动画先后快慢*/
+    /*both：表示动画开始前应用第一帧样式，结束后保留最后一帧样式*/
+    animation: fadeIn 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
 }
 
 .slide-up {
-  animation: slideUp 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+    animation: slideUp 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
 }
 
 .slide-in-left {
-  animation: slideInLeft 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+    animation: slideInLeft 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
 }
 
 .slide-in-right {
-  animation: slideInRight 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+    animation: slideInRight 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
 }
 
 .scale-in {
-  animation: scaleIn 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+    animation: scaleIn 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
 }
 
 .pulse {
-  animation: pulse 2s infinite;
+    animation: pulse 2s infinite;
 }
 
 .fade-out {
-  animation: pageOut 0.7s ease forwards;
+    animation: pageOut 0.7s ease forwards;
 }
 
-/* 动画延迟：覆盖 landing.js 动态生成的 delay-0 到 delay-800，保证分组入场节奏完整。 */
+
+/* 3.动画延迟类 */
+/*覆盖 landing.js 动态生成的 delay-0 到 delay-800，保证分组入场节奏完整。*/
 .delay-0 {
-  animation-delay: 0s;
+    animation-delay: 0s;
 }
 
-.delay-100 { animation-delay: 0.15s; }
+.delay-100 {
+    /*延迟 0.15 秒后才执行动画*/
+    animation-delay: 0.15s;
+}
 
-.delay-200 { animation-delay: 0.3s; }
+.delay-200 {
+    animation-delay: 0.3s;
+}
 
-.delay-300 { animation-delay: 0.45s; }
+.delay-300 {
+    animation-delay: 0.45s;
+}
 
-.delay-400 { animation-delay: 0.6s; }
+.delay-400 {
+    animation-delay: 0.6s;
+}
 
-.delay-500 { animation-delay: 0.75s; }
+.delay-500 {
+    animation-delay: 0.75s;
+}
 
-.delay-600 { animation-delay: 0.9s; }
+.delay-600 {
+    animation-delay: 0.9s;
+}
 
-.delay-700 { animation-delay: 1.05s; }
+.delay-700 {
+    animation-delay: 1.05s;
+}
 
-.delay-800 { animation-delay: 1.2s; }
+.delay-800 {
+    animation-delay: 1.2s;
+}
 
-/* 展示特效关键帧：为打字光标、进度条、光扫、网格和卡片入场提供复用动画。 */
+
+/* 4.展示特效关键帧 */
+/*为打字光标、进度条、光扫、网格和卡片入场提供复用动画。*/
+/*① 光标闪烁 打字机*/
 @keyframes cursorBlink {
-  0%, 50% {
-    border-right-color: rgba(215, 181, 109, 0.95);
-  }
-  51%, 100% {
-    border-right-color: transparent;
-  }
+    0%, 50% {
+        border-right-color: rgba(215, 181, 109, 0.95);
+    }
+    51%, 100% {
+        border-right-color: transparent;
+    }
 }
 
+/*② 加载条*/
 @keyframes loading {
-  0% {
-    width: 0;
-  }
-  100% {
-    width: 100%;
-  }
+    0% {
+        width: 0;
+    }
+    100% {
+        width: 100%;
+    }
 }
 
+/*③ 光扫*/
 @keyframes shine {
-  0% {
-    transform: translateX(-120%);
-  }
-  55% {
-    transform: translateX(120%);
-  }
-  100% {
-    transform: translateX(120%);
-  }
+    0% {
+        transform: translateX(-120%);
+    }
+    55% {
+        transform: translateX(120%);
+    }
+    100% {
+        transform: translateX(120%);
+    }
 }
 
+/*④ 波纹扩散*/
 @keyframes ripple {
-  0% {
-    transform: scale(0.92);
-    opacity: 0.55;
-  }
-  100% {
-    transform: scale(1.18);
-    opacity: 0;
-  }
+    0% {
+        transform: scale(0.92);
+        opacity: 0.55;
+    }
+    100% {
+        transform: scale(1.18);
+        opacity: 0;
+    }
 }
 
+/*⑤ 网格缓慢移动*/
 @keyframes gridMove {
-  0% {
-    transform: translateY(0) scale(1);
-  }
-  100% {
-    transform: translateY(48px) scale(1.02);
-  }
+    0% {
+        transform: translateY(0) scale(1);
+    }
+    100% {
+        transform: translateY(48px) scale(1.02);
+    }
 }
 
+/*⑥ 向上漂浮消失*/
 @keyframes floatUp {
-  0% {
-    transform: translateY(20px) scale(0.8);
-    opacity: 0;
-  }
-  20% {
-    opacity: 0.6;
-  }
-  100% {
-    transform: translateY(-120vh) scale(1.2);
-    opacity: 0;
-  }
+    0% {
+        transform: translateY(20px) scale(0.8);
+        opacity: 0;
+    }
+    20% {
+        opacity: 0.6;
+    }
+    100% {
+        transform: translateY(-120vh) scale(1.2);
+        opacity: 0;
+    }
 }
 
+/*⑦ 更高级的卡片入场*/
 @keyframes cardEnter {
-  0% {
-    opacity: 0;
-    transform: translateY(36px) scale(0.96);
-    filter: blur(8px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-    filter: blur(0);
-  }
+    0% {
+        opacity: 0;
+        transform: translateY(36px) scale(0.96);
+        filter: blur(8px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0);
+    }
 }
 
 
-/* =====================
-   主题流光入场特效 (Theme Shine)
-   为业务展示卡片增加“扫光”的动感科技效果。利用伪元素及 animation-delay 继承机制实现。
-   不包含 founder-card 以免与其专属的 hover 伪元素冲突。
-   ===================== */
+/* 5.主题流光入场特效*/
+/*   为业务展示卡片增加“扫光”的动感科技效果。利用伪元素及 animation-delay 继承机制实现。*/
+/*   不包含 founder-card 以免与其专属的 hover 伪元素冲突。*/
 .stat-card, .tech-card, .product-card {
-  position: relative;
-  overflow: hidden;
+    position: relative;
+    /*hidden：超出这个元素边界的内容会被裁掉、不显示*/
+    overflow: hidden;
 }
 
 .stat-card::after, .tech-card::after, .product-card::after {
-  content: "";
-  position: absolute;
-  top: 0; 
-  left: -150%; 
-  width: 50%; 
-  height: 100%;
-  background: linear-gradient(
-    to right, 
-    rgba(255, 107, 0, 0) 0%, 
-    rgba(255, 107, 0, 0.25) 50%, 
-    rgba(255, 107, 0, 0) 100%
-  );
-  transform: skewX(-25deg);
-  z-index: 10;
-  pointer-events: none;
+    /*生成伪元素*/
+    content: "";
+    /*让这个伪元素绝对定位，悬浮在卡片内部*/
+    position: absolute;
+    top: 0;
+    left: -150%;
+    width: 50%;
+    height: 100%;
+    /*定义一个中间亮、两边透明的渐变层*/
+    background: linear-gradient(
+            to right,
+            rgba(255, 107, 0, 0) 0%,
+            rgba(255, 107, 0, 0.25) 50%,
+            rgba(255, 107, 0, 0) 100%
+    );
+    /*把亮带斜切一点*/
+    transform: skewX(-25deg);
+    /*让它显示在卡片内容上层*/
+    z-index: 10;
+    /*让这个伪元素不会挡住鼠标点击*/
+    pointer-events: none;
 }
 
 /* 当卡片被赋予入场动画类时，一同触发流光动画。 */
 .slide-up::after, .scale-in::after {
-  animation: themeShine 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
-  animation-delay: inherit; 
+    animation: themeShine 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+    animation-delay: inherit;
 }
 
+/*“高光扫过”效果*/
 @keyframes themeShine {
-  0% { left: -150%; }
-  100% { left: 200%; }
+    0% {
+        left: -150%;
+    }
+    100% {
+        left: 200%;
+    }
 }

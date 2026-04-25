@@ -1,60 +1,63 @@
+/*定义颜色、字号、间距变量*/
+
 :root {
-  /* 品牌主题色：小麦橙贯穿按钮、激活态、业务高亮和落地页视觉焦点。 */
-  --color-primary: #FF6B00;
-  --color-primary-light: #FF8C33;
-  --color-primary-dark: #CC5500;
-  --color-primary-bg: #FFF3E8;
+    /* 1.品牌主题色：小麦橙贯穿按钮、激活态、业务高亮和落地页视觉焦点。 */
+    --color-primary: #FF6B00;
+    --color-primary-light: #FF8C33;
+    --color-primary-dark: #CC5500;
+    --color-primary-bg: #FFF3E8;
 
-  --color-success: #52c41a;
-  --color-warning: #faad14;
-  --color-danger: #f5222d;
-  --color-info: #1890ff;
+    /* 2.状态色*/
+    --color-success: #52c41a;
+    --color-warning: #faad14;
+    --color-danger: #f5222d;
+    --color-info: #1890ff;
 
-  /* 文字令牌：区分正文、辅助信息、禁用态和深色背景反白文字。 */
-  --color-text-primary: #1a1a1a;
-  --color-text-secondary: #666;
-  --color-text-disabled: #bbb;
-  --color-text-inverse: #fff;
+    /* 3.文字颜色：正文、辅助（次要）、禁用、深色背景反白文字。 */
+    --color-text-primary: #1a1a1a;
+    --color-text-secondary: #666;
+    --color-text-disabled: #bbb;
+    --color-text-inverse: #fff;
 
-  /* 背景令牌：业务页、卡片、头部、侧边栏和深色展示区共用这些背景定义。 */
-  --color-bg: #f5f7f9;
-  --color-bg-white: #ffffff;
-  --color-bg-sidebar: #1f2233;
-  --color-bg-sidebar-hover: #2a2d42;
-  --color-bg-header: #ffffff;
-  --color-bg-dark: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    /* 4.背景颜色：默认背景色（柔和）、纯白、侧边栏、侧边栏悬停时、头部、深色展示区 */
+    --color-bg: #f5f7f9;
+    --color-bg-white: #ffffff;
+    --color-bg-sidebar: #1f2233;
+    --color-bg-sidebar-hover: #2a2d42;
+    --color-bg-header: #ffffff;
+    --color-bg-dark: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
 
-  /* 边框与圆角：控制表单、卡片、弹窗和业务容器的统一圆角节奏。 */
-  --border-color: #ebeef5;
-  --border-radius-sm: 6px;
-  --border-radius: 12px;
-  --border-radius-lg: 16px;
+    /* 5.边框与圆角：默认边框颜色、小圆角、标准圆角、大圆角 */
+    --border-color: #ebeef5;
+    --border-radius-sm: 6px;
+    --border-radius: 12px;
+    --border-radius-lg: 16px;
 
-  /* 间距比例：页面留白、表单间距、卡片网格和移动端堆叠间距统一引用。 */
-  --spacing-xs: 4px;
-  --spacing-sm: 8px;
-  --spacing-md: 16px;
-  --spacing-lg: 24px;
-  --spacing-xl: 32px;
+    /* 6.间距比例：页面留白、表单间距、卡片网格和移动端堆叠间距统一引用。 */
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --spacing-xl: 32px;
 
-  /* 字号比例：覆盖表格、小型提示、正文、标题和统计数字。 */
-  --font-size-xs: 12px;
-  --font-size-sm: 13px;
-  --font-size-base: 14px;
-  --font-size-md: 15px;
-  --font-size-lg: 16px;
-  --font-size-xl: 20px;
-  --font-size-xxl: 24px;
+    /* 7.字号比例：覆盖正文、标题、统计数字、表格、小型提示等 */
+    --font-size-xs: 12px;
+    --font-size-sm: 13px;
+    --font-size-base: 14px;
+    --font-size-md: 15px;
+    --font-size-lg: 16px;
+    --font-size-xl: 20px;
+    --font-size-xxl: 24px;
 
-  /* 阴影层级：卡片、悬停态、弹窗和导航阴影使用递进强度。 */
-  --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.03);
-  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.08);
+    /* 8.阴影层级：卡片、悬停态、弹窗和导航阴影使用递进强度。 */
+    --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.03);
+    --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.08);
 
-  /* 框架尺寸：固定头部和侧边栏的尺寸，业务页面通过这些变量避让布局。 */
-  --sidebar-width: 220px;
-  --header-height: 60px;
+    /* 9.框架尺寸：固定头部和侧边栏的尺寸*/
+    --sidebar-width: 220px;
+    --header-height: 60px;
 
-  /* 通用交互过渡：按钮、表单、导航和卡片 hover 保持一致反馈节奏。 */
-  --transition: all 0.2s ease;
+    /* 10.通用交互过渡：0.2 秒 缓动方式 ease： */
+    --transition: all 0.2s ease;
 }

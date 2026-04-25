@@ -1,56 +1,74 @@
-/* 浏览器默认样式归一化：为企业管理系统的多页面布局提供一致盒模型和基础排版。 */
+/* 浏览器默认样式归一化：为多页面布局提供一致盒模型和基础排版。 */
+
+
+/* 1.全局归一：选中所有元素，以及所有元素的 ::before 和 ::after 伪元素 */
 *, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+    /*box-sizing: border-box  宽高包含内边距和边框*/
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
-/* 根元素与正文：统一字号基准、移动端文字缩放和页面默认背景。 */
+/* 2.html根元素 */
 html {
-  font-size: 14px;
-  -webkit-text-size-adjust: 100%;
+    font-size: 14px;
+    /*-webkit-text-size-adjust:（webkit浏览器）控制文字在移动设备上的自动缩放*/
+    -webkit-text-size-adjust: 100%;
 }
 
+/* 3. body 正文基础设置：统一字号基准、移动端文字缩放和页面默认背景。*/
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
-  font-size: var(--font-size-base);
-  color: var(--color-text-primary);
-  background-color: var(--color-bg);
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
+    font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    font-size: var(--font-size-base);
+    color: var(--color-text-primary);
+    background-color: var(--color-bg);
+    line-height: 1.6;
+    /*让 WebKit 浏览器上的字体显示更平滑一些*/
+    -webkit-font-smoothing: antialiased;
 }
 
-/* 基础元素重置：链接、列表、图片、表单和表格移除浏览器差异化默认表现。 */
+/* 4.基础元素重置：链接、列表、图片、表单和表格移除浏览器差异化默认表现。 */
+/*① 链接*/
 a {
-  color: var(--color-primary);
-  text-decoration: none;
+    color: var(--color-primary);
+    /*去掉默认下划线*/
+    text-decoration: none;
 }
 
+/*② 当鼠标移到链接上时生效*/
 a:hover {
-  color: var(--color-primary-light);
+    color: var(--color-primary-light);
 }
 
+/*③ 无序列表 有序列表*/
 ul, ol {
-  list-style: none;
+    /*去掉默认的列表标记（小圆点 数字）*/
+    list-style: none;
 }
 
+/*④ 图片*/
 img {
-  max-width: 100%;
-  display: block;
+    max-width: 100%;
+    display: block; /*图片变成块级元素*/
 }
 
-input, button, select, textarea {
-  font-family: inherit;
-  font-size: inherit;
+/*⑤ 输入框 下拉框 多行文本框*/
+input, select, textarea {
+    font-family: inherit;
+    font-size: inherit;
 }
 
+/*⑥ 按钮*/
 button {
-  cursor: pointer;
-  border: none;
-  background: none;
+    font-family: inherit;
+    font-size: inherit;
+    cursor: pointer; /*表示这个元素可以点击*/
+    border: none;
+    background: none;
 }
 
+/*⑦ 表格*/
 table {
-  border-collapse: collapse;
-  width: 100%;
+    border-collapse: collapse;
+    width: 100%;
 }
