@@ -1,18 +1,31 @@
+<!--全局顶部导航-->
+
 <header class="header">
-<button class="hamburger-btn" id="hamburger-btn" aria-label="打开菜单" aria-expanded="false" aria-controls="sidebar">
-  <span></span>
-  <span></span>
-  <span></span>
-</button>
-<div class="header-logo">
-    <img alt="小麦" id="header-logo-img" style="height: 42px; width: auto; object-fit: contain;">
-    <span class="brand-name">小麦科技 · 企业管理平台</span>
-  </div>
-  <div class="header-right">
-    <div class="header-user">
-      <div class="avatar"></div>
-      <span class="username">管理员</span>
+    <!--1.汉堡按钮-->
+    <button class="hamburger-btn" id="hamburger-btn" aria-label="打开菜单" aria-expanded="false"
+            aria-controls="sidebar">
+        <!--aria-label="打开菜单"：告诉辅助设备，这个按钮是“打开菜单”-->
+        <!--aria-expanded="false"：表示当前菜单是“收起状态”-->
+        <!--aria-controls="sidebar"：表示这个按钮控制的是 id="sidebar" 的那个区域-->
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
+    <!--2.品牌区-->
+    <div class="header-logo">
+        <img alt="小麦" id="header-logo-img" style="height: 42px; width: auto; object-fit: contain;">
+        <span class="brand-name">小麦科技 · 企业管理平台</span>
     </div>
-    <button id="logout-btn" class="btn btn-ghost btn-sm">退出</button>
-  </div>
+
+    <!--3.右侧用户区-->
+    <div class="header-right">
+        <div class="header-user">
+            <div class="avatar"></div>
+            <span class="username">管理员</span>
+            <!--avatar：头像占位-->
+            <!--username：用户名，即“管理员”-->
+        </div>
+        <button id="logout-btn" class="btn btn-ghost btn-sm">退出</button>
+    </div>
 </header>
